@@ -1,0 +1,193 @@
+/* @import "~@fullcalendar/core/main.css";
+@import "~@fullcalendar/daygrid/main.css"; */
+.calendly-col-1 {
+    border-left: 2px solid lightgray;
+    border-right: 2px solid lightgray;
+    border-top: 2px solid lightgray;
+    border-bottom: 2px solid lightgray;
+    /* height: 700px; */
+    /* border-radius: 15px; */
+}
+
+.calendly-col-2 {
+    /* height: 700px; */
+    border-right: 2px solid lightgray;
+    border-top: 2px solid lightgray;
+    border-bottom: 2px solid lightgray;
+}
+
+.headings {
+    padding-top: 2.5rem;
+    padding-left: 2rem;
+    padding-bottom: 3rem;
+}
+
+.inCellAlignment {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.border-setHours {
+    color: #f0f0f0;
+    border-top: 1px solid lightgray;
+    margin-bottom: 2.3rem;
+}
+/* .row {
+    padding-top: 0.3rem;
+    padding-bottom: 1rem;
+} */
+
+.add-btn {
+    justify-content: flex-end;
+}
+
+.icon-style {
+    cursor: pointer;
+}
+
+.msg-style {
+    color: gray;
+}
+
+.add-overrideDate-btn {
+    padding-left: 3.2rem;
+    padding-right: 3.2rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    background-color: #fff;
+    border-radius: 15px;
+    border: 1px solid #398ab9;
+    color: #398ab9;
+}
+
+.toggler {
+    /* width: 23rem; */
+}
+.toggler-container {
+    /* display: flex;
+    justify-content: flex-end; */
+    margin-top: 1rem;
+    margin-right: 1rem;
+}
+.listIcon-styling {
+    margin-right: 0.5rem;
+    margin-top: 0.1rem;
+}
+
+.container-listView {
+    background-color: #fff;
+    border-radius: 15px;
+}
+
+.DataSaved-Message {
+    display: inline;
+    border: 2px solid #155724;
+    color: #155724;
+    background-color: #fff;
+    font-size: 1.19rem;
+    border-color: #8dca9b;
+}
+
+.dataSave-container {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+}
+.unavailable-style {
+    color: gray;
+}
+
+.Submit-btn {
+    border-radius: 15px;
+    height: 2rem;
+    width: 6rem;
+    background-color: #10316b;
+    border: 0;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    margin-bottom: 0.5rem;
+}
+
+.submit-btn-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.time-select {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.time-cell {
+    display: flex;
+    align-items: center;
+}
+
+.paypal-button.paypal-button-number-0.paypal-button-layout-vertical.paypal-button-shape-rect.paypal-button-number-multiple.paypal-button-env-sandbox.paypal-button-color-gold.paypal-button-text-color-black.paypal-logo-color-blue {
+    height: 2rem;
+}
+
+button.HireDetails-btn.mb-5 {
+    height: 4rem;
+    margin-top: 1rem;
+}
+
+/* .service-each.shadow-2.mb-30.transition-4.text-center {
+    height: 30rem;
+} */
+
+.hireNow-date-container {
+    margin: 0;
+}
+button.rounded.btn.btn-primary.w-100 {
+    background: #036905;
+}
+
+.signup-login-title{
+    margin-top: 27rem !important;
+}
+
+
+
+button.rounded.login-signup.btn.btn-primary.w-100 {
+    margin-bottom: 4rem;
+}
+
+.signup-login{
+    /* margin-bottom: 23rem; */
+    margin-bottom: 4rem;
+}
+
+.headerClassStyle{
+    position:static !important;
+}
+
+
+.modal-backdrop {
+background: #3c4049;
+opacity: 0.8;
+}
+
+.label-style-configuration{
+    display: block;
+    margin: 0 0 0.28571429rem 0;
+    color: rgba(0,0,0,.87);
+    font-size: .92857143em;
+    font-weight: 700;
+    text-transform: none;
+    margin-bottom: 0;
+}
+
+
+
+@media only screen and (min-width: 500px){
+.paypal-button-row {
+    height: 2.4rem !important;
+     vertical-align: top; 
+     min-height: 0 !important; 
+     max-height: 0 !important;
+}
+}

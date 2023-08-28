@@ -1,0 +1,14 @@
+.custom_tabcontent
+{
+    border-left:0.15rem solid #e1dada;
+}
+
+@media screen and (min-width: 576px)
+{
+    .col-sm-2.custom_leftposition {
+    flex: 0 0 16.666667%;
+    max-width: 19.5%;
+    margin-bottom: 20px;
+}
+
+}

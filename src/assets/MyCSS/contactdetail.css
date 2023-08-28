@@ -1,0 +1,11 @@
+@media screen and (max-width: 1024px) {
+    .cust-right-container-h{
+        margin-bottom: 2rem !important;
+    }
+    .cust-right-container-disc{
+        margin-bottom: 15px !important;
+    }
+    .hr-1{
+        margin-bottom: 15px !important;
+    }
+}

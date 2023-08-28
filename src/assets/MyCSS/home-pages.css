@@ -1,0 +1,67 @@
+.online{
+    position: absolute;
+    color: green;
+    left: 15px;
+}
+
+.custom_empty_div_chat{
+    width: 100%;
+    margin-top: 5rem;
+}
+
+@media screen and (max-width:1025px) {
+    /* header */
+    .header-1.mr-5{
+    margin-right: unset !important;
+}
+
+.header-1 .main-menu-1>div>ul>li>a{
+    font-size: 14px !important;
+}
+    .header-1 .main-menu-1 ul li{
+        margin-right: unset !important;
+    }
+}
+
+@media screen and (max-width:769px) {
+    /* find-service-page */
+.find-service-banner-txt .blue{
+    font-size: 45px;
+}
+}
+@media screen and (max-width:426px) {
+    /* find-service-page */
+    .find-service-banner-txt .blue{
+        font-size: 25px !important;
+    }
+    /* find-service-page */
+    #cust-find-service-btn{
+        margin: 0 auto;
+    }
+
+}
+@media screen and (max-width:376px) {
+    /* find-service-page */
+    .find-service-banner-txt .blue{
+        font-size: 22px !important;
+    }
+} 
+@media screen and (max-width:321px) {
+    /* find-service-page */
+    .find-service-banner-txt .blue{
+        font-size: 20px !important;
+    }
+    .main-menu-1{
+    width: 200px !important;
+    }
+}
+@media only screen and (max-width: 767px) {
+    .logo-class {
+      justify-content: center;
+    }
+  }
+  @media only screen and (min-width: 768px) {
+    .logo-class {
+    justify-content: end;
+    }
+  }

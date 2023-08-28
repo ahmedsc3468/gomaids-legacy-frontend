@@ -1,0 +1,28 @@
+import React, { Component, Fragment } from 'react';
+import MetaTags from "react-meta-tags";
+import Header from '../layouts/Headerinner';
+import Breadcrumb from '../layouts/Breadcrumb';
+import Footer from '../layouts/Footer';
+import Content from '../sections/forgot_pass/Content';
+
+class Forgot extends Component {
+    render() {
+        return (
+            <Fragment>
+                <MetaTags>
+                    <title>GoMaidz | Forgot-Password</title>
+                    <meta
+                        name="description"
+                        content="#"
+                    />
+                </MetaTags>
+                <Header/>
+                <Breadcrumb breadcrumb={{pagename:'Forgot-Password'}} />
+                <Content/>
+                <Footer/>
+            </Fragment>
+        );
+    }
+}
+
+export default Forgot;

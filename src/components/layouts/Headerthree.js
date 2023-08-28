@@ -1,0 +1,68 @@
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import classNames from 'classnames';
+import Menu from './Menu';
+
+import logo from '../../assets/img/logo/logo.jpeg';
+
+class Headerthree extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            navmethod: false,
+        };
+        this.toggleNav = this.toggleNav.bind(this);
+    }
+    // Navigation
+    toggleNav() {
+        this.setState({
+            navmethod: !this.state.navmethod
+        });
+    }
+    // Sticky Header
+    componentDidMount() {
+        window.addEventListener('scroll', () => {
+            this.setState({
+                isTop: window.scrollY > 100
+            });
+        }, false);
+    }
+    render() {
+        const stickyheader = this.state.isTop ? 'fixed-nav' : '';
+        return (
+            <header className={`head-type-2 head-type-3 ${stickyheader}`}>
+                <div className="container-fluid">
+                    <div className="row align-items-center no-gutters">
+                        <div className="col-lg-3">
+                            <div className="d-flex align-self-stretch">
+                                <div className="logo">
+                                    <Link to="/">
+                                        <img src={logo} alt="" />
+                                    </Link>
+                                </div>
+                                <div className={classNames("mobile-trigger", { "active": this.state.navmethod })} onClick={this.toggleNav}>
+                                    <span />
+                                    <span />
+                                    <span />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-lg-9">
+                            <div className="header-1">
+                                <nav className={classNames("main-menu-1 menu-2", { "active": this.state.navmethod })}>
+                                    <div className="d-flex justify-content-end align-items-center">
+                                        <Menu />
+                                        <Link to="/" className="head-1-book-call ml-15"><i className="fas fa-phone fs-15 mr-10" />+123 456 7890</Link>
+                                        {/* <Link to="/services-v1" className="head-1-book-2 bg-blue ml-15 shine-btn">Order Now</Link> */}
+                                    </div>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+        );
+    }
+}
+
+export default Headerthree;

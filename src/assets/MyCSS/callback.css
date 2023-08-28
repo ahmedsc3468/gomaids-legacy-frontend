@@ -1,0 +1,53 @@
+@media screen and (max-width: 769px) {
+    .cta-callback .callback-form{
+        display: flex !important;
+        flex-wrap: wrap;       
+    }
+    .cta-callback .f-name{
+        margin-right: 10px !important;
+    }
+    .cta-callback .contact-nbr{
+        margin-right: 0px !important;
+    }
+    .cta-callback .cust-submit-btn{
+        margin-top: 20px;
+    }
+}
+@media screen and (max-width: 426px) {
+    /* .cta-callback .callback-form{
+        display: flex !important;
+        flex-wrap: wrap;       
+    } */
+    .cta-callback .f-name{
+        margin-right: 0px !important;
+    }
+    .cta-callback .contact-nbr{
+        margin-right: 0px !important;
+    }
+    .cta-callback .cust-submit-btn{
+        margin-top: 0px;
+    }
+}
+@media screen and (max-width: 321px) {
+    /* .cta-callback .callback-form{
+        display: flex !important;
+        flex-wrap: wrap;       
+    } */
+    .cta-callback .f-name{
+        margin-right: 0px !important;
+        /* max-width: 230px; */
+    }
+    .cta-callback .contact-nbr{
+        margin-right: 0px !important;
+    }
+    .cta-callback .cust-submit-btn{
+        margin-top: 0px;
+        min-width: 150px;
+    }
+    .cta-callback .cust-f-name{
+        min-width: 250px;
+    }
+    .cta-callback .cust-contact-nbr{
+        min-width: 250px;
+    }
+}  

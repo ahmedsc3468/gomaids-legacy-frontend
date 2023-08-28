@@ -1,0 +1,357 @@
+/* user-dashboard */
+.cust-userdashboard-container{
+    margin-top: 20px;
+    margin-left: 30px;
+}
+.cust-barProg{
+    display: flex;
+    justify-content: center;
+}
+/* User-profile */
+
+.cust-userprofile-container{
+    max-width: 550px;
+    padding-top: 10px;
+    margin-left: 150px;
+    padding-bottom: 30px;
+}
+
+.cust-verify-button{
+    margin-left: 2rem;
+    padding: 6px 0px;
+    margin-top: 24px;
+}
+/* Payment Methods */
+@media screen and (min-width:1024px) and (max-width:1440px){
+    .custom_exp_mn{
+        padding-right: 2px;
+    }
+    .custom_cardnum{
+        padding-left: 25px;
+    }
+}
+@media screen and (max-width:600px) {
+    .MuiAvatar-root{
+         justify-content: left !important;
+    }
+    .MuiAvatar-img{
+         width: 50% !important;
+         height: 50% !important;
+    }
+    .MuiListItem-gutters{
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+    .jss1 .MuiListItemIcon-root{
+        color:black !important;
+      }
+    .orderkey{
+        display: none !important;
+    }
+    .makeStyles-emptyChat-7{
+        width: 60%;
+    }
+   
+  }
+@media screen and (min-width:768px) and (max-width:1023px){
+    .cust-pad-card{
+        padding-left: 25px !important;
+    }
+    .cust-pad-exp-mn{
+        padding-left: 15px;
+    }
+    .custom_col_pm
+    {
+        padding-right: 0px;
+    }
+    .cust-pad-status-h6{
+        padding-left: 0px !important;
+    }
+   .MuiListItemIcon-root{
+        color: black !important;
+    }
+}
+.mobilecard{
+    margin-bottom: 15px;
+}
+@media screen and (min-width:319px) and (max-width:768px)
+{
+       .custom_row{ 
+        margin-right: -2px;
+        margin-left: -10px;
+       }
+       .custom_font{
+        font-size: 13px;
+       }
+       .cust-pad-card {
+        padding-left: 15px !important;
+    }
+    .custom_sn{
+    margin-right: 3px;
+    margin-left: 2px;
+    }
+    .custom_cd_title{
+        padding-right:0px;
+        padding-left: 0px;
+    }
+    .cust-pad-exp-mn {
+        padding-left: 0px !important;
+    }
+    .cust_visa{
+        margin-left: -10px;
+    }
+    .cust_42_42{
+        margin-left: -12px;
+    }
+    .cust_4_{
+        margin-left: 20px;
+    }
+        .cus-col-sm-12{
+        padding-right: 10px !important;
+    }
+
+}
+.cust-pad-card{
+    padding-left: 40px;
+}
+.cust-pad-exp-mn{
+    padding-left: 30px;
+}
+.cust-pad-status-h6{
+    padding-inline: inherit;
+}
+
+/* wallet */
+@media screen and (min-width:319px) and (max-width:768px)
+{
+    .custom_w_date {
+       padding-right: 0px;
+    padding-left: 10px;
+    } 
+    .custom_w_orderky {
+        padding-right: 0px;
+     padding-left: 10px;
+     }
+     .custom_w_amnt {
+        padding-right: 0px;
+     padding-left: 10px;
+     }
+     .custom_w_2022 {
+        padding-right: 0px;
+     padding-left: 10px;
+     }
+     .custom_w_s_c{
+        padding-right: 0px;
+     padding-left: 5px;
+     }
+}
+.cust-wallet-container{
+    max-width: 900px;
+    padding-top: 10px;
+    margin-left: 150px;
+    padding-bottom: 30px;
+}
+.custom_empty_div{
+    width: 100%;
+}
+/* Dispute */
+.cust-userdashboard-dispute{
+    max-width: 550px;
+    padding-top: 10px;
+    margin-left: 150px;
+    padding-bottom: 30px;
+}
+.cust-userdashboard-Viewdispute{
+    max-width: 900px;
+    padding-top: 10px;
+    margin-left: 150px;
+    padding-bottom: 30px;
+}
+/* chat */
+.messenger .ui.green.button,.messenger .ui.green.buttons .button {
+    background-color: #21ba45;
+    color: #fff;
+    text-shadow: none;
+    background-image: none;
+    float: left;
+    border-radius: 0 5px 5px 0;
+    height: 40px;
+}
+   /* payment configuration */
+   .cust-payment-container{
+    justify-content: center;
+}
+.cust-radio-select-container{
+    justify-content: center;
+}
+@media screen and (max-width: 1025px) {
+    .compose-input{
+        width: 55%;
+    }
+      /* payment configuration */
+      .cust-payment-container .cust-payment-h{
+        font-size: 25px !important;
+    }
+     /* Stripe Configuration */
+     .cust-stripeconfiguration-container .cust-stripeconfiguration-header{
+        font-size: 22px;
+    }
+}
+
+
+@media screen and (max-width: 769px) {
+    /* Chat */
+    .messenger {
+        display: block !important;
+        width: 100%;
+        height: unset !important;
+        background: #fff;
+        /* grid-template-columns: 350px auto; */
+        /* grid-template-rows: 60px auto 60px; */
+        /* grid-column-gap: 1px; */
+        /* grid-row-gap: 1px; */
+    }
+    .scrollable.sidebar {
+        display: none;
+    }
+    .compose {
+        padding: 10px;
+        display: block;
+        align-items: center;
+        background: white;
+        border-top: 1px solid #eeeef1;
+        position: fixed;
+        width: 100%;
+        bottom: 0px;
+        /* float: left; */
+    }
+    .compose-input {
+        width: 87% !important;
+        border: none;
+        font-size: 14px;
+        height: 40px;
+        background: #e7e8f1;
+        padding-left: 1rem;
+        margin-left: 1rem;
+        float: left;
+        border-radius: 5px 0 0 5px;
+    }
+      /* payment configuration */
+      .cust-payment-container .cust-payment-h{
+        font-size: 18px !important;
+    }
+    /* Stripe Configuration */
+    .cust-stripeconfiguration-container .cust-stripeconfiguration-header{
+        font-size: 18px;
+    }
+    /* .ui.green.button, .ui.green.buttons .button {
+        background-color: #21ba45;
+        color: #fff;
+        text-shadow: none;
+        background-image: none;
+        float: left;
+        border-radius: 0 5px 5px 0;
+        height: 40px;
+    } */
+
+   
+}
+
+@media screen and (max-width: 426px) {
+    /* user-dashboard */
+    .cust-userdashboard-container{
+        margin-left: auto !important;
+        margin-right: auto;
+    }
+    /* User-profile */
+
+    .cust-userprofile-container{
+        margin-left: auto !important;
+        margin-right: auto;
+    }
+    /* Stripe Configuration */
+    .cust-stripeconfiguration-container .cust-stripeconfiguration-header{
+        font-size: 22px;
+        /* padding-top: 25px; */
+    }
+   
+    /* wallet */
+    .cust-wallet-container{
+        padding-top: 30px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Dispute */
+    .cust-userdashboard-dispute{
+        margin-left: auto !important;
+        margin-right: auto;
+    }
+    /* View Dispute */
+    .cust-userdashboard-Viewdispute{
+        max-width: 900px;
+        padding-top: 10px;
+        margin-left: 0px;
+        padding-bottom: 30px;
+    }
+    /* wallet */
+    .compose-input {
+        width: 75% !important;
+    }
+     /* User serivce */
+     .cust-user-service{
+        margin-left: unset !important;
+    }
+      /* payment configuration */
+      .cust-payment-container .cust-payment-h{
+        font-size: 25px !important;
+    }
+    /* chat */
+    .MuiListItem-root{
+        display: unset !important;
+    }
+    .MuiFab-root{
+        width: 40px !important;
+        height: 40px !important;
+    }
+    /* My order */
+    .cust-myorder-container{
+        margin-left: 0px !important;
+    }
+}
+@media screen and (max-width: 376px){
+    .compose-input {
+        width: 70% !important;
+    }
+     /* User serivce */
+     .cust-user-service{
+        margin-left: unset !important;
+    }
+       /* payment configuration */
+       .cust-payment-container .cust-payment-h{
+        font-size: 25px !important;
+    }
+    /* wallet */
+    .cust-wallet-container .cust-wallet-info{
+        padding-top: 10px !important;
+    }
+}
+@media screen and (max-width: 321px){
+    .compose-input {
+        width: 65% !important;
+    }
+
+    /* User serivce */
+    .cust-user-service{
+        margin-left: unset !important;
+    }
+    /* payment configuration */
+    .cust-payment-container .cust-payment-h{
+        font-size: 25px !important;
+    }
+     /* wallet */
+     .cust-wallet-container .cust-wallet-info{
+        padding-top: 10px !important;
+    }
+}
+

@@ -1,0 +1,30 @@
+@media only  screen and (max-width: 375px)
+{
+    
+    .pt-100.custom_mmaidz
+    {
+            padding-top: 50px;
+        };
+        
+}
+@media only  screen and (max-width: 375px)
+{
+    .custom_displaymaidz
+        {
+            display: flex;
+            justify-content: center;
+        };
+}
+    
+@media  only screen and (min-width: 376px) and (max-width: 769px)
+{
+    .pt-100.custom_mmaidz{
+        padding-top: 50px;
+    };
+}
+.custom_displaymaidz{
+    text-align: center;
+}
+.foooterparagraphp{
+    margin-top: -10px;
+}

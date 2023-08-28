@@ -1,0 +1,129 @@
+
+ .custom_order {
+
+    max-Width: 950px;
+        padding-top: 10px;
+        margin-Left: 150px;
+        padding-Bottom: 30px;
+}
+@media screen and (min-width:768px) and (max-width:1440px) {
+    .custom_order {
+
+        max-Width: 950px;
+            padding-top: 10px;
+            margin-Left: 150px;
+            padding-Bottom: 30px;
+    }
+}
+/* @media screen and (min-width:375px) and (max-width:768px) {
+    .custom_order {
+
+        max-Width: 950px;
+            padding-top: 10px;
+            margin-Left: 0px;
+            padding-Bottom: 30px;
+    }
+} */
+
+@media screen and (min-width:769px) and (max-width:1024px) {
+    .custom_order_ra {
+
+        max-Width: 950px;
+            padding-top: 10px;
+            margin-left: 0px;
+            margin-right: 0px;
+            padding-Bottom: 30px;
+    }
+    .custom_cost
+    {
+        padding-left: 10px;
+        padding-right: 0px;
+    }
+    .custom_timefrom
+    {
+        padding-right: 0px;
+    }
+    .custom_status
+    {
+        padding-right: 60px;
+    }
+}
+.verifybuton{
+    text-align: center;
+}
+
+@media screen and (min-width:200px) and (max-width:768px) {
+    .custom_order_ra {
+
+        max-Width: 950px;
+            padding-top: 10px;
+            margin-left: 0px;
+            margin-right: 0px;
+            padding-Bottom: 30px;
+    }
+   /* 259*/ .custom_card-body{
+        /* flex: 1 1 auto;
+        min-height: 1px; */
+        padding: 0rem;
+        margin-top: 10px;
+    margin-bottom: 10px;
+    }
+
+  /* 167*/  .custom1_col-sm-12{
+    position: relative;
+    width: 100%;
+    padding-left: 15px;    
+    padding-right: 15px;    
+    }
+    .mobileonwly{
+        display: none;
+    }
+    .mobilebook{
+        margin-top: 10px;
+        margin-left: 20px;
+    }
+    .mobileonlye{
+        display: none;
+    }
+    .mobileon{
+        display: block !important;
+        margin-left: 20px;
+    }
+
+/* pending 260*/    
+/* .custom_row{  
+        width: fit-content;
+    } */
+    .custom_statustb{
+        
+        padding-left: 0px;
+    }
+}
+.mobilecard{
+    margin-bottom: 15px;
+}
+@media screen and (min-width:320px) and (max-width:768px) {
+    .custom_order {
+        max-Width: 950px;
+            padding-top: 10px;
+            margin-Left: 150px;
+            padding-Bottom: 30px;
+    }
+}
+
+@media screen and (min-width:320px) and (max-width:768px) {   
+    .css-3bmhjh-MuiPaper-root-MuiPopover-paper {
+        top: 0rem;
+       } 
+      }
+ 
+@media only screen and (max-width: 375px) {
+    .custom_order {
+        margin-left: 0px;
+    }
+}
+
+.muipaperroot{
+    top:95px;
+}
+

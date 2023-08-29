@@ -1,7 +1,9 @@
 import axios from "axios";
 import configData from "../config.json"
+import getCsrfToken from "../common/getCsrfToken";
 const API_URL = `${configData.SERVER_URL}/api`;
-
+const csrfToken = getCsrfToken();
+console.log(csrfToken);
 class AuthService {
     
     login(email, password) {
@@ -59,16 +61,20 @@ class AuthService {
                 if (response.data.data !== undefined && response.data.data.accessToken) {
 
                     const userData = response.data.data;
-                    // console.log(userData);
+                    console.log('user data', userData);
                     let url = API_URL + `/role/${role_id}/user/${response.data.data.id}`;
                     console.log("url:"+url);
-                    axios.post(url).then(response => {
-                        console.log(response);
+                    axios.post(url, {}, {
+                        headers: {
+                          'X-CSRF-TOKEN': csrfToken
+                        }
+                      }).then(response => {
+                        console.log('response: ',response);
                         const newData = {
                             ...userData,
                             ...response.data.data
                         }
-                        // console.log(newData);
+                        console.log('new data',newData);
                         localStorage.setItem("user", JSON.stringify(newData));
                     })
                 }

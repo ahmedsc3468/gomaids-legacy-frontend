@@ -27,8 +27,8 @@ class UserDetails extends Component {
 
     constructor(props) {
         let user = AuthService.getCurrentUser();
-
-        // console.log(user);
+        console.log('auth',AuthService);
+        console.log('user',user);
         super(props);
 
         this.handleUserDetails = this.handleUserDetails.bind(this);
@@ -218,8 +218,6 @@ class UserDetails extends Component {
         let that = this;
         e.preventDefault();
         let user = AuthService.getCurrentUser();
-        console.log(user);
-        console.log(localStorage);
         const obj = {
              dob: this.state.dob,
             street_address: this.state.street_address,

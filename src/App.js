@@ -149,7 +149,7 @@ function App() {
     //   console.log('CSRF Token not available.');
     // }
 
-    return;
+    // return;
 
     window.Echo = new Echo({
         broadcaster: "pusher",

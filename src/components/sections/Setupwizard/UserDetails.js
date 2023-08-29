@@ -27,8 +27,8 @@ class UserDetails extends Component {
 
     constructor(props) {
         let user = AuthService.getCurrentUser();
-        console.log('auth',AuthService);
-        console.log('user',user);
+        console.log('authService: ',AuthService);
+        console.log('userData: ',user);
         super(props);
 
         this.handleUserDetails = this.handleUserDetails.bind(this);

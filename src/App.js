@@ -8,7 +8,6 @@ import Details from "./components/sections/portfoliodetails/Details";
 import ThankYou from "./components/sections/Hire/ThankYouOrder";
 import authHeader from "./services/auth-header";
 import config from "./config.json";
-import getCsrfToken from './common/getCsrfToken';
 window.Pusher = require('pusher-js')
 
 
@@ -141,15 +140,6 @@ const Dispute = React.lazy(() =>
 
 
 function App() {
-
-    // const csrfToken = getCsrfToken();
-    // if (csrfToken) {
-    //   console.log('CSRF Token:', csrfToken);
-    // } else {
-    //   console.log('CSRF Token not available.');
-    // }
-
-    // return;
 
     window.Echo = new Echo({
         broadcaster: "pusher",

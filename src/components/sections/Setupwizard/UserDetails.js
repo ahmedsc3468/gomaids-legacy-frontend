@@ -224,7 +224,7 @@ class UserDetails extends Component {
             city: this.state.city,
             state: this.state.state,
             country: this.state.country,
-            user_id: user?.id,
+            user_id: user.id,
             postal_code: this.state.postal_code,
             default_address: this.state.default_address,
             image: this.state.image,
@@ -308,7 +308,14 @@ class UserDetails extends Component {
                     `/api/user/${user.id}/profile`,
                     obj,
                     { headers: authHeader() }
-                )
+                ).then(function (response) {
+                    const latLng = {
+                        lat: response.data.data.lat,
+                        lng: response.data.data.lng
+                    };
+                    console.log('latLng: ',latLng);
+                    localStorage.setItem("latLng", JSON.stringify(latLng));
+                  });
 
             that.props.setUserDetails({
                 user_id: user.id,

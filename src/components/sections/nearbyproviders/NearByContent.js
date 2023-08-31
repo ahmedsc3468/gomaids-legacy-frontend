@@ -27,14 +27,21 @@ class NearByContent extends Component  {
   
   constructor(props) {
       let user = authService.getCurrentUser();
+      let latLng = JSON.parse(localStorage.getItem('latLng'));
+      if (latLng === null || latLng.length === 0) {
+        latLng = {lat: 49.342880 ,lng: -123.114840};
+      }
+      user.lat = (user.lat) ? user.lat : latLng.lat;
+      user.lng = (user.lng) ? user.lng : latLng.lat;
+      
         super(props);
         if(user!=null){
           this.state = {
             filter_service_provider:[],
             center: { lat: parseFloat(user.lat), lng: parseFloat(user.lng)},
                inputRad: 10000
-          } 
-        }else{
+          }
+        } else{
             this.state = {
               filter_service_provider:[],
               center: { lat: 49.342880, lng: -123.114840},
@@ -56,14 +63,12 @@ class NearByContent extends Component  {
             });
           }
           popup();
-    
           const apiCalldata = {
             lat: that.state.center.lat,
              lng: that.state.center.lng,
             radius: this.state.inputRad/1000
           };
-        //   console.log("Before Api Call", apidata)
-    
+          
             try {
               const services_provider = await axios
                 .post(config.SERVER_URL + `/api/nearserviceproviders`, apiCalldata, {

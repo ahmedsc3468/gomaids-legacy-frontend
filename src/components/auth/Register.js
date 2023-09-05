@@ -68,7 +68,7 @@ const vpassword = (value) => {
     }
 
     var upperCaseLetters = /[A-Z]/g;
-    if(!value.match(upperCaseLetters)) {
+    if (!value.match(upperCaseLetters)) {
         return (
             <div className="alert alert-danger" role="alert">
                 The password must have one Uppercse Letter.
@@ -76,7 +76,7 @@ const vpassword = (value) => {
         );
     }
     var lowerCaseLetters = /[a-z]/g;
-    if(!value.match(lowerCaseLetters)) {
+    if (!value.match(lowerCaseLetters)) {
         return (
             <div className="alert alert-danger" role="alert">
                 The password must have one lowercase Letter.
@@ -84,14 +84,14 @@ const vpassword = (value) => {
         );
     }
     var numbers = /[0-9]/g;
-    if(!value.match(numbers)) {
+    if (!value.match(numbers)) {
         return (
             <div className="alert alert-danger" role="alert">
                 The password must have one number.
             </div>
         );
     }
-    
+
 };
 
 const Register = () => {
@@ -229,7 +229,7 @@ const Register = () => {
 
                     {message && (
                         <div className="form-group">
-                            <div className={ successful ? "alert alert-success" : "alert alert-danger" } role="alert">
+                            <div className={successful ? "alert alert-success" : "alert alert-danger"} role="alert">
                                 {message}
                             </div>
                         </div>

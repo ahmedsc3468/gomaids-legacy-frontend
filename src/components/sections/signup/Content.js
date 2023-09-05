@@ -127,9 +127,9 @@ class Content extends Component {
             tempErrorUnique: {},
             loader: false,
             hidden: true,
-            hiddeneye:true,
-            confirmhidden:true,
-            confirmhiddeneye:true
+            hiddeneye: true,
+            confirmhidden: true,
+            confirmhiddeneye: true
         };
 
         this.onChangeTextFields = this.onChangeTextFields.bind(this);
@@ -210,23 +210,23 @@ class Content extends Component {
             emailError = "Email Field is Invalid ";
         }
         var upperCaseLetters = /[A-Z]/g;
-        if(upperCaseLetters.test(this.state.password)===false) {
+        if (upperCaseLetters.test(this.state.password) === false) {
             passwordError = "Password field must have one Uppercase letter";
         }
         var lowerCaseLetters = /[a-z]/g;
-        if(lowerCaseLetters.test(this.state.password)===false) {
+        if (lowerCaseLetters.test(this.state.password) === false) {
             passwordError = "Password field must have one Lowercase letter";
         }
 
         var numbers = /[0-9]/g;
-        if(numbers.test(this.state.password)===false) {
+        if (numbers.test(this.state.password) === false) {
             passwordError = "Password field must have one number";
         }
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-        if(specialChars.test(this.state.password)===false) {
+        if (specialChars.test(this.state.password) === false) {
             passwordError = "Password field must have one special character";
         }
-        if(!this.state.password || this.state.password.length < 8 ){
+        if (!this.state.password || this.state.password.length < 8) {
             passwordError = "Password must have 8 or more characters";
         }
         // if(this.state.password !==this.state.c_password ){
@@ -254,7 +254,7 @@ class Content extends Component {
                 c_passwordError,
                 role_idError,
                 mobile_noError,
-                loader:false
+                loader: false
             });
             return false;
         }
@@ -272,7 +272,7 @@ class Content extends Component {
 
     submit(e) {
         e.preventDefault();
-               
+
         this.setState({
             loader: true,
             error: ""
@@ -316,13 +316,13 @@ class Content extends Component {
                         this.props.history.push("/Setupwizard");
                     }
                     else {
-                        const len=response.data.error_message.length;
-                        
+                        const len = response.data.error_message.length;
+
                         let tempErrorUnique = {};
 
                         for (let i = 0; i < len; i++) {
                             if (response.data.error_message[i].includes("username")) {
-                                
+
                                 tempErrorUnique.username = response.data.error_message[i];
                             }
                             if (response.data.error_message[i].includes("email")) {
@@ -545,7 +545,7 @@ class Content extends Component {
                                                         ]}
                                                     />
                                                     {/* <button  onClick={this.toggleShow}>Show / Hide</button> */}
-                                                    <i className={this.state.hiddeneye ? "fa fa-eye-slash transform-v-center":"fa fa-eye transform-v-center"}  style={{cursor: 'pointer'}} onClick={this.toggleShow}></i>
+                                                    <i className={this.state.hiddeneye ? "fa fa-eye-slash transform-v-center" : "fa fa-eye transform-v-center"} style={{ cursor: 'pointer' }} onClick={this.toggleShow}></i>
 
 
                                                     {!this.state
@@ -588,9 +588,9 @@ class Content extends Component {
                                                             required,
                                                             password,
                                                         ]}
-                                                    />                                                    
+                                                    />
                                                     {/* <i className="fas fa-lock transform-v-center" /> */}
-                                                    <i className={this.state.confirmhiddeneye ? "fa fa-eye-slash transform-v-center":"fa fa-eye transform-v-center"}  style={{cursor: 'pointer'}} onClick={this.toggleShowConfirm}></i>
+                                                    <i className={this.state.confirmhiddeneye ? "fa fa-eye-slash transform-v-center" : "fa fa-eye transform-v-center"} style={{ cursor: 'pointer' }} onClick={this.toggleShowConfirm}></i>
 
 
 
@@ -643,12 +643,14 @@ class Content extends Component {
                                                             }
                                                         </span>
                                                     }
-                                                     {this.state.tempErrorUnique.mobile_no &&
+                                                    {this.state.tempErrorUnique.mobile_no &&
                                                         <span className="text-danger">
                                                             {this.state.tempErrorUnique.mobile_no}
                                                         </span>
                                                     }
                                                 </div>
+
+
                                                 <div className="form-group">
                                                     <select
                                                         className="form-control input-white"
@@ -667,34 +669,34 @@ class Content extends Component {
                                                         defaultValue="-- Are you a --"
                                                     >
                                                         <option value="" hidden>
-      -- Are you a --
-    </option>
-    {this.state.role.map((value, index) => {
-  const roleName = value.name.replace("_", " ");
-  if (index===0){
-    const modifiedRole = "Service Provider";
-    return (
-      <option value={value.id} key={index}>
-        {modifiedRole}
-      </option>
-    );
-  }
-  else if (index === 1) {
-    // modify the name of the second item
-    const modifiedName = "Customer";
-    return (
-      <option value={value.id} key={index}>
-        {modifiedName}
-      </option>
-    );
-  } else {
-    return (
-      <option value={value.id} key={index}>
-        {roleName}
-      </option>
-    );
-  }
-})}
+                                                            -- Are you a --
+                                                        </option>
+                                                        {this.state.role.map((value, index) => {
+                                                            const roleName = value.name.replace("_", " ");
+                                                            if (index === 0) {
+                                                                const modifiedRole = "Service Provider";
+                                                                return (
+                                                                    <option value={value.id} key={index}>
+                                                                        {modifiedRole}
+                                                                    </option>
+                                                                );
+                                                            }
+                                                            else if (index === 1) {
+                                                                // modify the name of the second item
+                                                                const modifiedName = "Customer";
+                                                                return (
+                                                                    <option value={value.id} key={index}>
+                                                                        {modifiedName}
+                                                                    </option>
+                                                                );
+                                                            } else {
+                                                                return (
+                                                                    <option value={value.id} key={index}>
+                                                                        {roleName}
+                                                                    </option>
+                                                                );
+                                                            }
+                                                        })}
                                                         {/* {this.state.role.map(
                                                             (value, key) => {
                                                                 const roleName =
@@ -744,6 +746,35 @@ class Content extends Component {
                                                         </div>
                                                     </div>
                                                 </div>
+
+
+
+                                                <button className="btn btn-black btn-block mt-20 ">
+                                                    Send OTP
+                                                </button>
+
+                                                {/* Add white line using react bootstrap */}
+                                                <div className="form-group">
+                                                    <hr className="bg-white mt-20 mb-20" />
+                                                </div>
+
+
+                                                {/* Enter diabled OTP input container  */}
+
+                                                <div className="form-group relative mb-25 mb-sm-20">
+                                                    <input
+                                                        type="text"
+                                                        className="form-control input-lg input-white shadow-5"
+                                                        name="otp"
+                                                        placeholder="Enter OTP"
+                                                        disabled
+                                                        color="gray"
+                                                    />
+                                                    <i className="fas fa-key transform-v-center" />
+
+                                                </div>
+
+
                                                 <button
                                                     type="submit"
                                                     className="btn btn-black btn-block mt-20"
@@ -753,6 +784,7 @@ class Content extends Component {
                                                 >
                                                     Sign Up
                                                 </button>
+
                                                 <div className="signup-login text-center">
                                                     <p className="mt-15 fs-13 white">
                                                         Already a member?{" "}

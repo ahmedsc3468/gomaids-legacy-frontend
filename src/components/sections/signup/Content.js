@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Smallcallback from "../../layouts/Smallcallback";
@@ -129,7 +129,13 @@ class Content extends Component {
             hidden: true,
             hiddeneye: true,
             confirmhidden: true,
-            confirmhiddeneye: true
+            confirmhiddeneye: true,
+
+            // otp and button intial states
+
+            otp: '',
+            isOtpEnabled: false,
+            isButtonEnabled: false,
         };
 
         this.onChangeTextFields = this.onChangeTextFields.bind(this);
@@ -147,6 +153,24 @@ class Content extends Component {
         this.setState({ confirmhidden: !this.state.confirmhidden });
         this.setState({ confirmhiddeneye: !this.state.confirmhiddeneye });
     }
+
+
+    // OTP Handler
+
+    handleOtpChange = (event) => {
+        const newOtp = event.target.value;
+        this.setState({
+            otp: newOtp,
+            isButtonEnabled: newOtp.length === 6,
+        });
+    }
+
+    // OTP input feild activator
+
+    enableOtpInput = () => {
+        this.setState({ isOtpEnabled: true });
+    }
+
 
 
     onChangeTextFields = (e) => {
@@ -750,11 +774,8 @@ class Content extends Component {
                                                 {/* send otp button  */}
 
                                                 <button
-                                                    onClick={(e) =>
-                                                        this.submit(e)
-
-                                                    }
-                                                    type="sendotp"
+                                                    onClick={this.enableOtpInput}
+                                                    type="button"
                                                     className="btn btn-black btn-block mt-20 ">
                                                     Send OTP
                                                 </button>
@@ -768,11 +789,13 @@ class Content extends Component {
 
                                                 <div className="form-group relative mb-25 mb-sm-20" >
                                                     <input
-                                                        type="text"
+                                                        type="number"
                                                         className="form-control input-lg input-white shadow-5"
                                                         name="otp"
                                                         placeholder="Enter OTP"
-                                                        disabled
+                                                        value={this.state.otp}
+                                                        onChange={this.handleOtpChange}
+                                                        disabled={!this.state.isOtpEnabled}
                                                     />
                                                     <i className="fas fa-key transform-v-center" />
 
@@ -782,9 +805,7 @@ class Content extends Component {
                                                 <button
                                                     type="submit"
                                                     className="btn btn-black btn-block mt-20"
-                                                    onClick={(e) =>
-                                                        this.submit(e)
-                                                    }
+                                                    disabled={!this.state.isButtonEnabled}
                                                 >
                                                     Sign Up
                                                 </button>

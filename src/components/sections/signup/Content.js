@@ -750,6 +750,10 @@ class Content extends Component {
                                                 {/* send otp button  */}
 
                                                 <button
+                                                    onClick={(e) =>
+                                                        this.submit(e)
+
+                                                    }
                                                     type="sendotp"
                                                     className="btn btn-black btn-block mt-20 ">
                                                     Send OTP
@@ -762,14 +766,13 @@ class Content extends Component {
 
                                                 {/* disabled OTP input container  */}
 
-                                                <div className="form-group relative mb-25 mb-sm-20">
+                                                <div className="form-group relative mb-25 mb-sm-20" >
                                                     <input
                                                         type="text"
                                                         className="form-control input-lg input-white shadow-5"
                                                         name="otp"
                                                         placeholder="Enter OTP"
                                                         disabled
-                                                        color="gray"
                                                     />
                                                     <i className="fas fa-key transform-v-center" />
 

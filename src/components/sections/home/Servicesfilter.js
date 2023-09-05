@@ -28,7 +28,7 @@ class Service extends Component {
         let user = AuthService.getCurrentUser();
         // console.log("user",user);
         super(props);
-      if(user!=null){
+      if(user!=null && (user.lat!=null || user.lng!=null)){
         this.state = {
             serviceblock: this.props.serviceblock,
             serviceProviders: [],

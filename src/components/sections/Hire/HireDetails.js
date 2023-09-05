@@ -237,7 +237,7 @@ class HireDetails extends React.Component {
 
   async componentDidMount() {
     toast.success("Your service has been booked temporarily will get unbooked If you don't confirm payment within 10 minutes")
-    const stripePromise = await loadStripe("pk_test_51Ksj9mEPHCxIe48nVPbGbqakgbbmym22iEnepeNrxYo7JxBl8cDs3kLEHd6wQKnxV02rX9PTel1kEmekUu3L6zmd00g1hfeWqa");
+    const stripePromise = await loadStripe("pk_test_51NiH9YEKvKY3WrKz1TnxITwiI9FQDsGht8IRFjxlwNYRu3N0CMfMBclQ09XxM1rjX1NfgV453L7UFCpervgCEctv00aLdDMpiv");
     this.setState({ stripePromise })
     // console.log("stripePromise", stripePromise)
 console.log(this.state.getConfigr)

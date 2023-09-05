@@ -31,11 +31,10 @@ class NearByContent extends Component  {
       if (latLng === null || latLng.length === 0) {
         latLng = {lat: 49.342880 ,lng: -123.114840};
       }
-      user.lat = (user.lat) ? user.lat : latLng.lat;
-      user.lng = (user.lng) ? user.lng : latLng.lat;
-      
         super(props);
         if(user!=null){
+          user.lat = (user.lat) ? user.lat : latLng.lat;
+          user.lng = (user.lng) ? user.lng : latLng.lng;
           this.state = {
             filter_service_provider:[],
             center: { lat: parseFloat(user.lat), lng: parseFloat(user.lng)},

@@ -749,7 +749,9 @@ class Content extends Component {
 
 
 
-                                                <button className="btn btn-black btn-block mt-20 ">
+                                                <button
+                                                    type="sendotp"
+                                                    className="btn btn-black btn-block mt-20 ">
                                                     Send OTP
                                                 </button>
 

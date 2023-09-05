@@ -747,7 +747,7 @@ class Content extends Component {
                                                     </div>
                                                 </div>
 
-
+                                                {/* send otp button  */}
 
                                                 <button
                                                     type="sendotp"
@@ -755,13 +755,12 @@ class Content extends Component {
                                                     Send OTP
                                                 </button>
 
-                                                {/* Add white line using react bootstrap */}
                                                 <div className="form-group">
                                                     <hr className="bg-white mt-20 mb-20" />
                                                 </div>
 
 
-                                                {/* Enter diabled OTP input container  */}
+                                                {/* disabled OTP input container  */}
 
                                                 <div className="form-group relative mb-25 mb-sm-20">
                                                     <input

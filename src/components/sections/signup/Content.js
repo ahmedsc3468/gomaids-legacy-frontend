@@ -131,11 +131,12 @@ class Content extends Component {
             confirmhidden: true,
             confirmhiddeneye: true,
 
-            // otp and button intial states
+            // otp, button, animation intial states
 
             otp: '',
             isOtpEnabled: false,
             isButtonEnabled: false,
+            isAnimationEnabled: false,
         };
 
         this.onChangeTextFields = this.onChangeTextFields.bind(this);
@@ -168,7 +169,7 @@ class Content extends Component {
     // OTP input feild activator
 
     enableOtpInput = () => {
-        this.setState({ isOtpEnabled: true });
+        this.setState({ isOtpEnabled: true, isAnimationEnabled: true });
     }
 
 
@@ -776,7 +777,7 @@ class Content extends Component {
                                                 <button
                                                     onClick={this.enableOtpInput}
                                                     type="button"
-                                                    className="btn btn-black btn-block mt-20 ">
+                                                    className="btn btn-black btn-block mt-20 animate ">
                                                     Send OTP
                                                 </button>
 
@@ -804,7 +805,7 @@ class Content extends Component {
 
                                                 <button
                                                     type="submit"
-                                                    className="btn btn-black btn-block mt-20"
+                                                    className={`btn btn-signup btn-block mt-20 ${this.state.isAnimationEnabled ? 'animate' : ''}`}
                                                     disabled={!this.state.isButtonEnabled}
                                                 >
                                                     Sign Up

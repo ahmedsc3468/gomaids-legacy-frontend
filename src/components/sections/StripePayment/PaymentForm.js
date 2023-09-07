@@ -68,14 +68,20 @@ export default function PaymentForm({ cost, checkOutBtnEnable, service_provider_
                     // "user_id":3,
                     // "email":"abc@gamil.com",
                     // "amount": 96
-                    const response = await axios.post(config.SERVER_URL + "/api/stripe", {
+                    let stripeResponse;
+                    await axios.post(config.SERVER_URL + "/api/stripe", {
                         stripeToken: result.token.id,
                         amount: cost,
                         user_id: user.id,
+                        email: user?.email,
                         //    service_provider_id:service_provider_id,
-                        email
+                        // email
 
-                    })
+                    }).then(function(response){
+                        stripeResponse = response;
+                    }).catch(function (error) {
+                        console.log('stripe api error: ', error.message);
+                    });
 
                     const storeCardData = await axios.post(config.SERVER_URL + `/api/configurations/${user.id}`,
                         {
@@ -89,7 +95,11 @@ export default function PaymentForm({ cost, checkOutBtnEnable, service_provider_
 
                             card_no:result.token.card.last4,
 
-                        })
+                        }).then(function(response){
+                            console.log('configs api working: ',response.data);
+                        }).catch(function (error) {
+                            console.log('configs api error: ', error.message);
+                        });
                         console.log("::::::::::::::: STORE CARD DATA ::::::::::", storeCardData)
 
 
@@ -103,8 +113,8 @@ export default function PaymentForm({ cost, checkOutBtnEnable, service_provider_
                     // console.log("Last 4 digit CARD -----",result.token.card.last4,)
 
                     // console.log("INFORMATION CARD",response.data)
-
-                    if (response.data.success) {
+                    console.log('response inside: ',stripeResponse);
+                    if (stripeResponse.data.success) {
 
                         swal("Hurray..! Payment Successful", "Please Click on Checkout Button for Order Placed", "success")
 

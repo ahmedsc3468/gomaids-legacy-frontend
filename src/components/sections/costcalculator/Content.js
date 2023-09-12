@@ -30,12 +30,12 @@ class Content extends Component {
                                         <li className="mb-15">
                                             <span className="icon"><i className="fas fa-phone blue" /></span>
                                             <span className="sub-head">Call Us Now</span>
-                                            <p>+123 456 7890</p>
+                                            <p>+1 (236) 808-6010</p>
                                         </li>
                                         <li>
                                             <span className="icon"><i className="fas fa-envelope blue" /></span>
                                             <span className="sub-head">Send Us a Mail</span>
-                                            <p>info@example.com</p>
+                                            <p>info@gomaidz.com</p>
                                         </li>
                                     </ul>
                                 </div>

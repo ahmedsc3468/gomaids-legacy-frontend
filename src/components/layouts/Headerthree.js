@@ -52,7 +52,7 @@ class Headerthree extends Component {
                                 <nav className={classNames("main-menu-1 menu-2", { "active": this.state.navmethod })}>
                                     <div className="d-flex justify-content-end align-items-center">
                                         <Menu />
-                                        <Link to="/" className="head-1-book-call ml-15"><i className="fas fa-phone fs-15 mr-10" />+123 456 7890</Link>
+                                        <Link to="/" className="head-1-book-call ml-15"><i className="fas fa-phone fs-15 mr-10" />+1 (236) 808-6010</Link>
                                         {/* <Link to="/services-v1" className="head-1-book-2 bg-blue ml-15 shine-btn">Order Now</Link> */}
                                     </div>
                                 </nav>

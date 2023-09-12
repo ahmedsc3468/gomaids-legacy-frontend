@@ -28,7 +28,7 @@ class Headerfour extends Component {
                             <div className="col-lg-4 d-none d-lg-block">
                                 <div className="left-head">
                                     <span className="email mr-20 fs-15 f-500">
-                                        <i className="fas fa-envelope blue mr-10" />info@example.com
+                                        <i className="fas fa-envelope blue mr-10" />info@gomaidz.com
               </span>
                                     <div className="social-head d-inline">
                                         <ul className="social-icons ">
@@ -51,7 +51,7 @@ class Headerfour extends Component {
                             </div>
                             <div className="col-lg-4 col-6 text-right">
                                 <div className="right-head">
-                                    <span className="fs-15 f-500"><i className="fas fa-phone blue mr-10" />+123 456 789</span>
+                                    <span className="fs-15 f-500"><i className="fas fa-phone blue mr-10" />+1 (236) 808-6010</span>
                                     <Link to="/" className="btn btn-blue btn-md ml-20">Request Delivery</Link>
                                 </div>
                             </div>

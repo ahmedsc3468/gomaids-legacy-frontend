@@ -18,7 +18,7 @@ class Cta extends Component {
                         </div>
                         <div className="col-lg-5 text-center text-lg-right">
                             <div className="mb-20 cta-inline-btn">
-                                <Link to="/contact" className="btn btn-white-border"><i className="fas fa-headphones mr-10" />+123 456 789</Link>
+                                <Link to="/contact" className="btn btn-white-border"><i className="fas fa-headphones mr-10" />+1 (236) 808-6010</Link>
                             </div>
                             <div className="cta-inline-btn">
                                 <Link to="/contact" className="btn btn-black shine-btn">Get a Quote Now</Link>

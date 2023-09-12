@@ -71,11 +71,11 @@ class Footer extends Component {
                                 <ul>
                                     <li className="mb-10 white">
                                         <i className="fas fa-phone blue" />
-                                        +123 456 7890
+                                        +1 (236) 808-6010
                                     </li>
                                     <li>
                                         <i className="fas fa-envelope blue" />
-                                        info@example.com
+                                        info@gomaidz.com
                                     </li>
                                 </ul>
                             </div>

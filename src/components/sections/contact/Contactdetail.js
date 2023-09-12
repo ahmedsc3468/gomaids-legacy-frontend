@@ -174,12 +174,12 @@ class Contactdetail extends Contacthelper {
                                 <li className="mb-15">
                                     <span className="icon bg-blue"><i className="fas fa-phone" /></span>
                                     <span className="sub-head">Phone</span>
-                                    <p>+123 456 7890</p>
+                                    <p>+1 (236) 808-6010</p>
                                 </li>
                                 <li>
                                     <span className="icon bg-blue"><i className="fas fa-envelope" /></span>
                                     <span className="sub-head">Email</span>
-                                    <p>info@example.com</p>
+                                    <p>info@gomaidz.com</p>
                                 </li>
                             </ul>
                             <div className="hr-1 bg-black opacity-1 mt-25 mb-25" />
@@ -188,7 +188,7 @@ class Contactdetail extends Contacthelper {
                                 <li>
                                     <span className="icon bg-blue"><i className="fas fa-map-marker-alt" /></span>
                                     <span className="sub-head">Location</span>
-                                    <p>2663 Lodgeville Road Minneapolis, Minnesota 55402, USA</p>
+                                    <p>127 Westmore Dr, Unit 119, Etobicoke, ON M9V 3Y6, Canada</p>
                                 </li>
                             </ul>
                         </div>
@@ -360,7 +360,7 @@ class Contactdetail extends Contacthelper {
                     <div className="row mt-45">
                         <div className="col-lg-12">
                             <div className="map-responsive contact-map">
-                                <iframe title="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.9914406081493!2d2.292292615201654!3d48.85837360866272!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e2964e34e2d%3A0x8ddca9ee380ef7e0!2sEiffel%20Tower!5e0!3m2!1sen!2sin!4v1571115084828!5m2!1sen!2sin" height={400} allowFullScreen />
+                                <iframe title="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2882.7763638537626!2d-79.60347522457923!3d43.73597244707463!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b3aff597d8d5f%3A0xb4446c720180aa18!2s127%20Westmore%20Dr%2C%20Etobicoke%2C%20ON%20M9V%203Y6%2C%20Canada!5e0!3m2!1sen!2s!4v1694437116878!5m2!1sen!2s" height={400} allowFullScreen />
                             </div>
                         </div>
                     </div>

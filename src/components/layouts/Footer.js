@@ -97,14 +97,14 @@ class Footer extends Component {
                                     </Link>
                                 </li>
                                 <li>
-                                    <a href="../../../privacy-policy.html" target="_blank">
+                                    {/* <a href="/privacy-policy" target="_blank">
                                     <i className="fas fa-angle-double-right" />
                                         Privacy Policy  
-                                    </a>
-                                    {/* <Link to="../../../privacy-policy.html" >
+                                    </a> */}
+                                    <Link to="/privacy-policy" >
                                         <i className="fas fa-angle-double-right" />
                                         Privacy Policy
-                                    </Link> */}
+                                    </Link>
                                 </li>
                             </ul>
                         </div>

@@ -47,7 +47,6 @@ class CalendlyHour extends Component {
                 name: "TUE",
                 name_: "Tuesday",
                 schedule: "",
-                unavailable: false,
                 unavailable: true,
                 checked: false,
                 status: 0,
@@ -60,7 +59,6 @@ class CalendlyHour extends Component {
                 name: "WED",
                 name_: "Wednesday",
                 schedule: "",
-                unavailable: false,
                 unavailable: true,
                 checked: false,
                 status: 0,
@@ -73,7 +71,6 @@ class CalendlyHour extends Component {
                 name: "THU",
                 name_: "Friday",
                 schedule: "",
-                unavailable: false,
                 unavailable: true,
                 checked: false,
                 status: 0,
@@ -86,7 +83,6 @@ class CalendlyHour extends Component {
                 name: "FRI",
                 name_: "Friday",
                 schedule: "",
-                unavailable: false,
                 unavailable: true,
                 checked: false,
                 status: 0,
@@ -99,7 +95,6 @@ class CalendlyHour extends Component {
                 name: "SAT",
                 name_: "Saturday",
                 schedule: "",
-                unavailable: false,
                 unavailable: true,
                 checked: false,
                 status: 0,
@@ -112,7 +107,6 @@ class CalendlyHour extends Component {
                 name: "SUN",
                 name_: "Sunday",
                 schedule: "",
-                unavailable: false,
                 unavailable: true,
                 checked: false,
                 status: 0,
@@ -1208,6 +1202,8 @@ class CalendlyHour extends Component {
                                                 className="mb-3 inCellAlignment"
                                             >
                                                 <Select
+                                                    menuPortalTarget={document.body} 
+                                                    styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                                                     options={this.getSlots(
                                                         index
                                                     )}
@@ -1248,6 +1244,8 @@ class CalendlyHour extends Component {
                                                 className="mb-3 inCellAlignment"
                                             >
                                                 <Select
+                                                    menuPortalTarget={document.body} 
+                                                    styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                                                     w options={this.state.hours}
                                                     defaultValue={{
                                                         label: this.getTimeIn12h(

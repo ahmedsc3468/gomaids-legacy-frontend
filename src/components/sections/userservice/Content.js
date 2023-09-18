@@ -198,7 +198,7 @@ class UserService extends Component {
        var confirmation= localStorage.getItem('cs');
         if(confirmation == 1){
             const updateData = {
-                service_type_id: that.state.service_type_id,
+                service_type_id: that.state.service_type_id !== "" ?  that.state.service_type_id : that.state.servicesArr[0].value,
                 user_id: that.state.user_id,
                 experience: that.state.experience,
                 description: that.state.description,
@@ -206,9 +206,10 @@ class UserService extends Component {
                 price_per_hour:that.state.price,
                 auto_accept: that.state.auto_accept
             };
-            // console.log(":::::", updateData)
+            console.log("UPDATE DATA :::::", updateData);
+            console.log('get type', typeof that.state.service_type_id);
             try {
-                const updateService = await axios.put(config.SERVER_URL + `/api/serviceprovider/service/${that.state.service_type_id}`, updateData, {
+                const updateService = await axios.put(config.SERVER_URL + `/api/serviceprovider/service/${updateData.service_type_id}`, updateData, {
                     headers: authHeader(),
             })
             
@@ -216,7 +217,7 @@ class UserService extends Component {
             await that.componentDidMount();
 
             that.resetForm();
-            that.filterService(that.state.service_type_id);
+            that.filterService(updateData.service_type_id);
             swal("Updated!", "Your Service Has Been Update!", "success")
             localStorage.removeItem('cs')
             }
@@ -318,11 +319,11 @@ class UserService extends Component {
         //     return;
         // }
         event.preventDefault()
-        const languageIds = this.state.selectedLang?.map(lang => ({ value: lang?.value }))
+        const languageIds = this.state.selectedLang?.map(lang => ( lang?.value ))
         const service_types = {
             user_id: this.state.user_id,
             service_type_id: this.state.selectedServiceType,
-            price: this.state.modelPrice,
+            price_per_hour: this.state.modelPrice,
             experience: this.state.modelExperience,
             description: this.state.modelDescription,
             education: this.state.modelEducation,
@@ -552,9 +553,9 @@ class UserService extends Component {
         const servicesArr = [...this.state.servicesArr];
 
         const filteredService = servicesArr.filter(s => s.value === value);
-
+        console.log(":::: 556 ::::", filteredService)
         const temp = this.state.providerServices.data[0].serviceprovider_services.filter((s => s.service_type.name === filteredService[0].label))
-// console.log(":::: 465 ::::", temp)
+console.log(":::: 558 ::::", temp)
         this.setState({ description: temp[0].description })
         this.setState({ education: temp[0].education })
         this.setState({ experience: temp[0].experience })

@@ -438,13 +438,15 @@ class Productdetail extends Component {
                     console.log("::::::: ProDet 438 ::::::::", resp)
 
                 if (resp.data.success) {
-
+                    const service = this.state.currentServiceProvider.serviceprovider_services.filter(x => x.service_type.name === this.state.service)
+                    const servicePrice = service[0].service_type.service_price.price_per_hour
                     this.props.history.push("/hire/details", {
                         currentServiceProvider: this.state.currentServiceProvider,
                         date: this.state.date,
                         slot_start_time: this.state.timeForm,
                         slot_end_time: this.state.timeTo,
-                        serviceAvailed: this.state.service
+                        serviceAvailed: this.state.service,
+                        servicePrice: servicePrice
                     })
                 } else {
                     console.log(resp.data.data.error);

@@ -44,7 +44,7 @@ class HireDetails extends React.Component {
 
 
   constructor(props) {
-
+    
     super(props);
     let user = JSON.parse(localStorage.getItem("user"));
   
@@ -79,7 +79,7 @@ class HireDetails extends React.Component {
 
     let diff = parseInt(endTime) - parseInt(startTime)
 
-    let costFound = Math.abs(diff) * this.props.location.state.currentServiceProvider.user.service_price.price_per_hour
+    let costFound = Math.abs(diff) * this.props.location.state.servicePrice
 
 
 
@@ -133,14 +133,10 @@ class HireDetails extends React.Component {
     this.setState({ isPending: true }) 
     const user = authService.getCurrentUser()
 
-
-    const date_ = this.state.date.split("-");
-
-    const order_date = date_[2] + "-" + date_[1] + "-" + date_[0];
     const obj = {
       service_taker_id: user.id,
       service_provider_id: this.props.location.state.currentServiceProvider.id,
-      order_date: order_date,
+      order_date: this.state.date,
       slot_start_time: this.state.slot_start_time,
       slot_end_time: this.state.slot_end_time,
       cost: this.state.costAccumulation,
@@ -309,6 +305,7 @@ console.log(this.state.getConfigr)
       amount : this.state.costAccumulation,
       user_id:currentuser.id,
     }
+    console.log('obj1 ', obj1);
     try {
      
       const payAmnt = await axios.post(config.SERVER_URL + "/api/pay",obj1, {

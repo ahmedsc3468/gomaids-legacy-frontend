@@ -63,13 +63,10 @@ class ServiceTakerOrderDetails extends Component {
         const user = AuthService.getCurrentUser()
         const order_id = this.props.match.params.order_id
         //console.log("::::: Order Id:::::", this.props.match.params)
-            const usersession = JSON.parse(localStorage.getItem("user"));
-
-        
-            const order = await axios.get(config.SERVER_URL + `/api/order/${order_id}`,
-            {
-                headers: authHeader(),
-            });
+        const order = await axios.get(config.SERVER_URL + `/api/order/${order_id}`,
+        {
+            headers: authHeader(),
+        });
             
            
         this.setState({ order: order.data.data,
@@ -78,14 +75,9 @@ class ServiceTakerOrderDetails extends Component {
              order_status:order.data.data.status,
              currentTab: 'userprofile',
              rating: parseInt(order.data.data.rating) ,
-            total: parseInt(order.data.data.cost) + parseInt(order.data.data.tipamount)
+            total: parseInt(order.data.data.cost) + parseInt(order.data.data.tipamount || 0)
             })
-
             
-        // console.log("::::: Order 54 :::::", this.state.currentTab)
-
-        // console.log("::::: Order 68 :::::", this.state.order)
-        // console.log("convochat",this.state.convochat)
     }
     async handleFeedBackClose() {
         const user = AuthService.getCurrentUser()
@@ -454,7 +446,7 @@ class ServiceTakerOrderDetails extends Component {
                                                             <div className="text-secondary">
                                                                 <Row>
                                                                     <Col sm='5'>Per Hour Rate</Col>
-                                                                    <Col sm='3' className="text-right">{this.state.order.service_provider.user.service_price.price_per_hour + "$"}</Col>
+                                                                    <Col sm='3' className="text-right">{this.state.order.per_hour_rate + "$"}</Col>
                                                                 </Row>
                                                                 <Row hidden={this.state.order.tipamount == null}>
                                                                     <Col sm='5'>Tip Amount</Col>

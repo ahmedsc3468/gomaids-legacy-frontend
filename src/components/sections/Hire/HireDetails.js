@@ -146,7 +146,8 @@ class HireDetails extends React.Component {
       state: this.state.state,
       country: this.state.country,
       city: this.state.city,
-      service: this.state.service_availed
+      service: this.state.service_availed,
+      per_hour_rate: this.props.location.state.servicePrice
 
     }
 

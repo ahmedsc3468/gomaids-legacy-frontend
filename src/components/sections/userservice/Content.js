@@ -431,6 +431,12 @@ class UserService extends Component {
             let servicesArr = [];
             // servicesArr.length=3;
             for (let i = 0; i < data.data.length; i++) {
+
+                if (data.data[i].serviceprovider_services.length === 0) {
+                    this.openModal()
+                    return
+                }
+
                 for (let item of data.data[i].serviceprovider_services) {
                     servicesArr.push({
                         label: item.service_type.name,

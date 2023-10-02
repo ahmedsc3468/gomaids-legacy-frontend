@@ -348,7 +348,7 @@ console.log(this.state.getConfigr)
     //       console.log( " :::::: 328 ::::: ",data)
     }
     catch (errors) {
-      swal("Ops", "Pyament failed !", "danger")
+      swal("Ops", "Payment Failed!", "danger")
       console.log(errors)
   }
     // this.setState({ payWithPayNow: true })

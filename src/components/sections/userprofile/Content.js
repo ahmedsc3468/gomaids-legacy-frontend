@@ -117,7 +117,19 @@ class UserDetails extends Component {
         return Object.keys(errors).length === 0 ? null : errors;
     };
 
-    openModal = () => {
+    openModal = async () => {
+        await axios.put(config.SERVER_URL + `/api/user/${this.state.user_id}`, { mobile_no: this.state.mobile_no },
+        {
+            headers: authHeader(),
+        })
+        const requestBody = { 'user_id': this.state.user_id, 'mobile_no': this.state.mobile_no }
+        const { data } = await axios.post(config.SERVER_URL + `/api/resendsms`, requestBody,
+        {
+            headers: authHeader(),
+        })
+        if (data.success === false) {
+            swal("Error!", "Something went wrong.", "danger")
+        }
         this.setState({ isOpen: true});
     }
 
@@ -215,6 +227,7 @@ class UserDetails extends Component {
         event.preventDefault()
 
         const ob = {
+            id: this.state.user_id,
             otp : this.state.verifyCode,
             mobile_no:this.state.mobile_no
         }
@@ -558,7 +571,7 @@ let that=this;
                         </div>
                         <div className="form-group verifybuton col-md-6">
                         <button
-                        hidden={this.state.is_verified === '1' || this.state.mobile_no === null}
+                        hidden={this.state.is_verified == '1' || this.state.mobile_no === null}
                             type="submit"
                             className="btn btn-black btn-small cust-verify-button"
                             onClick={this.openModal}>

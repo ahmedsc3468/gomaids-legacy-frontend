@@ -91,6 +91,8 @@ const dummy = useRef();
   const [chatIsPending, setChatIsPending] = useState(true)
   const [convoIsPending, setConvoIsPending] = useState(true)
   const [userChat, setUserChat] = useState(null)
+  const [orderStatus, setOrderStatus] = useState(null)
+  const [conversationId, setConversationId] = useState(null)
   useEffect(() => {
     getConversations()
   }, [])
@@ -124,25 +126,27 @@ const dummy = useRef();
   const getSingleChatMessages = async (conversation_id) => {
 
     const { data: messagesObj } = await axios.get(config.SERVER_URL + '/api/singlechat/' + conversation_id, { headers: AuthHeader() })
-    //  console.log("messagesObj",messagesObj);
-    if (messagesObj?.data?.length > 0){
+    // if (messagesObj?.data?.length > 0){
       setChatIsPending(false)
-    }
+    // }
 
-    setSingleChatMessages(messagesObj.data)
+    setSingleChatMessages(messagesObj.data);
   }
 
   const sendMessage = async () => {
-    if (message.trim() !== '' && singleChatMessages.length > 0) {
+    if (message.trim() !== '') {
       const data = {
         reciever_id: convoRecepient.id,
+        conversation_id: conversationId,
         message
       }
-      setMessage('')
+      console.log('chat recipient id', data.reciever_id);
+      console.log('convoId ', conversationId);
+      setMessage('');
       const response = await axios.post(`${config.SERVER_URL}/api/chat`, data, { headers: AuthHeader() })
       if (response.status === 200) {
-        getSingleChatMessages(singleChatMessages[0]?.conversation_id)
-        getConversations()
+        getSingleChatMessages(conversationId);
+        getConversations();
       }
     }
     
@@ -165,8 +169,8 @@ const dummy = useRef();
   })
   const messageRef = useRef();
 // console.log('single chat',sideBarMessages);
-let order_status=null
-console.log("userChat",userChat);
+// console.log("userChat",userChat);
+// console.log('single chat messages', singleChatMessages);
 return (
     <div>
       {sideBarMessages.length == null ? <div className="text-center"> <CircularProgress color="success" /></div> :
@@ -209,10 +213,13 @@ return (
                 const recepient = user.id === conversation.user_one.id ? conversation.user_two : conversation.user_one
                 return (
                   <ListItem button key={conversation.id} className={selectedIndex === index ? classes.selected : ''} onClick={e => {
-                    setConvoIsPending(true)
-                    setSelectedIndex(index)
+                    setConvoIsPending(true);
+                    setSelectedIndex(index);
                     getSingleChatMessages(conversation.id);
-                    setConvoRecepient(user.id === conversation.user_one.id ? conversation.user_two : conversation.user_one)
+                    setOrderStatus(conversation.order.status);
+                    setConversationId(conversation.id);
+                    console.log('order status 2', orderStatus);
+                    setConvoRecepient(user.id === conversation.user_one.id ? conversation.user_two : conversation.user_one);
                   }}>
                     <ListItemIcon>
                       <Avatar alt={`recepient_${recepient.id}_image`} src={`${config.SERVER_URL}/${recepient.image}`} />
@@ -240,10 +247,10 @@ return (
           {!chatIsPending ? <Grid item xs={9} ref={messageRef}>
           <List key='chatMessages' id="chatgrid"className={classes.messageArea}>
               {singleChatMessages.map((message, index) => {
-                const align = message.sender_user.id === user.id ? 'right' : 'left '
-               order_status=message.conversation.order.status;
+                const align = message.sender_user.id === user.id ? 'right' : 'left ';
+              //  setOrderStatus(message.conversation.order.status);
                
-                // console.log("order_status ::217",order_status);
+                console.log("orderStatus ::217",orderStatus);
                 const _date = new Date(message.created_at)
                 return (
                   // window.scrollTo(0, 0);
@@ -267,7 +274,7 @@ return (
             
             <Divider />
          
-             <Grid container style={{ padding: '20px' }} hidden={order_status !== '1'} >
+             <Grid container style={{ padding: '20px' }} hidden={orderStatus != 1} >
               <Grid item xs={11}>
                 <TextField id="outlined-basic-email" onKeyPress={handleKeyPress} value={message} onChange={(e) => { setMessage(e.target.value) }} label="Type Something" fullWidth />
               </Grid>

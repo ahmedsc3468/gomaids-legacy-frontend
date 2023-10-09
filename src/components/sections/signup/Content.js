@@ -751,9 +751,30 @@ class Content extends Component {
                                                         this.submit(e)
                                                     }
                                                 >
+                                                    Send OTP
+                                                </button>
+                                                <div className="form-group">
+                                                    <hr className="bg-white mt-40 mb-40" />
+                                                </div>
+                                                <div className="form-group relative mb-25 mb-sm-20">
+                                                    <input
+                                                        type="text"
+                                                        className="form-control input-lg input-white shadow-5"
+                                                        name="otp"
+                                                        placeholder="OTP"
+                                                        disabled={true}
+
+                                                    />
+                                                    <i className="fas fa-key transform-v-center" />
+                                                </div>
+                                                <button
+                                                    type="submit"
+                                                    className="btn btn-black btn-block mt-20"
+                                                    disabled={true}
+                                                >
                                                     Sign Up
                                                 </button>
-                                                <div className="signup-login text-center">
+                                                <div className="signup-login text-center mb-0">
                                                     <p className="mt-15 fs-13 white">
                                                         Already a member?{" "}
                                                         <Link

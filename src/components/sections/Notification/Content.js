@@ -141,7 +141,7 @@ export default function PopoverPopupState(props) {
                   className="notification-width"
                   >{notification.length>0 &&
                     notification.map((takerNotification)=>( 
-                      <Segment>
+                      <Segment key={takerNotification.id} >
                         
                       <a href="/Userdashboard"><p
                        style={{color:"#102043",fontWeight:"400"}}

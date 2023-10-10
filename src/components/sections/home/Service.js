@@ -12,7 +12,7 @@ import service3 from '../../../assets/img/service/chef-s.png';
 // import service8 from '../../../assets/img/service/8.png';
 const serviceblock = [
     { icon: service1,value:1, title: 'Maid', text: 'We provide backgroud checked and well mannered maids in your city to help you in your daily home tasks.Just book a maid and get your work done.', animation: '' },
-    { icon: service2, value:3,title: 'Cleanear', text: 'Our professional cleaners will help you get rid of those dusty fans, greasy stoves and window stains so your home is sparkly clean throughout the year.', animation: 2 },
+    { icon: service2, value:3,title: 'Cleaner', text: 'Our professional cleaners will help you get rid of those dusty fans, greasy stoves and window stains so your home is sparkly clean throughout the year.', animation: 2 },
     { icon: service3, value:2,title: 'Cook', text: 'Book a professional cook and enjoy delicious home-cooked food safely and hygienically prepared in your kitchen or a kitchen helper to chop your veggies.', animation: 4 },
     // { icon: service4, title: 'Laundry Service', text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit, sed do eiusmod', animation: 6 },
     // { icon: service5, title: 'Move In / Out Clean', text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit, sed do eiusmod', animation: '' },

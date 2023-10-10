@@ -31,10 +31,10 @@ import {
 import path from "path";
 
 
-
+const libraries = ["places"]
 
 const Address = ({ page }) => {
-  const libraries = ["places"]
+  
   return (
     <LoadScript googleMapsApiKey="AIzaSyDxLxPEKkM9vuuAJpTQuWJBCcfLmZKlDmI"
       libraries={libraries}

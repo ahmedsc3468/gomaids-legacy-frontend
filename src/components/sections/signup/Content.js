@@ -18,6 +18,7 @@ import { bindActionCreators } from "redux";
 import PasswordStrengthMeter from "./PasswordStrengthMeter";
 import { Eye, EyeOff } from 'react-feather';
 import "../../../assets/MyCSS/loginpage.css";
+import swal from 'sweetalert';
 
 const required = (value) => {
     if (!value) {
@@ -129,7 +130,10 @@ class Content extends Component {
             hidden: true,
             hiddeneye:true,
             confirmhidden:true,
-            confirmhiddeneye:true
+            confirmhiddeneye:true,
+            isOtpInputDisabled:true,
+            isSignUpButtonDisabled:true,
+            verificationCode: ""
         };
 
         this.onChangeTextFields = this.onChangeTextFields.bind(this);
@@ -292,8 +296,25 @@ class Content extends Component {
                 this.state.role_id,
                 this.state.mobile_no,
             ).then(
-                (response) => {
+                async (response) => {
                     if ('message' in response.data) {
+
+                        try {
+                            const { data } = await axios.post(`${config.SERVER_URL}/api/verifymail`, {
+                                email: this.state.email
+                            })
+                            this.setState({
+                                isOtpInputDisabled: false,
+                                isSignUpButtonDisabled: false
+                            })
+                            console.log('verifyEmail Response ', data)
+                            this.setState({
+                               loader: false 
+                            })
+                            swal("SuccessFull!", "Verification Code Sent Successfully!", "success")
+                        } catch (error) {
+                            console.error(error);
+                        } 
 
                         this.props.checkAvailability({
                             username: this.state.username,
@@ -313,7 +334,6 @@ class Content extends Component {
                                     headers: authHeader()
                                 })
                         }
-                        this.props.history.push("/Setupwizard");
                     }
                     else {
                         const len=response.data.error_message.length;
@@ -339,6 +359,26 @@ class Content extends Component {
             ).catch(error => {
             })
         }
+    }
+
+    async verifyCode(e) {
+        e.preventDefault()
+        this.setState({loader: true})
+        try {
+            const { data: { data } } = await axios.post(`${config.SERVER_URL}/api/verifymailcode`, {
+                email: this.state.email,
+                code: this.state.verificationCode
+            })
+            
+            if (data.is_verified === 1) {
+                this.props.history.push("/Setupwizard")
+            } else {
+                this.setState({loader: false})
+                swal("Invalid Verification Code", "The verification code you entered is invalid.", "error")
+            }
+        } catch (error) {
+            console.error(error);
+        }         
     }
 
     componentDidMount() {
@@ -379,7 +419,7 @@ class Content extends Component {
                             <div className="col-xl-5 col-lg-6 login-form-container position-relative">
                                 {this.state.loader && <div className="position-absolute loader-login">
 
-                                    <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+                                    <Box sx={{ position: 'relative', top: 40, display: 'inline-flex' }}>
                                         <CircularProgress color='success' size={80} />
                                         <Box
                                             sx={{
@@ -761,8 +801,10 @@ class Content extends Component {
                                                         type="text"
                                                         className="form-control input-lg input-white shadow-5"
                                                         name="otp"
+                                                        value={this.state.verificationCode}
                                                         placeholder="OTP"
-                                                        disabled={true}
+                                                        onChange={(e) => this.setState({verificationCode: e.target.value})}
+                                                        disabled={this.state.isOtpInputDisabled}
 
                                                     />
                                                     <i className="fas fa-key transform-v-center" />
@@ -770,7 +812,10 @@ class Content extends Component {
                                                 <button
                                                     type="submit"
                                                     className="btn btn-black btn-block mt-20"
-                                                    disabled={true}
+                                                    disabled={this.state.isSignUpButtonDisabled}
+                                                    onClick={(e) =>
+                                                        this.verifyCode(e)
+                                                    }
                                                 >
                                                     Sign Up
                                                 </button>

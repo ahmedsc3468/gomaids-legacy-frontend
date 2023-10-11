@@ -391,6 +391,15 @@ window.scrollTo(0,0);
         //         console.log(response);
         //         that.setState({ country: response.data.data });
         //     });
+
+        setTimeout(() => {
+            if (sessionStorage.getItem("reload") === null && localStorage.getItem("user") !== null) {
+                sessionStorage.setItem("reload", true)
+                window.location.reload()
+            } else {
+                sessionStorage.removeItem("reload")
+            }
+        }, 2000)
     }
     radioBtn = (e) => {
 

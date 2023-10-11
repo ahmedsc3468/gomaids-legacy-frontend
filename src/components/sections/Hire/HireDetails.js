@@ -46,8 +46,16 @@ class HireDetails extends React.Component {
   constructor(props) {
     
     super(props);
+
+    if (sessionStorage.getItem("reload") === null) {
+      sessionStorage.setItem("reload", true)
+      window.location.reload()
+    } else {
+      sessionStorage.removeItem("reload")
+    }
+
     let user = JSON.parse(localStorage.getItem("user"));
-  
+    
     if (user && user.role.name === "service_provider") this.props.history.push("/");
 
     let startTime = moment(this.props.location.state.slot_start_time, 'hh:mm A').format('H')

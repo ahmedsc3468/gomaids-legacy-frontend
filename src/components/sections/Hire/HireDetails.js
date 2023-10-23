@@ -46,14 +46,7 @@ class HireDetails extends React.Component {
   constructor(props) {
     
     super(props);
-
-    if (sessionStorage.getItem("reload") === null) {
-      sessionStorage.setItem("reload", true)
-      window.location.reload()
-    } else {
-      sessionStorage.removeItem("reload")
-    }
-
+    
     let user = JSON.parse(localStorage.getItem("user"));
     
     if (user && user.role.name === "service_provider") this.props.history.push("/");
@@ -128,16 +121,19 @@ class HireDetails extends React.Component {
       payWithPayPal: false,
       payWithStripe: false,
       getConfigr:false,
-
+      isPaymentCompleted: false
     };
 
   }
 
 
 
-  checkOut = async (e) => {
+  formCheckOut = async (e) => {
     e.preventDefault();
-    
+    await this.checkOut()  
+  }
+
+  checkOut = async () => {
     this.setState({ isPending: true }) 
     const user = authService.getCurrentUser()
 
@@ -188,7 +184,6 @@ class HireDetails extends React.Component {
 
     }
 
-
   }
 
 
@@ -231,7 +226,10 @@ class HireDetails extends React.Component {
   }, 1000);
 
   checkOutBtnEnable = () => {
-    this.setState({ CheckOut: false })
+    this.setState({ CheckOut: false, isPaymentCompleted: true  })
+    setTimeout(() => {
+      this.checkOut()
+    }, 5000)
   }
 
   componentDidUpdate() {
@@ -263,7 +261,6 @@ console.log(this.state.getConfigr)
     catch (errors) {
       console.log(errors)
   }
-
   }
 
   style = {
@@ -317,17 +314,22 @@ console.log(this.state.getConfigr)
     console.log('obj1 ', obj1);
     try {
      
-      const payAmnt = await axios.post(config.SERVER_URL + "/api/pay",obj1, {
+      const payment = await axios.post(config.SERVER_URL + "/api/pay",obj1, {
         headers: authHeader(),
       })
-      console.log( " :::::: 295 ::::: ",payAmnt.data.success)
-      // console.log( " :::::: 296 ::::: ",payAmnt.message)
 
-      if( payAmnt.data.success === true)
+      console.log( " :::::: 295 ::::: ",payment.data.success)
+      
+      if( payment.data.success === true)
       {
-        this.setState({ CheckOut: false })
-        swal("Hurray..!", "Your Payment Has Been Sent SuccessFully!", "success")
-        console.log( " :::::: 302 ::::: ",payAmnt)
+        swal({
+          icon: "success",
+          title: "Payment Successful!",
+          text: "Your order will be automatically placed in 5 seconds. If not, please click 'Place Order'",
+          timer: 4000
+        });
+        this.checkOutBtnEnable()
+        console.log( " :::::: 302 ::::: ", payment)
       }
 
     // const user = authService.getCurrentUser()
@@ -356,7 +358,7 @@ console.log(this.state.getConfigr)
     //       console.log( " :::::: 328 ::::: ",data)
     }
     catch (errors) {
-      swal("Ops", "Payment Failed!", "danger")
+      swal("Sorry Payment Failed", "Your payment couldn't be processed please try again.", "danger")
       console.log(errors)
   }
     // this.setState({ payWithPayNow: true })
@@ -649,7 +651,7 @@ console.log(this.state.getConfigr)
                     </Row>
                     <button
                       className='HireDetails-btn mb-5 mt-0 btn-disable-style'
-                      onClick={this.checkOut}
+                      onClick={this.formCheckOut}
                       disabled={this.state.CheckOut}>Place Order</button>
                   </Col>
 

@@ -116,7 +116,12 @@ export default function PaymentForm({ cost, checkOutBtnEnable, service_provider_
                     console.log('response inside: ',stripeResponse);
                     if (stripeResponse.data.success) {
 
-                        swal("Hurray..! Payment Successful", "Please Click on Checkout Button for Order Placed", "success")
+                        swal({
+                            icon: "success",
+                            title: "Payment Successful!",
+                            text: "Your order will be automatically placed in 5 seconds. If not, please click 'Place Order'",
+                            timer: 4000
+                        });
 
                         checkOutBtnEnable();
                     }

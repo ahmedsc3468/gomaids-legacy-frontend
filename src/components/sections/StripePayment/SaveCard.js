@@ -89,7 +89,7 @@ export default function SaveCard({ onResponse }) {
     
                             })
                             console.log("::::::::::::::: STORE CARD DATA ::::::::::", storeCardData)
-                         swal("Hurray..! Card Added Successfully", "You can use PayNow Button for the direct order payment", "success")
+                         swal("Card Added Successfully", "You can use Pay Now Button for the direct order payment", "success")
                          onResponse(response.data); // Pass the response data to the parent component
                          setSuccess(true);
                          

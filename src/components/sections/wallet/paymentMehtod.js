@@ -81,22 +81,22 @@ class PaymentMethod extends Component {
 
   async componentDidMount() {
     try {
-      let payMenthod = await axios.get(config.SERVER_URL + '/api/getallconfigurations', {
+      let paymentDetails = await axios.get(config.SERVER_URL + '/api/getallconfigurations', {
         headers: authHeader(),
         cancelToken: this.source.token
       });
 
-      if (payMenthod.data.data.length === 0) {
+      if (paymentDetails.data.data.length === 0) {
         console.log("no payment methods");
-        this.setState({ user_payment: payMenthod.data.data });
+        this.setState({ user_payment: paymentDetails.data.data });
         return;
       }
 
       this.setState({
-        user_payments: payMenthod.data.data,
+        user_payments: paymentDetails.data.data,
         isAddingCard: false,
         error: null,
-        user_payment: payMenthod.data.data
+        user_payment: paymentDetails.data.data
       });
     } catch (e) {
       console.log(e.message);

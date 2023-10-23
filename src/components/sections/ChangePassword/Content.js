@@ -340,13 +340,13 @@ class ChangePassword extends Component {
                     <div className="form-group col-md-3"></div>
                         <div className="form-group col-sm-6">
                             <Form.Field>
-                                <label> Confrim New Password</label>
+                                <label> Confirm New Password</label>
 
                                 <input
                                     name="confirmpassword"
                                     type={this.state.confirmhidden ? 'password' : 'text'}
 
-                                    placeholder="Confrim New Password"
+                                    placeholder="Confirm New Password"
                                     className="form-control input-lg input-white shadow-5"
                                     value={this.state.confirmpassword}
                                     onChange={

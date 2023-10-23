@@ -15,6 +15,10 @@ import AuthService from "../../../services/auth.service";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
+
 <script async
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM&callback=initMap">
 </script>
@@ -52,7 +56,8 @@ class Serviceblock extends Component {
       inputRad: 10000,
       markers: [{lat:user?.lat || 49.342880, lng: user?.lng || -123.114840, img_src: '../../../assets/img/lcoation.png'}],
       lat: 49.342880, 
-      lng: -123.114840
+      lng: -123.114840,
+      loader: false
     };
   }
   
@@ -172,12 +177,11 @@ class Serviceblock extends Component {
     circle.setRadius(Number(value*1000));
   }
   async findServiceProviders(event) {
-    //service providers api
+    this.setState({loader: true})
     window.scrollTo(0, 1400);
     let that = this;
     event.preventDefault();
-    // console.log("Find Service Provider Before APi Call")
-
+    
     const apidata = {
       name: this.state.providername,
       price: this.state.price,
@@ -187,14 +191,14 @@ class Serviceblock extends Component {
       lng:this.state.lng,
         lat:this.state.lat,
     };
-     console.log("Before Api Call", apidata)
-
+    
     try {
       const services_provider = await axios
         .post(config.SERVER_URL + `/api/searchforprovider`, apidata, {
           headers: authHeader(),
         })
         .then(function (services_provider) {
+          that.setState({loader: false})
           if (services_provider.data.data.data.length > 0) {
             that.setState({
               filter_service_provider: services_provider.data.data.data,
@@ -203,12 +207,7 @@ class Serviceblock extends Component {
             //   linklength:services_provider.data.data.links.length
             links:[],
             linklength:"",
-            });
-            swal("Result Found!", "Your Result has been found!", "success");
-           
-            // console.log(services_provider.data.data);
-            // console.log("links",that.state.searchlinks);
-
+            });           
           } else swal("Result Not Found!", services_provider.data.message, "warning");
         });
     } catch (err) {
@@ -416,6 +415,18 @@ class Serviceblock extends Component {
           {this.state.filter_service_provider.length > 0 && (
             <h3> Search Result </h3>
           )}
+          {this.state.loader && (<div className="position-relative h-100">
+            <Box display='flex' justifyContent='center' alignItems='center' style={{position: 'absolute', top: 200, bottom: 0, zIndex: 1, right: 0, left: 0, margin: "auto", textAlign: "center" }} >
+              <CircularProgress color='success' size={80} />
+              <Typography 
+                position='absolute'
+                variant="caption"
+                component="div"
+              >
+                Please Wait
+              </Typography>
+            </Box>
+          </div>)}
           <div className="row">
             {this.state.filter_service_provider.map((item, i) => (
               <div

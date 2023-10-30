@@ -70,9 +70,7 @@ export default function SaveCard({ onResponse }) {
                     const response = await axios.post(config.SERVER_URL + "/api/add-card", {
                         stripeToken: result.token.id,
                         user_id: user.id,
-                        //    service_provider_id:service_provider_id,
-                        
-
+                        email: user.email
                     })
                     if(response.data.success){
                         const storeCardData = await axios.post(config.SERVER_URL + `/api/configurations/${user.id}`,
@@ -90,7 +88,7 @@ export default function SaveCard({ onResponse }) {
                             })
                             console.log("::::::::::::::: STORE CARD DATA ::::::::::", storeCardData)
                          swal("Card Added Successfully", "You can use Pay Now Button for the direct order payment", "success")
-                         onResponse(response.data); // Pass the response data to the parent component
+                         onResponse(); // Pass the response data to the parent component
                          setSuccess(true);
                          
                         //  window.location.reload();
@@ -135,7 +133,9 @@ export default function SaveCard({ onResponse }) {
               <div className="stripe">
                   <fieldset className="FormGroup">
                       <div className="FormRow">
-                          <CardElement options={CARD_OPTIONS} />
+                          <CardElement 
+                                options={CARD_OPTIONS}           
+                            />
                       </div>
                   </fieldset>
               </div>

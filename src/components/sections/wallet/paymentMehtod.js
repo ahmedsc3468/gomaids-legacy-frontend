@@ -11,35 +11,11 @@ import "../../../assets/MyCSS/userdashboard.css";
 import CircularProgress from '@mui/material/CircularProgress';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit, faArrowLeft, faTrash } from "@fortawesome/free-solid-svg-icons";
+import swal from 'sweetalert';
 
 const stripePromise = loadStripe('pk_test_51NiH9YEKvKY3WrKz1TnxITwiI9FQDsGht8IRFjxlwNYRu3N0CMfMBclQ09XxM1rjX1NfgV453L7UFCpervgCEctv00aLdDMpiv');
-
-class CardForm extends Component {
-  handleSubmit = async (event) => {
-    event.preventDefault();
-    const { stripe, elements, handleCardSubmit } = this.props;
-    const cardElement = elements.getElement(CardElement);
-
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: 'card',
-      card: cardElement,
-    });
-
-    handleCardSubmit(error, paymentMethod);
-  };
-
-  render() {
-    const { elements, stripe } = this.props;
-
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <CardElement />
-        <button className="btn btn-blue mt-15 mb-15 btn-lg btn-shine" type="submit">Save Card</button>
-      </form>
-    );
-  }
-}
-
 class PaymentMethod extends Component {
   constructor(props) {
     super(props);
@@ -52,6 +28,7 @@ class PaymentMethod extends Component {
       user_payment: null,
       isAddingCard: false,
       error: null,
+      showEditPaymentConfigForm: false
     };
 
     this.source = axios.CancelToken.source();
@@ -79,11 +56,47 @@ class PaymentMethod extends Component {
     }
   };
 
-  async componentDidMount() {
+  toggleEditForm = () => {
+    this.setState({showEditPaymentConfigForm: !(this.state.showEditPaymentConfigForm)})
+  }
+
+  deletePaymentConfiguration = (id) => {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover these payment details.",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then(async (willDelete) => {
+      if (willDelete) {
+        try {
+          await axios.delete(
+            config.SERVER_URL + `/api/payment-configurations/${id}`,
+            {
+              headers: authHeader()
+            }
+          )
+          
+          this.setState({
+            user_payments: this.state.user_payments.filter((config) => {
+              return config.id != id
+            })
+          })
+
+          swal("Card Details Deleted Successfully!", "Your payment configuration details have been removed.", "success")
+        } catch (e) {
+          console.log(e)
+        }
+      }
+    });
+  }
+
+  loadPaymentConfig = async () => {
     try {
       let paymentDetails = await axios.get(config.SERVER_URL + '/api/getallconfigurations', {
         headers: authHeader(),
-        cancelToken: this.source.token
+        // cancelToken: this.source.token
       });
 
       if (paymentDetails.data.data.length === 0) {
@@ -97,10 +110,15 @@ class PaymentMethod extends Component {
         isAddingCard: false,
         error: null,
         user_payment: paymentDetails.data.data
-      });
+      })
+            
     } catch (e) {
-      console.log(e.message);
+      console.log(e);
     }
+  }
+
+  async componentDidMount() {
+    await this.loadPaymentConfig()
   }
 
   componentWillUnmount() {
@@ -112,15 +130,14 @@ class PaymentMethod extends Component {
     const { user_payments, isAddingCard, error } = this.state;
     let user = AuthService.getCurrentUser();
 
-
-        // const title = (user.role.name === 'service_taker') ?`Service Provider` : `Service Taker` 
         return ( 
             <> {this.state.user_payment == null ? <div className="text-center"> <CircularProgress color="success" />
             </div> : <Grid.Column
                 className='cust-wallet-container'
             >
 
-                <Row>
+                { !(this.state.showEditPaymentConfigForm) && <Row>
+                  { this.state.user_payments.length > 0 &&
                     <Col sm='12'>
                         <Card>
                             <CardBody>
@@ -140,31 +157,34 @@ class PaymentMethod extends Component {
                       <Col className="align-self-center custom_col_pm custom_cd_title">
                         <h6 className="cust-pad-status-h6 custom_font">Status</h6>
                       </Col>
+                      <Col className="align-self-center custom_col_pm custom_cd_title">
+                        <h6 className="cust-pad-status-h6 custom_font"></h6>
+                      </Col>
                     </Row>
                             </CardBody>
                         </Card>
-                    </Col>
-                    {this.state.user_payments.length < 1 ? 
-                   <div className="custom_empty_div">
+                    </Col> }
+                    { this.state.user_payments.length < 1 ? 
+                   (<div className="custom_empty_div">
                    <Col sm='12'>
                        <Card className="mobilecard" style={{"marginBottom":"15px"}}>
                            <CardBody>
                            <Row>
                           <Col className="align-self-center text-center">
-                            <h5>You Don't Have Any Saved Card</h5>
+                            <h5 className='pb-3'>You Don't Have Any Saved Card</h5>
                             {isAddingCard ? (
                               <button className="btn btn-blue mt-15 mb-15 btn-lg btn-shine" onClick={this.handleAddCard}>Add Card</button>
                             ) : (
                               <div>
                             <Elements stripe={stripePromise}>
-			<SaveCard onResponse={this.componentDidMount}
-			cost={6}
-			checkOutBtnEnable={false}
-			service_provider_id={"savecard"}
-			email={user.email}
-			
-			/>
-		</Elements>
+                              <SaveCard onResponse={this.loadPaymentConfig}
+                              cost={6}
+                              checkOutBtnEnable={false}
+                              service_provider_id={"savecard"}
+                              email={user.email}
+                              
+                              />
+                            </Elements>
 			
                                 {error && <div>{error}</div>}
                               </div>
@@ -174,24 +194,9 @@ class PaymentMethod extends Component {
                            </CardBody>
                        </Card>
                    </Col>
-               </div> : 
+               </div>) : 
                     this.state.user_payments.map((paym, key) => {
 
-                        let status = ''
-                        let color = ''
-                        if (paym.status === 0) {
-                            status = 'Pending'
-                            color = 'info'
-                        } else if (paym.status === 1) {
-                            status = 'Assigned'
-                            color = 'primary'
-                        } else if (paym.status === 2) {
-                            status = 'Completed'
-                            color = 'success'
-                        } else if (paym.status === 3) {
-                            status = 'Cancelled'
-                            color = 'danger'
-                        }
                         return (
                         <Col sm='12' key={key}>
                             <Card style={{"marginBottom":"15px"}}>
@@ -202,22 +207,21 @@ class PaymentMethod extends Component {
                                         </Col>
                                         <Col className="align-self-center cust-pad-card custom_cd_title cust_42_42">
                                             {paym.card_no} 
-                                            {/* <Link to={`order_details_${paym.id}`}> (View Order) </Link> */}
                                         </Col>
                                         <Col className="align-self-center cust-pad-exp-mn custom_cd_title cust_4_">
                                             {paym.expiry_month}
                                         </Col>
                                         <Col className="align-self-center custom_cd_title">
                                             {paym.expiry_year} 
-                                            {/* <Link to={`order_details_${paym.id}`}> (View Order) </Link> */}
                                         </Col>
-                                        {/* <Col className="align-self-center">
-                                            {paym.cost}$
-                                        </Col> */}
                                         <Col className="align-self-center custom_cd_title">
                                             {paym.default_status==='3' ? "Cancelled":""}
                                             {paym.default_status==='1' ? "In-Use":""}
                                             {paym.default_status==='2' ? "Completed":""}
+                                        </Col>
+                                        <Col className="align-self-center custom_cd_title">
+                                          <FontAwesomeIcon style={{cursor: 'pointer'}} icon={faEdit} onClick={this.toggleEditForm} />
+                                          <FontAwesomeIcon style={{cursor: 'pointer', marginLeft: '12px'}} icon={faTrash} onClick={() => {this.deletePaymentConfiguration(paym.id)}} />
                                         </Col>
                                     </Row>
                                 </CardBody>
@@ -226,7 +230,38 @@ class PaymentMethod extends Component {
                     })}
                     
 
-                </Row>
+                </Row> }
+
+                { this.state.showEditPaymentConfigForm &&                 
+                  <Row>
+                    <div className="custom_empty_div">
+                    <Col sm='12'>
+                        <Card className="mobilecard" style={{"marginBottom":"15px"}}>
+                            <CardBody>
+                            <Row>
+                            <Col className="align-self-center text-center">
+                              <FontAwesomeIcon style={{cursor: 'pointer'}} className='float-left' icon={faArrowLeft} onClick={this.toggleEditForm} />
+                              <h5 className="pb-3">Edit Card Details</h5>
+                              <div>
+                                <Elements stripe={stripePromise}>
+                                  <SaveCard 
+                                    onResponse={() => 'add some function instead'}
+                                    cost={6}
+                                    checkOutBtnEnable={false}
+                                    service_provider_id={"savecard"}
+                                    email={"something"}
+                                  />
+                                </Elements>
+                              </div>
+                              
+                            </Col>
+                          </Row>
+                            </CardBody>
+                        </Card>
+                    </Col>
+                </div>
+                  </Row>
+                }
 
             </Grid.Column>}
             </>

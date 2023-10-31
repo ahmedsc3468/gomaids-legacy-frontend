@@ -5,6 +5,7 @@ import AuthService from "../../../services/auth.service";
 import { Grid } from "semantic-ui-react";
 import config from "../../../config.json";
 import SaveCard from "../StripePayment/SaveCard";
+import UpdateCard from "../StripePayment/UpdateCard";
 import { Card, CardBody, Col, Row } from "reactstrap";
 import authHeader from "../../../services/auth-header";
 import "../../../assets/MyCSS/userdashboard.css";
@@ -28,7 +29,8 @@ class PaymentMethod extends Component {
       user_payment: null,
       isAddingCard: false,
       error: null,
-      showEditPaymentConfigForm: false
+      showEditPaymentConfigForm: false,
+      paymentConfigurationId: 0,
     };
 
     this.source = axios.CancelToken.source();
@@ -56,8 +58,11 @@ class PaymentMethod extends Component {
     }
   };
 
-  toggleEditForm = () => {
-    this.setState({showEditPaymentConfigForm: !(this.state.showEditPaymentConfigForm)})
+  toggleEditForm = (paymentConfigurationId) => {
+    this.setState({
+      showEditPaymentConfigForm: !(this.state.showEditPaymentConfigForm),
+      paymentConfigurationId: paymentConfigurationId
+    })
   }
 
   deletePaymentConfiguration = (id) => {
@@ -74,7 +79,8 @@ class PaymentMethod extends Component {
           await axios.delete(
             config.SERVER_URL + `/api/payment-configurations/${id}`,
             {
-              headers: authHeader()
+              headers: authHeader(),
+              cancelToken: this.source.token
             }
           )
           
@@ -96,7 +102,7 @@ class PaymentMethod extends Component {
     try {
       let paymentDetails = await axios.get(config.SERVER_URL + '/api/getallconfigurations', {
         headers: authHeader(),
-        // cancelToken: this.source.token
+        cancelToken: this.source.token
       });
 
       if (paymentDetails.data.data.length === 0) {
@@ -220,7 +226,7 @@ class PaymentMethod extends Component {
                                             {paym.default_status==='2' ? "Completed":""}
                                         </Col>
                                         <Col className="align-self-center custom_cd_title">
-                                          <FontAwesomeIcon style={{cursor: 'pointer'}} icon={faEdit} onClick={this.toggleEditForm} />
+                                          <FontAwesomeIcon style={{cursor: 'pointer'}} icon={faEdit} onClick={() => this.toggleEditForm(paym.id)} />
                                           <FontAwesomeIcon style={{cursor: 'pointer', marginLeft: '12px'}} icon={faTrash} onClick={() => {this.deletePaymentConfiguration(paym.id)}} />
                                         </Col>
                                     </Row>
@@ -241,15 +247,12 @@ class PaymentMethod extends Component {
                             <Row>
                             <Col className="align-self-center text-center">
                               <FontAwesomeIcon style={{cursor: 'pointer'}} className='float-left' icon={faArrowLeft} onClick={this.toggleEditForm} />
-                              <h5 className="pb-3">Edit Card Details</h5>
+                              <h5 className="pb-3">Update Card Details</h5>
                               <div>
                                 <Elements stripe={stripePromise}>
-                                  <SaveCard 
-                                    onResponse={() => 'add some function instead'}
-                                    cost={6}
-                                    checkOutBtnEnable={false}
-                                    service_provider_id={"savecard"}
-                                    email={"something"}
+                                  <UpdateCard 
+                                    onResponse={this.loadPaymentConfig}
+                                    paymentConfigurationId={this.state.paymentConfigurationId}
                                   />
                                 </Elements>
                               </div>

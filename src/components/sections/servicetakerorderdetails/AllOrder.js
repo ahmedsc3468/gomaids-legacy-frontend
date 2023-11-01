@@ -10,6 +10,7 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from "react-boot
 import Rate from "../userdashboard/RateUs";
 import CircularProgress from '@mui/material/CircularProgress';
 import "../../../assets/MyCSS/allorders.css"
+import swal from 'sweetalert'
 
 class AllOrder extends Component {
 
@@ -36,38 +37,30 @@ class AllOrder extends Component {
 
     }
 
-    // statusChange = async (a) =>  {
-    //     console.log("::::::" , a)
-    //     const order_id = this.props.match.params.order_id
-    //     const { data } = await axios.put(config.SERVER_URL + `/api/changeorderstatus/${order_id}`, { status: a },
-    //     {
-    //         headers: authHeader(),
-    //     });
-    //     const newArray = this.state.user_orders.map((order) => {
-    //         //         if (order.id === data.data.id)
-    //         //             order.status = data.data.status
-    //         //         return order
-    //     })
-    //     console.log(":::::: After Change status", newArray)
-    //     this.setState({ user_orders: newArray })
-    // }
     statusChange = async (e, id) => {
-        //        console.log(":::::::::: Status::::::::::",e,id)
+        try {
+            const { data: {data} } = await axios.put(config.SERVER_URL + `/api/changeorderstatus/${id}`, { status: e },
+                {
+                    headers: authHeader(),
+                });
 
+            const updatedUserOrders = this.state.user_orders.map((order) => {
+                if (order.id === data.id)
+                    order.status = data.status
+                return order
+            })
 
-        const { data } = await axios.put(config.SERVER_URL + `/api/changeorderstatus/${id}`, { status: e },
-            {
-                headers: authHeader(),
-            });
-        // console.log(data.data)
+            this.setState({ user_orders: updatedUserOrders })
 
-        const newArray = this.state.user_orders.map((order) => {
-            if (order.id === data.data.id)
-                order.status = data.data.status
-            return order
-        })
-        // console.log(":::::: After Change status", newArray)
-        this.setState({ user_orders: newArray })
+            if (data.status == 1) {
+                swal("Order Accepted Successfully!", `You have accepted order # ${data.order_key}`, "success")
+            } else if (data.status == 3) {
+                swal("Order Cancelled Successfully!", `You have cancelled order # ${data.order_key}`, "success")
+            }
+
+        } catch(e) {
+            console.log(e)
+        }
     }
 
     async componentDidMount() {
@@ -177,6 +170,10 @@ class AllOrder extends Component {
 
                                     </Col>
                                     <Col className="align-self-center custom_timefrom mobileonlye">
+                                        <h6>Date</h6>
+
+                                    </Col>
+                                    <Col className="align-self-center custom_timefrom mobileonlye">
                                         <h6>Time (From)</h6>
 
                                     </Col>
@@ -255,7 +252,7 @@ class AllOrder extends Component {
                             }
 
                             return (
-                                <Col sm='12' key={key}>
+                                <Col sm='12' key={key} style={{fontSize: "0.926rem"}}>
                                     <Card className="mobilecard">
                                         <CardBody className="custom_card-body">
                                             <Row className="custom_row">
@@ -272,7 +269,11 @@ class AllOrder extends Component {
                                                 </Col>
 
                                                 <Col className="align-self-center mobileonwly">
-                                                    {order.cost}$
+                                                    ${order.cost}
+                                                </Col>
+
+                                                <Col className="align-self-center mobileonwly">
+                                                    {order.order_date}
                                                 </Col>
 
                                                 <Col className="align-self-center mobileonwly">
@@ -287,11 +288,11 @@ class AllOrder extends Component {
                                                 </Col>
 
                                                 <Col className="mobilebook">
-                                                    <Button variant="primary"> <Link to={`order_details_${order.id}`}> View Details </Link></Button>
+                                                    <Button variant="primary" size="tiny"> <Link to={`order_details_${order.id}`}> View Details </Link></Button>
                                                 </Col>
                                                 {user.role.name === 'service_taker' && (<> 
                                                     <Col className="mobilebook">
-                                                    <Button variant="primary"> 
+                                                    <Button variant="primary" size="tiny"> 
                                                     <Link to={`/service-details/${order.service_provider.id}`}>Book Again </Link>
                                                     </Button>
                                                 </Col></>)
@@ -303,14 +304,12 @@ class AllOrder extends Component {
 
                                                 {user.role.name === 'service_provider' && (<> <Col>
                                                     <Dropdown onSelect={(e) => this.statusChange(e, order.id)}  disabled={order.status != 0} >
-                                                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                                        <Dropdown.Toggle variant="success" id="dropdown-basic" size="sm">
                                                             Status
                                                         </Dropdown.Toggle>
 
-                                                        <Dropdown.Menu >
-                                                            {/* <Dropdown.Item eventKey="0">Pending</Dropdown.Item> */}
+                                                        <Dropdown.Menu>
                                                             <Dropdown.Item eventKey="1" disabled={order.status != 0}>Accept</Dropdown.Item>
-                                                            {/* <Dropdown.Item eventKey="2">Complete</Dropdown.Item> */}
                                                             <Dropdown.Item eventKey="3" disabled={order.status != 0}>Cancel</Dropdown.Item>
                                                         </Dropdown.Menu>
                                                     </Dropdown>

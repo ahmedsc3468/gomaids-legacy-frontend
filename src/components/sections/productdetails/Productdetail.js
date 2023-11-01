@@ -132,14 +132,28 @@ class Productdetail extends Component {
             serviceprovider: {},
             serviceprovider_services: [],
             serviceprovider_services_type: [],
-            // hire:"",
+            profileCompletion: ""
         };
 
     }
 
-
     async componentDidMount() {
         window.scrollTo(0, 0);
+
+        try {
+            let user = AuthService.getCurrentUser();
+            const { data: { data } } = await axios.get(
+                config.SERVER_URL + `/api/user/${user.id}`,
+                {
+                    headers: authHeader()
+                }
+            );
+           this.setState({
+                profileCompletion: data.profile_completion
+            })
+        } catch(e) {
+            console.log(e)
+        }
         
         const userID = this.props.match.params.serviceProviderID;
         // console.log("PD 133", userID)
@@ -395,6 +409,12 @@ class Productdetail extends Component {
 
         // const proceed = window.confirm("Are you sure you want to Hire")
         // if (proceed) {
+            if (this.state.profileCompletion != "100") {
+                swal("Incomplete User Profile", "Please complete your user profile details for hiring service providers.", "warning")
+
+                return
+            }
+
             const serviceProviderID = this.props.match.params.serviceProviderID;
             const errors = this.validate();
             if (errors) {

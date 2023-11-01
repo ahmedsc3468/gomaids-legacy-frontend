@@ -161,20 +161,22 @@ class ChangePassword extends Component {
     }
     
     async submit() {
+        this.setState({
+            oldpasswordError: "",
+            passwordError: "",
+            confirmpasswordError: ""            
+        })
+
         var upperCaseLetters = /[A-Z]/g;
         var lowerCaseLetters = /[a-z]/g;
         var numbers = /[0-9]/g;
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+        
         if(!this.state.oldpassword){
             this.setState({
-            oldpasswordError:"This field is required"
+                oldpasswordError:"This field is required"
             })
         }
-        // else if(!this.state.password){
-        //     this.setState({
-        //     passwordError:"This field is required"
-        //     })
-        // }
         else if(!this.state.password || this.state.password.length < 8 ){
             this.setState({
             passwordError : "Password must have 8 or more characters"
@@ -187,34 +189,33 @@ class ChangePassword extends Component {
         }
         else if(this.state.confirmpassword !== this.state.password ){
             this.setState({
-            confirmpasswordError:"password and confirm password miss match"
+                confirmpasswordError:"password and confirm password miss match"
             })
         }
         
         else if(upperCaseLetters.test(this.state.password)===false) {
             this.setState({
-                    passwordError:"Password must have atleast one Uppercase letter"
-                    })
+                passwordError:"Password must have atleast one Uppercase letter"
+            })
         }
         
         else if(lowerCaseLetters.test(this.state.password)===false) {
             this.setState({
                 passwordError:"Password must have atleast one Lowercase letter"
-                })
+            })
         }
 
         
         else if(numbers.test(this.state.password)===false) {
             this.setState({
                 passwordError:"Password must have atleast one number"
-                })
+            })
         }
         
         else if(specialChars.test(this.state.password)===false) {
             this.setState({
-                passwordError:"Password must have atleast one Special Character"
-                
-                })
+                passwordError:"Password must have atleast one Special Character"  
+            })
         }
         
         else{

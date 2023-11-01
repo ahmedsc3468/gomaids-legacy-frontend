@@ -20,8 +20,8 @@ import Fab from '@material-ui/core/Fab';
 import CircularProgress  from '@mui/material/CircularProgress';
 import "../../../assets/MyCSS/home-pages.css"
 import "../../../assets/MyCSS/chatUpdateSetting.css"
-// import "../../../assets/MyCSS/chatslap.css"
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons"
 import {useRef } from 'react'
 
 
@@ -279,7 +279,7 @@ return (
                 <TextField id="outlined-basic-email" onKeyPress={handleKeyPress} value={message} onChange={(e) => { setMessage(e.target.value) }} label="Type Something" fullWidth />
               </Grid>
               <Grid xs={1} align="right" onClick={sendMessage}>
-                <Fab color="success" aria-label="add">Send</Fab>
+                <Fab style={{background: "#036905"}} aria-label="add"><FontAwesomeIcon icon={faPaperPlane} size="lg" inverse /></Fab>
               </Grid>
             </Grid>
 

@@ -594,7 +594,7 @@ console.log(":::: 558 ::::", temp)
 
                             <Dropdown.Menu >
                                 {this.state.servicesArr.map((service) => (
-                                    <Dropdown.Item eventKey={service.value}
+                                    <Dropdown.Item key={service.value} eventKey={service.value}
                                         onClick={(e) => { this.filterService(service.value) }}
                                     >{service.label}</Dropdown.Item>
                                 ))}

@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { Component } from "react";
 import AuthService from "../../../services/auth.service";
-import { Grid, Header, Segment, Form, Button, Dimmer, Loader, Label } from "semantic-ui-react";
+import { Grid, Header, Segment, Form, Button, Dimmer, Loader, Label, Input, Icon } from "semantic-ui-react";
 import config from "../../../config.json";
 import authHeader from "../../../services/auth-header";
 import Joi from "joi-browser";
@@ -269,21 +269,20 @@ class ChangePassword extends Component {
                         <div className="form-group col-md-6">
                         <Form.Field>
                                 <label>Old Password</label>
-                                <input
-                                    name="oldpassword"
-                                    type={this.state.oldhidden ? 'password' : 'text'}
-                                    placeholder="Old Password"
-                                    className="form-control input-lg input-white shadow-5"
-                                    value={this.state.oldpassword}
-                                    onChange={
-                                        this.handleInputChange
-                                    }
-                                    validations={[
-                                        required
-                                    ]}
-                                    
-                                />
-                                    <i className={this.state.oldhiddeneye ? "fa fa-eye-slash transform-v-center":"fa fa-eye transform-v-center"}  style={{cursor: 'pointer',transform:'none'}} onClick={this. toggleShowold}></i>
+                                <div className="ui big icon input">
+                                    <input
+                                        name="oldpassword"
+                                        type={this.state.oldhidden ? 'password' : 'text'}
+                                        placeholder="Old Password"
+                                        value={this.state.oldpassword}
+                                        onChange={this.handleInputChange}
+                                    />
+                                    <i 
+                                        aria-hidden="true"
+                                        className={`${this.state.oldhidden ? 'eye slash' : 'eye'} link icon`}
+                                        onClick={this.toggleShowold}
+                                    ></i>
+                                </div>
                                 {
                                     this.state.oldpasswordError && (
                                         <div
@@ -305,22 +304,20 @@ class ChangePassword extends Component {
                         <div className="form-group col-sm-6">
                             <Form.Field>
                                 <label>New Password</label>
-                                <input
-                                    name="password"
-                                    type={this.state.hidden ? 'password' : 'text'}
-                                    className="form-control input-lg input-white shadow-5"
-                                    placeholder="New Password"
-                                    value={this.state.password}
-                                    onChange={
-                                        this.handleInputChange
-                                    }
-                                    validations={[
-                                        required
-                                    ]}
-                                    
-                                />
-                                    <i className={this.state.hiddeneye ? "fa fa-eye-slash transform-v-center":"fa fa-eye transform-v-center"}  style={{cursor: 'pointer',transform:'none'}} onClick={this.toggleShow}></i>
-
+                                <div className="ui big icon input">
+                                    <input
+                                        name="password"
+                                        type={this.state.hidden ? 'password' : 'text'}
+                                        placeholder="New Password"
+                                        value={this.state.password}
+                                        onChange={this.handleInputChange}
+                                    />
+                                    <i 
+                                        aria-hidden="true"
+                                        className={`${this.state.hiddeneye ? 'eye slash' : 'eye'} link icon`}
+                                        onClick={this.toggleShow}
+                                    ></i>
+                                </div>
                                 {
                                     this.state.passwordError && (
                                         <div
@@ -342,23 +339,20 @@ class ChangePassword extends Component {
                         <div className="form-group col-sm-6">
                             <Form.Field>
                                 <label> Confirm New Password</label>
-
-                                <input
-                                    name="confirmpassword"
-                                    type={this.state.confirmhidden ? 'password' : 'text'}
-
-                                    placeholder="Confirm New Password"
-                                    className="form-control input-lg input-white shadow-5"
-                                    value={this.state.confirmpassword}
-                                    onChange={
-                                        this.onChangeTextFields
-                                    }
-                                    validations={[
-                                        required
-                                    ]}
-                                />
-                                    <i className={this.state.confirmhiddeneye ? "fa fa-eye-slash transform-v-center":"fa fa-eye transform-v-center"}  style={{cursor: 'pointer',transform:'none'}} onClick={this.toggleShowconfirm}></i>
-
+                                <div className="ui big icon input">
+                                    <input
+                                        name="confirmpassword"
+                                        type={this.state.confirmhidden ? 'password' : 'text'}
+                                        placeholder="Confirm New Password"
+                                        value={this.state.confirmpassword}
+                                        onChange={this.onChangeTextFields}
+                                    />
+                                    <i 
+                                        aria-hidden="true"
+                                        className={`${this.state.confirmhiddeneye ? 'eye slash' : 'eye'} link icon`}
+                                        onClick={this.toggleShowconfirm}
+                                    ></i>
+                                </div>
                                 {
                                     this.state.confirmpasswordError && (
                                         <div

@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { Component } from "react";
 import AuthService from "../../../services/auth.service";
-import { Grid, Header, Segment, Form, Button, Dimmer, Loader, Label } from "semantic-ui-react";
+import { Grid, Header, Segment, Form, Button, Dimmer, Loader, Label, Input, Icon } from "semantic-ui-react";
 import config from "../../../config.json";
 import authHeader from "../../../services/auth-header";
 import Joi from "joi-browser";
@@ -161,20 +161,22 @@ class ChangePassword extends Component {
     }
     
     async submit() {
+        this.setState({
+            oldpasswordError: "",
+            passwordError: "",
+            confirmpasswordError: ""            
+        })
+
         var upperCaseLetters = /[A-Z]/g;
         var lowerCaseLetters = /[a-z]/g;
         var numbers = /[0-9]/g;
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+        
         if(!this.state.oldpassword){
             this.setState({
-            oldpasswordError:"This field is required"
+                oldpasswordError:"This field is required"
             })
         }
-        // else if(!this.state.password){
-        //     this.setState({
-        //     passwordError:"This field is required"
-        //     })
-        // }
         else if(!this.state.password || this.state.password.length < 8 ){
             this.setState({
             passwordError : "Password must have 8 or more characters"
@@ -187,34 +189,33 @@ class ChangePassword extends Component {
         }
         else if(this.state.confirmpassword !== this.state.password ){
             this.setState({
-            confirmpasswordError:"password and confirm password miss match"
+                confirmpasswordError:"password and confirm password miss match"
             })
         }
         
         else if(upperCaseLetters.test(this.state.password)===false) {
             this.setState({
-                    passwordError:"Password must have atleast one Uppercase letter"
-                    })
+                passwordError:"Password must have atleast one Uppercase letter"
+            })
         }
         
         else if(lowerCaseLetters.test(this.state.password)===false) {
             this.setState({
                 passwordError:"Password must have atleast one Lowercase letter"
-                })
+            })
         }
 
         
         else if(numbers.test(this.state.password)===false) {
             this.setState({
                 passwordError:"Password must have atleast one number"
-                })
+            })
         }
         
         else if(specialChars.test(this.state.password)===false) {
             this.setState({
-                passwordError:"Password must have atleast one Special Character"
-                
-                })
+                passwordError:"Password must have atleast one Special Character"  
+            })
         }
         
         else{
@@ -268,21 +269,20 @@ class ChangePassword extends Component {
                         <div className="form-group col-md-6">
                         <Form.Field>
                                 <label>Old Password</label>
-                                <input
-                                    name="oldpassword"
-                                    type={this.state.oldhidden ? 'password' : 'text'}
-                                    placeholder="Old Password"
-                                    className="form-control input-lg input-white shadow-5"
-                                    value={this.state.oldpassword}
-                                    onChange={
-                                        this.handleInputChange
-                                    }
-                                    validations={[
-                                        required
-                                    ]}
-                                    
-                                />
-                                    <i className={this.state.oldhiddeneye ? "fa fa-eye-slash transform-v-center":"fa fa-eye transform-v-center"}  style={{cursor: 'pointer',transform:'none'}} onClick={this. toggleShowold}></i>
+                                <div className="ui big icon input">
+                                    <input
+                                        name="oldpassword"
+                                        type={this.state.oldhidden ? 'password' : 'text'}
+                                        placeholder="Old Password"
+                                        value={this.state.oldpassword}
+                                        onChange={this.handleInputChange}
+                                    />
+                                    <i 
+                                        aria-hidden="true"
+                                        className={`${this.state.oldhidden ? 'eye slash' : 'eye'} link icon`}
+                                        onClick={this.toggleShowold}
+                                    ></i>
+                                </div>
                                 {
                                     this.state.oldpasswordError && (
                                         <div
@@ -304,22 +304,20 @@ class ChangePassword extends Component {
                         <div className="form-group col-sm-6">
                             <Form.Field>
                                 <label>New Password</label>
-                                <input
-                                    name="password"
-                                    type={this.state.hidden ? 'password' : 'text'}
-                                    className="form-control input-lg input-white shadow-5"
-                                    placeholder="New Password"
-                                    value={this.state.password}
-                                    onChange={
-                                        this.handleInputChange
-                                    }
-                                    validations={[
-                                        required
-                                    ]}
-                                    
-                                />
-                                    <i className={this.state.hiddeneye ? "fa fa-eye-slash transform-v-center":"fa fa-eye transform-v-center"}  style={{cursor: 'pointer',transform:'none'}} onClick={this.toggleShow}></i>
-
+                                <div className="ui big icon input">
+                                    <input
+                                        name="password"
+                                        type={this.state.hidden ? 'password' : 'text'}
+                                        placeholder="New Password"
+                                        value={this.state.password}
+                                        onChange={this.handleInputChange}
+                                    />
+                                    <i 
+                                        aria-hidden="true"
+                                        className={`${this.state.hiddeneye ? 'eye slash' : 'eye'} link icon`}
+                                        onClick={this.toggleShow}
+                                    ></i>
+                                </div>
                                 {
                                     this.state.passwordError && (
                                         <div
@@ -341,23 +339,20 @@ class ChangePassword extends Component {
                         <div className="form-group col-sm-6">
                             <Form.Field>
                                 <label> Confirm New Password</label>
-
-                                <input
-                                    name="confirmpassword"
-                                    type={this.state.confirmhidden ? 'password' : 'text'}
-
-                                    placeholder="Confirm New Password"
-                                    className="form-control input-lg input-white shadow-5"
-                                    value={this.state.confirmpassword}
-                                    onChange={
-                                        this.onChangeTextFields
-                                    }
-                                    validations={[
-                                        required
-                                    ]}
-                                />
-                                    <i className={this.state.confirmhiddeneye ? "fa fa-eye-slash transform-v-center":"fa fa-eye transform-v-center"}  style={{cursor: 'pointer',transform:'none'}} onClick={this.toggleShowconfirm}></i>
-
+                                <div className="ui big icon input">
+                                    <input
+                                        name="confirmpassword"
+                                        type={this.state.confirmhidden ? 'password' : 'text'}
+                                        placeholder="Confirm New Password"
+                                        value={this.state.confirmpassword}
+                                        onChange={this.onChangeTextFields}
+                                    />
+                                    <i 
+                                        aria-hidden="true"
+                                        className={`${this.state.confirmhiddeneye ? 'eye slash' : 'eye'} link icon`}
+                                        onClick={this.toggleShowconfirm}
+                                    ></i>
+                                </div>
                                 {
                                     this.state.confirmpasswordError && (
                                         <div

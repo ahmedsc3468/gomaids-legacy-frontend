@@ -231,18 +231,21 @@ class UserDetails extends Component {
             otp : this.state.verifyCode,
             mobile_no:this.state.mobile_no
         }
-        const ot = await axios.post(config.SERVER_URL + `/api/verifymobile`, ob)
-        console.log("ot",ot.data.message);
-        if(ot.data.success === false)
-        {
-            this.setState({otpError : ot.data.message})
-            this.resetForm();
-        }
-        if(ot.data.message === "User mobile number is verified.")
-        {
-            swal("success!", " Your mobile number has been verified.!", "success")
-            this.closeModal();
-            this.componentDidMount();
+
+        try {
+            const result = await axios.post(config.SERVER_URL + `/api/verifymobile`, ob)
+            console.log("result", result.data.message);
+
+            if (result.data.success === false) {
+                this.setState({otpError : result.data.message})
+                this.resetForm();
+            } else {
+                swal("success!", " Your mobile number has been verified!", "success")
+                this.closeModal()
+                this.componentDidMount()
+            }
+        } catch (error) {
+            console.log(error)
         }
     }
     resetForm = async () => {
@@ -571,7 +574,7 @@ let that=this;
                         </div>
                         <div className="form-group verifybuton col-md-6">
                         <button
-                        hidden={this.state.is_verified == '1' || this.state.mobile_no === null}
+                        hidden={this.state.is_verified == '2' || this.state.mobile_no === null}
                             type="submit"
                             className="btn btn-black btn-small cust-verify-button"
                             onClick={this.openModal}>

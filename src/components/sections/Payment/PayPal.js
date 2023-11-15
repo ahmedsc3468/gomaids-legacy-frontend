@@ -4,7 +4,7 @@ import swal from "sweetalert";
 
 import axios from "axios";
 
-export default function App({cost}) {
+export default function App({cost, checkOutBtnEnable}) {
   const style = {"min-height":"0","max-height":"0","height":"0"};
 //   console.log("cost:",cost)
     return (
@@ -39,11 +39,17 @@ export default function App({cost}) {
                       
                         try{
                             await axios.post(config.SERVER_URL+"/api/charge",{amount:cost})
-                            swal("Payment Successful", "", "success")
-                            }
-                            catch(ex){
-                               
-                            }
+                            swal({
+                                icon: "success",
+                                title: "Payment Successful!",
+                                text: "Your order will be automatically placed in 5 seconds. If not, please click 'Place Order'",
+                                timer: 4000
+                            });
+                            checkOutBtnEnable()
+                        }
+                        catch(error){
+                            console.log(error)
+                        }
                        
                     });
                   

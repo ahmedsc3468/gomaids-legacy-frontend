@@ -646,6 +646,7 @@ console.log(this.state.getConfigr)
                       {this.state.payWithPayPal === true && <Col md={12} className="mt-4">
                         <Paypal
                           cost={this.state.costAccumulation}
+                          checkOutBtnEnable={this.checkOutBtnEnable}
                         />
                       </Col>}
                     </Row>

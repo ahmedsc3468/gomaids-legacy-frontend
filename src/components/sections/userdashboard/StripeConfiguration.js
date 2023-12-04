@@ -147,7 +147,8 @@ class StripeConfiguration extends Component {
         catch (ex) {
 
         }
-    }else{
+    }
+    else if (this.state.paymentConfigShow === "bank") {
         try {
             const bank = await axios.post(config.SERVER_URL + "/api/add-bank",
                 {
@@ -178,6 +179,8 @@ class StripeConfiguration extends Component {
     catch (ex) {
 
     }
+    } else {
+        swal("Error!", "please enter values in the input fields.", "warning")
     }
 }
     handleInputChange = (e) => {

@@ -13,15 +13,14 @@ import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import swal from "sweetalert";
-import ListItemText from '@material-ui/core/ListItemText';
+import { ListItemText, ListItemAvatar } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Fab from '@material-ui/core/Fab';
 import CircularProgress  from '@mui/material/CircularProgress';
 import "../../../assets/MyCSS/home-pages.css"
 import "../../../assets/MyCSS/chatUpdateSetting.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPaperPlane } from "@fortawesome/free-solid-svg-icons"
+import { faPaperPlane, faEnvelope } from "@fortawesome/free-solid-svg-icons"
 import {useRef } from 'react'
 
 
@@ -40,10 +39,11 @@ const useStyles = makeStyles({
   },
   chatSection: {
     width: '100%',
-    height: '90vh',
+    height: '410px',
     borderTop: '2px solid #e0e0e0',
     borderBottom: '1px solid #e0e0e0',
-    padding: '10px'
+    padding: '10px',
+    marginBottom: '10px'
   },
   headBG: {
     backgroundColor: '#e0e0e0'
@@ -54,7 +54,7 @@ const useStyles = makeStyles({
     overflowY: 'scroll'
   },
   messageArea: {
-    height: '60vh',
+    height: '46vh',
     overflowY: 'auto',
     '&::-webkit-scrollbar-track': {
       borderRadius: '10px',
@@ -93,25 +93,27 @@ const dummy = useRef();
   const [userChat, setUserChat] = useState(null)
   const [orderStatus, setOrderStatus] = useState(null)
   const [conversationId, setConversationId] = useState(null)
+  const [newMessageConversationId, setNewMessageConversationId] = useState(null)
+  
   useEffect(() => {
-    getConversations()
+    getConversations()    
+    window.Echo.private(`message_${user?.id}`).listen("MessageSent", (
+      e) => {
+    
+      getConversations()
+      setNewMessageConversationId(e.conversation_id)
+      
+    })
   }, [])
 
-  window.Echo.private(`message_${user && user.id}`).listen("MessageSent", (
-    e) => {
-   
-    // console.log(e)
-    getConversations()
-// console.log("e.conversation_id ",e.conversation_id );
-// console.log("e.singleChatMessages",singleChatMessages[0]?.conversation_id);
-
-    if (e.conversation_id == singleChatMessages[0]?.conversation_id) {
-      // console.log('Listening for new chat')
-      getSingleChatMessages(e.conversation_id)
+  useEffect(() => {
+    if ( newMessageConversationId !== null && 
+      newMessageConversationId == singleChatMessages[0]?.conversation_id) {
+      getSingleChatMessages(newMessageConversationId)
+      seeMessages(newMessageConversationId)
     }
-    
-  })
- 
+    setNewMessageConversationId(null)    
+  }, [newMessageConversationId])
 
   const getConversations = async () => {
     const { data: lastMessageObj } = await axios.get(config.SERVER_URL + `/api/allchats`, { headers: AuthHeader() })
@@ -129,7 +131,7 @@ const dummy = useRef();
     // if (messagesObj?.data?.length > 0){
       setChatIsPending(false)
     // }
-
+    console.log('single chat messages ', messagesObj.data)
     setSingleChatMessages(messagesObj.data);
   }
 
@@ -145,8 +147,9 @@ const dummy = useRef();
       setMessage('');
       const response = await axios.post(`${config.SERVER_URL}/api/chat`, data, { headers: AuthHeader() })
       if (response.status === 200) {
-        getSingleChatMessages(conversationId);
-        getConversations();
+        getSingleChatMessages(conversationId)
+        getConversations()
+        setSelectedIndex(conversationId)
       }
     }
     
@@ -156,7 +159,30 @@ const dummy = useRef();
       if(event.key === 'Enter'){
         console.log('enter press here! ')
       }
+  }
+
+  const displayLastChatMessage = (message, width) => {
+    if (typeof message === "undefined") {
+      return null
+    } 
+
+
+    if (message.length >= width) {
+      return message.substr(0, (width - 3)) + '...'
     }
+
+    return message
+  }
+
+  const seeMessages = async (id) => {
+    try {
+       await axios.put(config.SERVER_URL + `/api/v2/chat/see-messages/${id}`, {}, { headers: AuthHeader() })
+       getConversations()
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
   useEffect(() => {
     if (messageRef.current) {
       messageRef.current.scrollIntoView(
@@ -176,15 +202,13 @@ return (
       {sideBarMessages.length == null ? <div className="text-center"> <CircularProgress color="success" /></div> :
     
         <Grid container component={Paper} className={classes.chatSection}>
-          <Grid item xs={3} className={classes.borderRight500}>
+          <Grid item xs={3} className={`${classes.borderRight500} h-100 `}>
             <List key={user.id}>
               <ListItem button  >
                 <ListItemIcon>
-                  <Avatar alt="User Picture" src={`${config.SERVER_URL}/${user.avatar}`} />
-                  <span className='' style={{"marginLeft":"5px"}}>{user.username}</span>
-
+                  <FontAwesomeIcon icon={faEnvelope} size="lg" />
+                  <span className='h5 fw-normal' style={{"marginLeft":"5px"}}>Inbox</span>
                 </ListItemIcon>
-                {/* <ListItemText primary={`${user.username}`}></ListItemText> */}
               </ListItem>
             </List>
             <Divider />
@@ -207,38 +231,63 @@ return (
               </Col>
             </div> :
             <List key={'sideBarMessages'}>
-              {sideBarMessages.map((conversation, index) => {
+              {sideBarMessages.filter((conversation) => {
+                  return conversation.order.status != 0
+              }).map((conversation, index) => {
                   var chatlen=conversation.chats.length;
                 // get data of conversation recepient
                 const recepient = user.id === conversation.user_one.id ? conversation.user_two : conversation.user_one
                 return (
-                  <ListItem button key={conversation.id} className={selectedIndex === index ? classes.selected : ''} onClick={e => {
+                  <React.Fragment key={conversation.id}>
+                  <ListItem alignItems="flex-start" button className={selectedIndex === conversation.id ? classes.selected : ''} onClick={e => {
                     setConvoIsPending(true);
-                    setSelectedIndex(index);
+                    setSelectedIndex(conversation.id);
                     getSingleChatMessages(conversation.id);
                     setOrderStatus(conversation.order.status);
                     setConversationId(conversation.id);
+                    seeMessages(conversation.id);
                     console.log('order status 2', orderStatus);
                     setConvoRecepient(user.id === conversation.user_one.id ? conversation.user_two : conversation.user_one);
                   }}>
-                    <ListItemIcon>
+                    <ListItemAvatar className="d-none d-lg-block">
                       <Avatar alt={`recepient_${recepient.id}_image`} src={`${config.SERVER_URL}/${recepient.image}`} />
-                      {/* <span className='online'>●</span> */}
-                      <span className='' style={{"marginLeft":"5px"}}>{recepient.username}
-                      <span className='' style={{"display":"block"}}>{conversation?.chats[chatlen-1]?.message}</span>
-                      </span>
-                    </ListItemIcon>
-                    {/* <ListItemText primary={`${recepient.username}`}>{`${recepient.username}`} */}
-                    
-                    {/* </ListItemText> */}
-                    {
-                      recepient.status === 1 &&
-                      <ListItemText secondary="" align="right"></ListItemText>
-                    }
-                    
-                    <ListItemText className='orderkey'  primary={`(${conversation.order.order_key})`} align="right"></ListItemText>
-                   
-                  </ListItem>)
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={
+                        <div className="d-flex justify-content-between">
+                          <span>{recepient.username}</span>
+                          <small className="text-muted d-none d-lg-block">{`(${conversation.order.order_key})`}</small>
+                        </div>  
+                      }
+                      secondary={
+                        <React.Fragment>
+                          <Typography
+                            className="d-block d-lg-none d-xl-none d-xxl-none fw-bold text-dark"
+                            sx={{ display: 'inline' }}
+                            component="span"
+                            variant="body2"
+                          >
+                            {`(${conversation.order.order_key})`}
+                          </Typography>
+                          <div className="d-flex  justify-content-between">
+                          <Typography
+                            className=""
+                            sx={{ display: 'inline' }}
+                            component="span"
+                            variant="body2"
+                          >
+                            {displayLastChatMessage(conversation?.chats[chatlen-1]?.message, 56)}
+                          </Typography>
+                          <h6 className="d-inline pr-1">
+                            <span className="badge bg-success text-white rounded-circle">{(conversation?.chats?.filter((chat) => chat.sender_id != user.id && chat.is_seen == 0).length) || ""}</span>                          
+                          </h6>
+                          </div>
+                        </React.Fragment>
+                      }
+                    />                  
+                    </ListItem>
+                  <Divider variant="inset" component="li" />
+                     </React.Fragment>)
               })}
 
             </List>

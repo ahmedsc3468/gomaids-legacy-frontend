@@ -145,7 +145,7 @@ function App() {
         broadcaster: "pusher",
         cluster: 'ap2',
         encrypted: true,
-        key: '4b70cc9598b80dcadac2',
+        key: '53d29f0e4b04ffcfc346',
         authorizer: (channel, options) => {
             return ({
                 authorize: (socketId, callback) => {

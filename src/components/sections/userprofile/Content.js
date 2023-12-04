@@ -269,22 +269,22 @@ let that=this;
                 ],
                 dangerMode: true,
               }).then(async function(isConfirm) {
-                  localStorage.setItem('DD',1)
-                // });
-                var confirmation= localStorage.getItem('DD');
-       
-            console.log(confirmation)
-            if(confirmation == 1){
-                that.setState({ image: that.state.image.replace(config.SERVER_URL + "/", ''), identity: that.state.identity.replace(config.SERVER_URL + "/", '',) })
-                const update = await axios.put(config.SERVER_URL + `/api/user/${that.userDet.id}/profile`, that.state)
-    
-                that.setState({ image: config.SERVER_URL + "/" + update.data.data.image, identity: config.SERVER_URL + "/" + update.data.data.identity })
-                // console.log("::::::: After Upload ::::::", update)
-                swal("Updated!", "Your Profile Has Been Update!", "success")
-                localStorage.removeItem('DD')
-                that.componentDidMount();
+                    if (isConfirm) {
+                        localStorage.setItem('DD',1)
+                        let confirmation = localStorage.getItem('DD');
 
-            }
+                        if (confirmation == 1) {
+                            that.setState({ image: that.state.image.replace(config.SERVER_URL + "/", ''), identity: that.state.identity.replace(config.SERVER_URL + "/", '',) })
+                            const update = await axios.put(config.SERVER_URL + `/api/user/${that.userDet.id}/profile`, that.state)
+                
+                            that.setState({ image: config.SERVER_URL + "/" + update.data.data.image, identity: config.SERVER_URL + "/" + update.data.data.identity })
+                            // console.log("::::::: After Upload ::::::", update)
+                            swal("Updated!", "Your Profile Has Been Update!", "success")
+                            localStorage.removeItem('DD')
+                            that.componentDidMount();
+
+                        }
+                    }
         });
     }
 

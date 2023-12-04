@@ -210,9 +210,7 @@ class Wallet extends Component {
                                             {order.cost}$
                                         </Col>
                                         <Col className="align-self-center custom_w_s_c">
-                                            {order.status==='3' ? "Cancelled":""}
-                                            {order.status==='1' ? "In-process":""}
-                                            {order.status==='2' ? "Completed":""}
+                                            <span class={`badge bg-secondary text-light`}>{status}</span>
                                         </Col>
                                     </Row>
                                 </CardBody>

@@ -17,6 +17,8 @@ import "../../../assets/css/custom-style.css";
 import Rate from "../userdashboard/RateUs";
 import swal from "sweetalert";
 import { useHistory, useParams } from "react-router-dom";
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 
 class ServiceTakerOrderDetails extends Component {
@@ -46,8 +48,7 @@ class ServiceTakerOrderDetails extends Component {
             service_taker_feedback:"",
             service_provider_feedback:"",
             total:null,
-          
-
+            loader: false
         };
 
         this.toggleDropDown = this.toggleDropDown.bind(this)
@@ -123,82 +124,84 @@ class ServiceTakerOrderDetails extends Component {
 
 
     statusChange = async (a) =>  {
-        console.log("::::::" , a)
         const user = AuthService.getCurrentUser()
-        console.log("::::113:: ",user.role.name)
         
         if(user.role.name === 'service_provider')
         {
+            const status = (a == "2")? "complete" : "cancel"
             const order_id = this.props.match.params.order_id
-            const { data } = await axios.put(config.SERVER_URL + `/api/changeorderstatus/${order_id}`, { status: a, sp_status:a },
-            {
-                headers: authHeader(),
-            });
-            localStorage.setItem("orderstate", "complete");
-            <Rate></Rate>
-            // swal("Updated!", "Your Status Has Been Change!", "success")
+            const that = this
 
-        const order = await axios.get(config.SERVER_URL + `/api/order/${order_id}`,
-            {
-                headers: authHeader(),
-            });
-           
-        this.setState({ order: order.data.data,
-             convoTargeted: order.data.data.conversation,
-             convochat:order.data.data.conversation.chat,
-             order_status:order.data.data.status,
-             rating: parseInt(order.data.data.rating),
-             rateshow:true
-            });
-       
-            
-            }
-        else{
+            swal({
+                title: "Are you sure?",
+                text: `Do you want to ${status} the order? You will not be able to revert this action.`,
+                icon: "warning",
+                buttons: [
+                  'No, cancel it!',
+                  'Yes, I am sure!'
+                ],
+                dangerMode: true,
+              }).then(async function(isConfirm) {
+                    if (isConfirm) {
+                        that.setState({
+                            loader: true
+                        })
+
+                        const { data } = await axios.put(config.SERVER_URL + `/api/changeorderstatus/${order_id}`, { status: a, sp_status:a },
+                        {
+                            headers: authHeader(),
+                        });
+
+                        localStorage.setItem("orderstate", "complete");
+
+                        try {
+                            const order = await axios.get(config.SERVER_URL + `/api/order/${order_id}`,
+                            {
+                                headers: authHeader(),
+                            })
+                        
+                            that.setState({ 
+                                order: order.data.data,
+                                convoTargeted: order.data.data.conversation,
+                                convochat: order.data.data.conversation.chat,
+                                order_status : order.data.data.status,
+                                rating: parseInt(order.data.data.rating),
+                                rateshow: true
+                            })
+
+                            swal("Order Updated!", "Action successfully completed.", "success")
+                        } catch(e) {
+                            swal("Something went wrong", "Please try again later.", "warning")
+                        }
+
+                        that.setState({
+                            loader: false
+                        })
+                    }
+            })            
+        } else {
             const order_id = this.props.match.params.order_id
-            const { data } = await axios.put(config.SERVER_URL + `/api/changeorderstatus/${order_id}`, { status: a, st_status:a },
+
+            const { data } = await axios.put(config.SERVER_URL + `/api//${order_id}`, { status: a, st_status:a },
             {
                 headers: authHeader(),
             });
+
             swal("Updated!", "Your Status Has Been Change!", "success")
 
-        const order = await axios.get(config.SERVER_URL + `/api/order/${order_id}`,
+            const order = await axios.get(config.SERVER_URL + `/api/order/${order_id}`,
             {
                 headers: authHeader(),
             });
-        this.setState({ order: order.data.data,
-             convoTargeted: order.data.data.conversation,
-             convochat:order.data.data.conversation.chat,
-             order_status:order.data.data.status,
-             rating: parseInt(order.data.data.rating) })
+
+            this.setState({ 
+                order: order.data.data,
+                convoTargeted: order.data.data.conversation,
+                convochat:order.data.data.conversation.chat,
+                order_status:order.data.data.status,
+                rating: parseInt(order.data.data.rating) 
+            })
         }
-
-        // console.log("::::::" , a)
-        // const order_id = this.props.match.params.order_id
-        // const { data } = await axios.put(config.SERVER_URL + `/api/changeorderstatus/${order_id}`, { status: a, user_st:a },
-        // {
-        //     headers: authHeader(),
-        // });
-        // console.log(":::::: After Change status", data)
-        // swal("Updated!", "Your Status Has Been Change!", "success")
-
-        // const order = await axios.get(config.SERVER_URL + `/api/order/${order_id}`,
-        //     {
-        //         headers: authHeader(),
-        //     });
-        // this.setState({ order: order.data.data,
-        //      convoTargeted: order.data.data.conversation,
-        //      order_status:order.data.data.status,
-        //      rating: parseInt(order.data.data.rating) })
-        
-        // this.refreshPage()
-
-        // const newArray = this.state.user_orders.map((order) => {
-        //     if (order.id === data.data.id)
-        //         order.status = data.data.status
-        //     return order
-        // })
-        // console.log(":::::: After Change status", newArray)
-        // this.setState({ user_orders: newArray })
     }
 
     refreshPage () { 
@@ -340,6 +343,10 @@ class ServiceTakerOrderDetails extends Component {
        
         return (
             <>
+                {(this.state.loader) &&
+                <div style={{position: 'fixed', top: '40%', right: '50%', zIndex: 9999}}> 
+                    <div id="CustomAllorders" className="text-center"> <CircularProgress color="success" /> </div>
+                </div>}
                 {this.state.order === null ? <Dimmer active inverted><Loader size='large' indeterminate>Loading</Loader></Dimmer> :
                     <Row style={{
                         paddingTop: 10,
@@ -484,7 +491,7 @@ class ServiceTakerOrderDetails extends Component {
                                 </Col>
                             </Row>
                             <Row className="custom-row">
-                                <Col md='6'>
+                                <Col md='5'>
                                     {/* <Button className="ui button order_print_button"> <Link className="text-light" to={`order_details_${this.state.order.id}`}> Print </Link></Button> */}
                                     <Button className="ui button order_back_button" onClick={() =>{localStorage.setItem("currenttab", "AllOrder"); this.props.history.goBack() }}>  Back</Button>
                                     {/* {user.role.name === 'service_taker' && (<>
@@ -504,7 +511,7 @@ class ServiceTakerOrderDetails extends Component {
                                     </>)}
                                     </>)}
                                 </Col>
-                                <Col md='6' className="ml-auto">
+                                <Col md='7' className="ml-auto">
                                         
                                     <Button className="ui button order_SendMessage_button" onClick={this.handleShow} hidden={this.state.order.status!="1"}> Send Message</Button>
                                     {/* {user.role.name === 'service_taker' && ( <>
@@ -512,8 +519,8 @@ class ServiceTakerOrderDetails extends Component {
                                     <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(3)} disabled={this.state.order.status =="3" || this.state.order.st_status =="2" || this.state.order.status =="1"}> Cancel</Button>
                                     </>)}  */}
                                     {user.role.name === 'service_provider' && ( <>
-                                     <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(2)} hidden={this.state.order.sp_status =="2" || this.state.order.status !=="1"  || this.state.order.status =="5" }> Complete</Button>
-                                    <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(3)} hidden={this.state.order.status =="2" ||this.state.order.sp_status =="2" || this.state.order.status =="3" || this.state.order.status =="5"}> Cancel</Button>
+                                     <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(2)} hidden={this.state.order.sp_status == "2" || this.state.order.status != "1"  || this.state.order.status == "5" }> Complete</Button>
+                                     <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(3)} hidden={this.state.order.status =="2" ||this.state.order.sp_status =="2" || this.state.order.status =="3" || this.state.order.status =="5"}> Cancel</Button>
                                     </>)} 
                                     {/* <Dropdown onSelect={(e) => this.statusChange(e, order.id)}>
                                                         <Dropdown.Toggle variant="success" id="dropdown-basic">

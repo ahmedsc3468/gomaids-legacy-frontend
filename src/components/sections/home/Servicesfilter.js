@@ -18,7 +18,7 @@ import swal from "sweetalert";
 
 let circle;
 
-const AnyReactComponent = ({  img_src }) => <div id='locationicons'><img src={config.SERVER_URL+'/images/das.png'} className="YOUR-CLASS-NAME" style={{"width":"10px"}} /></div>;
+const AnyReactComponent = ({  img_src }) => <div id='locationicons'><img src={config.SERVER_URL+'/images/das.jpg'} className="YOUR-CLASS-NAME" style={{"width":"10px"}} /></div>;
 
 class Service extends Component {
     

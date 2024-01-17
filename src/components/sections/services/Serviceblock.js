@@ -15,19 +15,28 @@ import AuthService from "../../../services/auth.service";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import CircularProgress from '@mui/material/CircularProgress';
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import CircularProgress from "@mui/material/CircularProgress";
+import Select from "react-select";
 
-<script async
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM&callback=initMap">
-</script>
+<script
+  async
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM&callback=initMap"
+></script>;
 let circle;
 
-const AnyReactComponent = ({  img_src }) => <div id='locationicons'><img src={config.SERVER_URL+'/images/das.jpg'} className="YOUR-CLASS-NAME" style={{"width":"20px"}} /></div>;
+const AnyReactComponent = ({ img_src }) => (
+  <div id="locationicons">
+    <img
+      src={config.SERVER_URL + "/images/das.jpg"}
+      className="YOUR-CLASS-NAME"
+      style={{ width: "20px" }}
+    />
+  </div>
+);
 
 class Serviceblock extends Component {
-
   _isMounted = false;
   constructor(props) {
     let user = authService.getCurrentUser();
@@ -40,7 +49,7 @@ class Serviceblock extends Component {
       services_type: [],
       services_providers: [],
       filter_service_provider: [],
-      service_type_id: "",
+      service_type_id: 1,
       city_name: "",
       services_provider: "",
       providername: "",
@@ -48,19 +57,28 @@ class Serviceblock extends Component {
       radius: "",
       searchvalue: localStorage.getItem("searchservice"),
       currentUser: authService.getCurrentUser(),
-      links:[],
-      searchlinks:[],
-      searchlinklength:[],
-      linklength:"",
-      center: { lat: parseFloat(user?.lat) || 49.342880, lng: parseFloat(user?.lng) || -123.114840 },
+      links: [],
+      searchlinks: [],
+      searchlinklength: [],
+      linklength: "",
+      center: {
+        lat: parseFloat(user?.lat) || 49.34288,
+        lng: parseFloat(user?.lng) || -123.11484,
+      },
       inputRad: 10000,
-      markers: [{lat:user?.lat || 49.342880, lng: user?.lng || -123.114840, img_src: '../../../assets/img/lcoation.png'}],
-      lat: 49.342880, 
-      lng: -123.114840,
-      loader: false
+      markers: [
+        {
+          lat: user?.lat || 49.34288,
+          lng: user?.lng || -123.11484,
+          img_src: "../../../assets/img/lcoation.png",
+        },
+      ],
+      lat: 49.34288,
+      lng: -123.11484,
+      loader: false,
     };
   }
-  
+
   async componentDidMount() {
     window.scrollTo(0, 500);
 
@@ -82,10 +100,10 @@ class Serviceblock extends Component {
         radius: this.state.radius,
         city: this.state.city_name,
         service_type: this.state.searchvalue,
-        lng:this.state.lng,
-        lat:this.state.lat,
+        lng: this.state.lng,
+        lat: this.state.lat,
       };
-      
+
       // console.log("Before Api Call", apidata)
 
       if (this.state.searchvalue > 0) {
@@ -99,19 +117,18 @@ class Serviceblock extends Component {
               if (services_provider.data.data.length > 0) {
                 that.setState({
                   filter_service_provider: services_provider.data.data,
-                  searchlinks:services_provider.data.data.links,
-                //   links:services_provider.data.data.links,
-                  links:[],
-                  linklength:"",
-
+                  searchlinks: services_provider.data.data.links,
+                  //   links:services_provider.data.data.links,
+                  links: [],
+                  linklength: "",
                 });
 
                 // swal("Result Found!", "Your Result has been found!", "success")
                 localStorage.removeItem("searchservice");
                 // console.log("searchlinks",this.state.searchlinks);
-              } else
-                //"dlfjldskjf"
-                swal("Result Not Found!", "Result not found!", "warning");
+              }
+              //"dlfjldskjf"
+              else swal("Result Not Found!", "Result not found!", "warning");
             });
         } catch (err) {
           console.log(err);
@@ -122,11 +139,11 @@ class Serviceblock extends Component {
         );
         this.setState({
           services_providers: all_services_provider.data.data.data,
-          links:all_services_provider.data.data.links
+          links: all_services_provider.data.data.links,
         });
         this.setState({
-            linklength:this.state.links.length
-          });
+          linklength: this.state.links.length,
+        });
       }
       // }
       //Service Provider api
@@ -141,7 +158,14 @@ class Serviceblock extends Component {
     const cities = await axios.get(config.SERVER_URL + `/api/cities`, {
       headers: authHeader(),
     });
-    this.setState({ cities: cities.data.data });
+
+    let tempcit = [];
+    cities.data.data.map(function (currentValue, index) {
+      tempcit.push({ value: index, label: currentValue.city });
+    });
+    console.log(tempcit);
+    this.setState({ cities: tempcit });
+    // this.setState({ cities: cities.data.data });
     // console.log("CITIES", cities.data.data)
 
     //service_type api
@@ -166,67 +190,64 @@ class Serviceblock extends Component {
       [name]: value,
     });
   }
- 
+
   handleRadiusChange = (event) => {
     const value = event.target.value;
-  console.log("value",value)
+    console.log("value", value);
     this.setState({
       radius: value,
-      inputRad: value * 1000
+      inputRad: value * 1000,
     });
-    circle.setRadius(Number(value*1000));
-  }
+    circle.setRadius(Number(value * 1000));
+  };
   async findServiceProviders(event) {
-    this.setState({loader: true})
+    this.setState({ loader: true });
     window.scrollTo(0, 1400);
     let that = this;
     event.preventDefault();
-    
+
     const apidata = {
       name: this.state.providername,
       price: this.state.price,
       radius: this.state.radius,
       city: this.state.city_name,
       service_type: this.state.service_type_id,
-      lng:this.state.lng,
-        lat:this.state.lat,
+      lng: this.state.lng,
+      lat: this.state.lat,
     };
-    
+
     try {
       const services_provider = await axios
         .post(config.SERVER_URL + `/api/searchforprovider`, apidata, {
           headers: authHeader(),
         })
         .then(function (services_provider) {
-          that.setState({loader: false})
+          that.setState({ loader: false });
           if (services_provider.data.data.data.length > 0) {
             that.setState({
               filter_service_provider: services_provider.data.data.data,
-              searchlinks:services_provider.data.data.links,
-            //   links:services_provider.data.data.links,
-            //   linklength:services_provider.data.data.links.length
-            links:[],
-            linklength:"",
-            });           
+              searchlinks: services_provider.data.data.links,
+              //   links:services_provider.data.data.links,
+              //   linklength:services_provider.data.data.links.length
+              links: [],
+              linklength: "",
+            });
           } else swal("Result Not Found!", services_provider.data.message, "warning");
         });
     } catch (err) {
       console.log(err);
     }
   }
-  async handlepage(url){
+  async handlepage(url) {
     window.scrollTo(0, 900);
     // console.log("urlfrom",url)
-    const serviceproviderpage = await axios.get(
-        url,
-      );
-      this.setState({
-        services_providers: serviceproviderpage.data.data.data,
-        // links:all_services_provider.data.data.links
-      });
-
+    const serviceproviderpage = await axios.get(url);
+    this.setState({
+      services_providers: serviceproviderpage.data.data.data,
+      // links:all_services_provider.data.data.links
+    });
   }
-  async searchhandlepage(url){
+  async searchhandlepage(url) {
     window.scrollTo(0, 800);
     // console.log("urlfrom",url)
     const searchdata = {
@@ -237,18 +258,18 @@ class Serviceblock extends Component {
       service_type: this.state.service_type_id,
     };
     // console.log("searchdata",searchdata);
-    const searchserviceproviderpage = await axios.post(
-        url,searchdata
-      );
-      this.setState({
-        filter_service_provider: searchserviceproviderpage.data.data.data,
-        // links:all_services_provider.data.data.links
-      });
-
+    const searchserviceproviderpage = await axios.post(url, searchdata);
+    this.setState({
+      filter_service_provider: searchserviceproviderpage.data.data.data,
+      // links:all_services_provider.data.data.links
+    });
   }
+  handleChange = (selectedOption) => {
+    console.log(`Option selected:`, selectedOption.label);
+    this.setState({ city_name: selectedOption.label });
+  };
 
   render() {
-   
     const apiIsLoaded = (map, maps) => {
       circle = new maps.Circle({
         strokeColor: "#FF0000",
@@ -259,10 +280,9 @@ class Serviceblock extends Component {
         map,
         center: this.state.center,
         radius: this.state.inputRad,
-
       });
     };
-    
+
     // console.log("links",this.state.links);
     return (
       <section className="service pt-95 pb-90 bg-light-white">
@@ -307,16 +327,16 @@ class Serviceblock extends Component {
                   <label for="city">
                     <h5>Search by City</h5>
                   </label>
-                  <select
+                  {/* <select
                     className="form-control input-white select-nice mr-15 mb-xs-15 step-one"
                     name="city"
                     id="city"
                     onChange={(e) => {
                       this.setState({ city_name: e.target.value });
                     }}
-                  >
-                    <option value="">Select city</option>
-                    {this.state.cities
+                  > */}
+                  {/* <option value="">Select city</option> */}
+                  {/* {this.state.cities
                       .filter(({ city }) => city !== null)
                       .map(({ city }, index) => {
                         return (
@@ -324,24 +344,42 @@ class Serviceblock extends Component {
                             {city}
                           </option>
                         );
-                      })}
-                  </select>
+                      })} */}
+                  {/* </select> */}
+                  <Select
+                    id="city"
+                    options={this.state.cities}
+                    className="find_service_cities"
+                    classNamePrefix="find_service_cities"
+                    placeholder={"Select City...."}
+                    onChange={this.handleChange}
+                    theme={(theme) => ({
+                      ...theme,
+                      borderRadius: 5,
+                      colors: {
+                        ...theme.colors,
+                        primary25: "#036905",
+                        primary: "transparent",
+                      },
+                    })}
+                  />
                 </div>
               </div>
               <div className="col-lg-6 col-md-6">
                 <div className="form-group">
                   <label for="service_type_id">
-                    <h5>Search by Category</h5>
+                    <h5>Category</h5>
                   </label>
                   <select
                     className="form-control input-white select-nice mb-xs-15 step-two"
+                    style={{ pointerEvents: "none" }}
                     name="service_type_id"
                     id="service_type_id"
                     onChange={(e) => {
                       this.setState({ service_type_id: e.target.value });
                     }}
                   >
-                    <option value="">Select Service</option>
+                    {/* <option value="">Select Service</option> */}
                     {this.state.services_type.map((value) => {
                       return (
                         <option value={value.id} key={value.id}>
@@ -365,15 +403,11 @@ class Serviceblock extends Component {
                     id="radius"
                     value={this.state.radius}
                     onChange={(event) => this.handleRadiusChange(event)}
-
-
                     placeholder="10 km"
                   />
                 </div>
               </div>
-              <div className="col-lg-6 col-md-6">
-
-              </div>
+              <div className="col-lg-6 col-md-6"></div>
               <div id="cust-find-service-btn">
                 <button
                   type="submit"
@@ -387,46 +421,62 @@ class Serviceblock extends Component {
             </div>
           </form>
         </div>
-        
+
         <div className="container">
-        <div style={{ height: "500px", width: "100%", marginBottom:"20px" }}>
-        <GoogleMapReact
-                bootstrapURLKeys={{
-                  key: "AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM",
-                  libraries: ["places"]
-                }}
-                defaultZoom={10}
-                center={this.state.center}
-                defaultCenter={this.state.center}
-                yesIWantToUseGoogleMapApiInternals
-                onGoogleApiLoaded={({ map, maps }) =>apiIsLoaded(map, maps)}
-              >{this.state.markers.map((marker, i) =>{
-                return(
+          <div style={{ height: "500px", width: "100%", marginBottom: "20px" }}>
+            <GoogleMapReact
+              bootstrapURLKeys={{
+                key: "AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM",
+                libraries: ["places"],
+              }}
+              defaultZoom={10}
+              center={this.state.center}
+              defaultCenter={this.state.center}
+              yesIWantToUseGoogleMapApiInternals
+              onGoogleApiLoaded={({ map, maps }) => apiIsLoaded(map, maps)}
+            >
+              {this.state.markers.map((marker, i) => {
+                return (
                   <AnyReactComponent
                     lat={marker.lat}
                     lng={marker.lng}
                     img_src={marker.img_src}
                   />
-  
-                )
-              })}      
-        </GoogleMapReact> 
-    </div>
+                );
+              })}
+            </GoogleMapReact>
+          </div>
           {this.state.filter_service_provider.length > 0 && (
             <h3> Search Result </h3>
           )}
-          {this.state.loader && (<div className="position-relative h-100">
-            <Box display='flex' justifyContent='center' alignItems='center' style={{position: 'absolute', top: 200, bottom: 0, zIndex: 1, right: 0, left: 0, margin: "auto", textAlign: "center" }} >
-              <CircularProgress color='success' size={80} />
-              <Typography 
-                position='absolute'
-                variant="caption"
-                component="div"
+          {this.state.loader && (
+            <div className="position-relative h-100">
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                style={{
+                  position: "absolute",
+                  top: 200,
+                  bottom: 0,
+                  zIndex: 1,
+                  right: 0,
+                  left: 0,
+                  margin: "auto",
+                  textAlign: "center",
+                }}
               >
-                Please Wait
-              </Typography>
-            </Box>
-          </div>)}
+                <CircularProgress color="success" size={80} />
+                <Typography
+                  position="absolute"
+                  variant="caption"
+                  component="div"
+                >
+                  Please Wait
+                </Typography>
+              </Box>
+            </div>
+          )}
           <div className="row">
             {this.state.filter_service_provider.map((item, i) => (
               <div
@@ -448,7 +498,7 @@ class Serviceblock extends Component {
                           borderRadius: "50px",
                           height: "6.5rem",
                           width: "15rem",
-                          objectFit:"cover",
+                          objectFit: "cover",
                         }}
                         src={`${config.SERVER_URL}/${item.image}`}
                         alt="service_provider_image"
@@ -476,34 +526,46 @@ class Serviceblock extends Component {
                   </Link>
                 </div>
               </div>
-              
             ))}
           </div>
           <div className="container">
-          <div className="row">
-              <ButtonToolbar style={{margin :"auto"}} aria-label="Toolbar with button groups">
-                <ButtonGroup size="lg"  className="me-2" aria-label="First group">
-              {this.state.searchlinks.map((value,index) => {
-                  // console.log(value.url)
-                  // console.log(this.state.linklength)
+            <div className="row">
+              <ButtonToolbar
+                style={{ margin: "auto" }}
+                aria-label="Toolbar with button groups"
+              >
+                <ButtonGroup
+                  size="lg"
+                  className="me-2"
+                  aria-label="First group"
+                >
+                  {this.state.searchlinks.map((value, index) => {
+                    // console.log(value.url)
+                    // console.log(this.state.linklength)
 
-                      return (
-                    
-                        <Button className="buttongroudp" hidden={index<1 || index==this.state.searchlinks.length-1} 
-                        onClick={() => this.searchhandlepage(value.url)} >{value.label}</Button>
-                        // <option value={value.id} key={value.id}>
-                        //   {value.name}
-                        // </option>
-                      );
-                    })}
+                    return (
+                      <Button
+                        className="buttongroudp"
+                        hidden={
+                          index < 1 ||
+                          index == this.state.searchlinks.length - 1
+                        }
+                        onClick={() => this.searchhandlepage(value.url)}
+                      >
+                        {value.label}
+                      </Button>
+                      // <option value={value.id} key={value.id}>
+                      //   {value.name}
+                      // </option>
+                    );
+                  })}
                   {/* <Button>1</Button> <Button>2</Button> <Button>3</Button>{" "}
                   <Button>4</Button> */}
                 </ButtonGroup>
               </ButtonToolbar>
+            </div>
           </div>
-        </div>
-      
-          
+
           {this.state.filter_service_provider?.length < 1 &&
             this.state.services_providers?.length > 0 && (
               <>
@@ -530,7 +592,7 @@ class Serviceblock extends Component {
                                 borderRadius: "50px",
                                 height: "6.5rem",
                                 width: "15rem",
-                                objectFit:"cover",
+                                objectFit: "cover",
                               }}
                               src={`${config.SERVER_URL}/${item.image}`}
                               alt="service_provider_image"
@@ -582,24 +644,32 @@ class Serviceblock extends Component {
         </div>
         <div className="container">
           <div className="row">
-              <ButtonToolbar style={{margin :"auto"}} aria-label="Toolbar with button groups">
-                <ButtonGroup size="lg"  className="me-2" aria-label="First group">
-              {this.state.links.map((value,index) => {
+            <ButtonToolbar
+              style={{ margin: "auto" }}
+              aria-label="Toolbar with button groups"
+            >
+              <ButtonGroup size="lg" className="me-2" aria-label="First group">
+                {this.state.links.map((value, index) => {
                   // console.log(value.url)
                   // console.log(this.state.linklength)
 
-                      return (
-                    
-                        <Button className="buttongroudp"  hidden={index<1 || index==this.state.linklength-1} onClick={() => this.handlepage(value.url)} >{value.label}</Button>
-                        // <option value={value.id} key={value.id}>
-                        //   {value.name}
-                        // </option>
-                      );
-                    })}
-                  {/* <Button>1</Button> <Button>2</Button> <Button>3</Button>{" "}
+                  return (
+                    <Button
+                      className="buttongroudp"
+                      hidden={index < 1 || index == this.state.linklength - 1}
+                      onClick={() => this.handlepage(value.url)}
+                    >
+                      {value.label}
+                    </Button>
+                    // <option value={value.id} key={value.id}>
+                    //   {value.name}
+                    // </option>
+                  );
+                })}
+                {/* <Button>1</Button> <Button>2</Button> <Button>3</Button>{" "}
                   <Button>4</Button> */}
-                </ButtonGroup>
-              </ButtonToolbar>
+              </ButtonGroup>
+            </ButtonToolbar>
           </div>
         </div>
       </section>

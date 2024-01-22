@@ -155,7 +155,7 @@ class Footer extends Component {
                 </div>
                 {isLoggedIn === "notsignin" ? (
                   <Link
-                    to="/login"
+                    to="/near-by-providers"
                     className="btn btn-blue-border mb-15 btn-lg"
                   >
                     Join Us

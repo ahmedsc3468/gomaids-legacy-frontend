@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 
 import hw1 from "../../assets/img/icons/online.png";
-import hw2 from "../../assets/img/icons/verify.png";
-import hw3 from "../../assets/img/icons/yoga.png";
+import hw2 from "../../assets/img/icons/maid_working.png";
+import hw3 from "../../assets/img/icons/maid_on_sofa.png";
 
 const howitswork = [
   {

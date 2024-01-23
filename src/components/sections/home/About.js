@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import CountUp from "react-countup";
 import VisibilitySensor from "react-visibility-sensor";
 
-import aboutimg from "../../../assets/img/about/about-img.jpg";
+import aboutimg from "../../../assets/img/about/about-img.png";
 import abouticon from "../../../assets/img/other/clean.png";
 const aboutlist = [
   { title: "1500+ Clients Served" },

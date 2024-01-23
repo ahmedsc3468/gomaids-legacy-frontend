@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import CountUp from "react-countup";
 import VisibilitySensor from "react-visibility-sensor";
 
-import aboutimg from "../../../assets/img/about/about-img.jpg";
+import aboutimg from "../../../assets/img/about/about-img.png";
 import abouticon from "../../../assets/img/other/clean.png";
 const aboutlist = [
   { title: "1500+ Clients Served" },
@@ -83,7 +83,7 @@ export default function Counter() {
                     {item.title}
                   </li>
                 ))} */}
-                <li>
+                {/* <li>
                   <span>
                     <i className="fas fa-check" />
                   </span>
@@ -96,7 +96,7 @@ export default function Counter() {
                   ></CountUp>
                   <span className="plus-icon about_us_counter">+ </span>
                   Clients Served
-                </li>
+                </li> */}
                 <li>
                   <span>
                     <i className="fas fa-check" />

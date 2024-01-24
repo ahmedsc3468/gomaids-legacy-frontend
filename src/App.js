@@ -119,6 +119,9 @@ const Contact = React.lazy(() => import("./components/pages/Contact"));
 const NearByContent = React.lazy(() =>
   import("./components/pages/NearByContent")
 );
+const PartnerWithUs = React.lazy(() =>
+  import("./components/pages/PartnerWithUs")
+);
 const Setupwizard = React.lazy(() => import("./components/pages/Setupwizard"));
 const FormDetail = React.lazy(() => import("./components/pages/FormDetail"));
 const Userdashboard = React.lazy(() =>
@@ -245,6 +248,7 @@ function App() {
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/find-a-services" component={Serviceone} />
           <Route exact path="/near-by-providers" component={NearByContent} />
+          <Route exact path="/partner-with-us" component={PartnerWithUs} />
 
           <Route exact path="/services--" component={ServicesPage} />
           <Route exact path="/services-v2" component={Servicetwo} />

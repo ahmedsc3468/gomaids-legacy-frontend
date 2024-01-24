@@ -61,6 +61,9 @@ class Content extends Component {
 
   componentDidMount() {
     this._isMounted = true;
+
+    window.scrollTo(0, 0);
+
     // if (this._isMounted) {
 
     //     this.checkwebTour();
@@ -155,6 +158,7 @@ class Content extends Component {
 
   render() {
     const { stepsEnabled, steps, initialStep, webTour } = this.state;
+    window.scrollTo(0, 0);
     return (
       <Fragment>
         {/* {!webTour&&(

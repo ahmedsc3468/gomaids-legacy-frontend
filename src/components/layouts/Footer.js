@@ -173,28 +173,31 @@ class Footer extends Component {
               </div>
               <ul className="social-icons footer mt-10 white">
                 <li>
-                  {" "}
-                  <Link to="/">
+                  <a
+                    href="https://www.facebook.com/profile.php?id=61556105240510"
+                    target="_blank"
+                  >
                     <i className="fab fa-facebook-f" />
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  {" "}
-                  <Link to="/">
-                    <i className="fab fa-twitter" />
-                  </Link>
+                  <a href="https://www.instagram.com/gomaidz/" target="_blank">
+                    <i className="fab fa-brand fa-instagram" />
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="https://www.linkedin.com/company/gomaidz/?viewAsMember=true"
+                    target="_blank"
+                  >
+                    <i className="fab fa-solid fa-linkedin" />
+                  </a>
                 </li>
                 <li>
-                  {" "}
-                  <Link to="/">
-                    <i className="fab fa-linkedin-in" />
-                  </Link>
-                </li>
-                <li>
-                  {" "}
-                  <Link to="/">
-                    <i className="fab fa-google-plus-g" />
-                  </Link>
+                  <a href="https://www.tiktok.com/@go.maidz" target="_blank">
+                    <i className="fab fa-tiktok" />
+                  </a>
                 </li>
               </ul>
             </div>

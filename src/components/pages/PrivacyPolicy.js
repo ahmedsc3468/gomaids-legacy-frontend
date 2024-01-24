@@ -9,7 +9,10 @@ const PrivacyPolicy = () => {
       <Header />
       <Breadcrumb breadcrumb={{ pagename: "Privacy Policy" }} />
       <div className="container mb-5 mt-5">
-        <div className="bg-success p-3 d-flex align-items-center justify-content-center mx-auto mt-3 mb-3" style={{ width: "250px" }}>
+        <div
+          className="bg-success p-3 d-flex align-items-center justify-content-center mx-auto mt-3 mb-3"
+          style={{ width: "250px" }}
+        >
           <p className="text-white  text-align-center">
             <strong>Last updated: June 23, 2023</strong>
           </p>
@@ -449,7 +452,7 @@ const PrivacyPolicy = () => {
           us:
         </p>
         <p>
-          <strong>By email:</strong> apexviewers@gmail.com
+          <strong>By email:</strong> info@gomaidz.com
         </p>
         <p>
           <strong>By visiting this page on our website:</strong>{" "}

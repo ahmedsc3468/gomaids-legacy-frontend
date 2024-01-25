@@ -10,7 +10,9 @@ class BreadcrumbContact extends Component {
     return (
       <section
         className="inner-banner find-service-banner-txt flex-center"
-        style={{ backgroundImage: "url(" + contactbg + ")" }}
+        style={{
+          backgroundImage: "url(" + contactbg + ")",
+        }}
       >
         <div className="container">
           <div className="row z-5 mt-85 align-items-center">

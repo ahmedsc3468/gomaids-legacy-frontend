@@ -1,7 +1,7 @@
 .notification-content {
   padding: 5rem 1rem;
   /* height: 30rem; */
-
+  background-color: #f3f8fe;
   padding-top: 1.5rem;
 }
 .MuiPaper-elevation8 {

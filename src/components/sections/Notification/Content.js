@@ -106,7 +106,9 @@ export default function PopoverPopupState(props) {
                   // Ensure the red dot is positioned above the bell icon
                 }
               }
-            ></span>
+            >
+              {" "}
+            </span>
           ) : (
             <></>
           )}
@@ -129,7 +131,7 @@ export default function PopoverPopupState(props) {
               <div className="heading-notification-container">
                 <strong>
                   <h4 className="heading-notification">Notifications</h4>
-                  <p className="details-notification">No Notifications Yet</p>
+                  <hr />+
                 </strong>
               </div>
 

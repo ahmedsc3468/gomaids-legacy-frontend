@@ -13,7 +13,6 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Joi from "joi-browser";
-
 class Contactdetail extends Contacthelper {
   // objectSchema = Joi.object({
   //     label: Joi.string().required().label("Service").required(),
@@ -367,6 +366,63 @@ class Contactdetail extends Contacthelper {
                                                 </select>
                                             </div>
                                         </div> */}
+                    <div className="col-lg-6">
+                      <div className="form-group relative">
+                        <input
+                          type="text"
+                          className="form-control input-white"
+                          placeholder="Current Location (City)"
+                          name="city"
+                          // value={this.state.name}
+                          // onChange={this.handleInputChange}
+                          required
+                        />
+                        <i className="fas fa-map-marker-alt transform-v-center" />
+                      </div>
+                    </div>
+                    <div className="col-lg-6">
+                      <div className="form-group relative">
+                        <input
+                          type="text"
+                          className="form-control input-white"
+                          placeholder="Languages Known"
+                          name="knownlanguages"
+                          // value={this.state.name}
+                          // onChange={this.handleInputChange}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="col-lg-6">
+                      <div className="form-group relative">
+                        <input
+                          type="number"
+                          className="form-control input-white"
+                          placeholder="Total Work Experience (in Years)"
+                          name="experience"
+                          // value={this.state.name}
+                          // onChange={this.handleInputChange}
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="col-lg-6">
+                      <div className="form-group relative">
+                        <select
+                          className="form-control input-white select-nice mb-xs-15"
+                          name="subject"
+                          value={this.state.subject}
+                          onChange={this.onSubjectChange}
+                          required
+                        >
+                          <option>Field of Experience</option>
+                          <option>Maid</option>
+                          <option>Cleaner</option>
+                          <option>Other</option>
+                        </select>
+                      </div>
+                    </div>
                     <div className="col-lg-12">
                       <div className="form-group relative">
                         <textarea
@@ -391,6 +447,7 @@ class Contactdetail extends Contacthelper {
                                                 } */}
                       </div>
                     </div>
+
                     <div className="col-lg-12">
                       {/* <ReCAPTCHA
                                                 sitekey="6LdxUhMaAAAAAIrQt-_6Gz7F_58S4FlPWaxOh5ib"

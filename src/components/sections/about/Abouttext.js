@@ -61,6 +61,20 @@ export default function Counter() {
                   <CountUp
                     className="about_us_counter"
                     start={focus ? 0 : null}
+                    end={1500}
+                    duration={5}
+                    redraw={true}
+                  ></CountUp>
+                  <span className="plus-icon about_us_counter">+ </span>
+                  Clients Served
+                </li>
+                <li>
+                  <span>
+                    <i className="fas fa-check" />
+                  </span>
+                  <CountUp
+                    className="about_us_counter"
+                    start={focus ? 0 : null}
                     end={1000}
                     duration={5}
                     redraw={true}

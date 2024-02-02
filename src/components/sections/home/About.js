@@ -83,7 +83,7 @@ export default function Counter() {
                     {item.title}
                   </li>
                 ))} */}
-                {/* <li>
+                <li>
                   <span>
                     <i className="fas fa-check" />
                   </span>
@@ -96,7 +96,7 @@ export default function Counter() {
                   ></CountUp>
                   <span className="plus-icon about_us_counter">+ </span>
                   Clients Served
-                </li> */}
+                </li>
                 <li>
                   <span>
                     <i className="fas fa-check" />

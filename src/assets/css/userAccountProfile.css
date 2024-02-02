@@ -1,64 +1,63 @@
+.user-profile-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  border: 2px solid;
+  border-color: #102043;
+  cursor: pointer;
+  /* margin-left: 0.5rem; */
+  /* margin: 0 1rem; */
+}
+.user-profile-menu {
+  margin-right: 1rem;
+  cursor: pointer;
+}
+.user-profile-menu-container {
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
+}
+.user-account-dashboard-link:hover {
+  background-color: #e4f0f6;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.dashboard {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.username {
+  /* margin-right: 1rem; */
+  cursor: pointer;
+  font-size: 1rem;
+  color: #102043;
+}
+.profile-img-container {
+  margin-top: 0.5rem;
+  text-align: center;
+  /* margin-right: 0.5rem; */
+}
+@media screen and (max-width: 769px) {
+  /* nav bar */
+  .profile-img-container {
+    float: left;
+  }
+}
 
-.user-profile-img{
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
-    border:2px solid;
-    border-color: #102043;
-    cursor: pointer;
-    /* margin-left: 0.5rem; */
-    margin-right: 1rem;
-}.user-profile-menu{
-    margin-right: 1rem;
-    cursor: pointer;
-}.user-profile-menu-container {
-    padding-left: 1.2rem;
-    padding-right: 1.2rem;
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
-    
-    
-}.user-account-dashboard-link:hover{
-    background-color: #E4F0F6;
-    cursor: pointer;
-    border-radius: 4px;
-}.dashboard{
-    padding-left:1rem;
-    padding-right: 1rem;
-    padding-top: 8px;
-    padding-bottom: 8px;
-}.username{
-    /* margin-right: 1rem; */
-    cursor: pointer;
-    font-weight: 600;
-    color: #102043;
-    
-   
-}.profile-img-container{
-    margin-top: 0.5rem;
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .profile-img-container {
+    margin-top: -16.5rem;
     text-align: center;
-    /* margin-right: 0.5rem; */
+    margin-left: 3px;
+  }
 }
-@media screen and (max-width:769px){
-     /* nav bar */
-     .profile-img-container{
-        float:left;
-    }
-}
-
-@media screen and (min-width:320px) and (max-width:767px) {
-
-    .profile-img-container{
-        margin-top: -16.5rem;
-        text-align: center;
-        margin-left:3px;
-    }
-}
-@media screen and (min-width:768px) and (max-width:1023px) {
-
-    .profile-img-container{
-        margin-top: -16.5rem;
-        text-align: center;
-        margin-left:5px;
-    }
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .profile-img-container {
+    margin-top: -16.5rem;
+    text-align: center;
+    margin-left: 5px;
+  }
 }

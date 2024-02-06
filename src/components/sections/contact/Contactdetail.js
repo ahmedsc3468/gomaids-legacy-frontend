@@ -182,8 +182,8 @@ class Contactdetail extends Contacthelper {
                   <span className="icon bg-blue">
                     <i className="fas fa-envelope" />
                   </span>
-                  <span className="sub-head">Email</span>
-                  <p>info@gomaidz.com</p>
+                  <span>Email</span>
+                  <div>info@gomaidz.com</div>
                 </li>
               </ul>
               <div className="hr-1 bg-black opacity-1 mt-25 mb-25" />
@@ -193,10 +193,10 @@ class Contactdetail extends Contacthelper {
                   <span className="icon bg-blue">
                     <i className="fas fa-map-marker-alt" />
                   </span>
-                  <span className="sub-head">Location</span>
-                  <p>
+                  <span>Location</span>
+                  <div>
                     127 Westmore Dr, Unit 119, Etobicoke, ON M9V 3Y6, Canada
-                  </p>
+                  </div>
                 </li>
               </ul>
             </div>

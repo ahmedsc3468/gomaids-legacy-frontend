@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 // import Details from "./components/sections/portfoliodetails/Details";
 import ThankYou from "./components/sections/Hire/ThankYouOrder";
 import authHeader from "./services/auth-header";
+import EmailVerification from "./components/pages/EmailVerification";
 import config from "./config.json";
 window.Pusher = require("pusher-js");
 
@@ -121,6 +122,10 @@ const NearByContent = React.lazy(() =>
 );
 const PartnerWithUs = React.lazy(() =>
   import("./components/pages/PartnerWithUs")
+);
+
+const NumberVerification = React.lazy(() =>
+  import("./components/pages/NumberVerification")
 );
 const Setupwizard = React.lazy(() => import("./components/pages/Setupwizard"));
 const FormDetail = React.lazy(() => import("./components/pages/FormDetail"));
@@ -249,6 +254,16 @@ function App() {
           <Route exact path="/find-a-services" component={Serviceone} />
           <Route exact path="/near-by-providers" component={NearByContent} />
           <Route exact path="/partner-with-us" component={PartnerWithUs} />
+          <Route
+            exact
+            path="/email-verification"
+            component={EmailVerification}
+          />
+          <Route
+            exact
+            path="/number-verification"
+            component={NumberVerification}
+          />
 
           <Route exact path="/services--" component={ServicesPage} />
           <Route exact path="/services-v2" component={Servicetwo} />

@@ -153,7 +153,7 @@ class Header extends Component {
                           SignUp
                         </Link>
                       ) : (
-                        <UserAccount />
+                        <span></span>
                       )}
                     </span>
                     <span className="ml-4 ">

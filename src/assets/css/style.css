@@ -4985,3 +4985,8 @@ button.ui.button.add_feedback {
   font-size: inherit;
   color: inherit;
 }
+
+.special_link a {
+  background: #0b6818;
+  color: white !important;
+}

@@ -124,9 +124,10 @@ class Headerinner extends Component {
 
     // console.log("rr:")
     return (
-      <header
-        className={`head-type-2 head-type-3 inner-header ${stickyheader} ${r}`}
-      >
+      // <header
+      //   className={`head-type-2 head-type-3 inner-header ${stickyheader} ${r}`}
+      // >
+      <header className={`head-type-1 ${stickyheader} ${r}`}>
         <div className="container-fluid">
           <div className="row align-items-center no-gutters">
             <div className="col-lg-2">
@@ -175,7 +176,7 @@ class Headerinner extends Component {
                         })}
                       >
                         <div className="d-flex justify-content-end align-items-center ml-15">
-                          <span className="headerprofile">
+                          {/* <span className="headerprofile">
                             {this.state.userDetials && (
                               // <Link to="/login"
                               // className="head-1-book ml-15 mr-30">Login
@@ -184,6 +185,27 @@ class Headerinner extends Component {
                               <UserAccount
                               // dontShowDashboard="true"
                               />
+                            )}
+                          </span> */}
+                          <span className="headerprofile">
+                            {!this.state.userDetials ? (
+                              <Link
+                                to="/login"
+                                className="head-1-book ml-15 mr-30"
+                              >
+                                Login
+                              </Link>
+                            ) : (
+                              <UserAccount />
+                            )}
+                          </span>
+                          <span className="headerprofile">
+                            {!this.state.userDetials ? (
+                              <Link to="/signup" className="head-1-book mr-30">
+                                SignUp
+                              </Link>
+                            ) : (
+                              <span></span>
                             )}
                           </span>
                           <span className="ml-4 notificationsphone ">

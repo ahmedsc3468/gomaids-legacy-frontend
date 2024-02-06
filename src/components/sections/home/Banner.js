@@ -94,9 +94,6 @@ class Banner extends Component {
                 <h1 className="f-900 mb-25">
                   Effortless, Stress-Free Cleaning at the Click of a Button!
                 </h1>
-                <h4 className="fs-21 f-400 mb-2 mt-3">
-                  I am looking for a Maid/Cleaner in
-                </h4>
 
                 {/* {(this.state.currentUser === null) ||
                                     (this.state.currentUser &&
@@ -109,6 +106,9 @@ class Banner extends Component {
                   (this.state.currentUser &&
                     this.state.currentUser.role.name === "service_taker")) && (
                   <div className="banner-form-4">
+                    <h4 className="fs-21 f-400 mb-2 mt-3">
+                      I am looking for a Maid/Cleaner in
+                    </h4>
                     <form action="#">
                       <div className=" d-flex flex-column flex-md-row">
                         <Select
@@ -122,7 +122,7 @@ class Banner extends Component {
                             colors: {
                               ...theme.colors,
                               primary25: "#036905",
-                              primary: "transparent",
+                              primary: "#036905",
                             },
                           })}
                         />

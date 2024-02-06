@@ -116,6 +116,7 @@ const navigationmenu = [
     linkText: "Partner With Us",
     link: "/partner-with-us",
     child: false,
+    special: true,
     // submenu: [
     //     {
     //         id: 31,
@@ -341,7 +342,9 @@ class Menu extends Component {
           ? navigationmenu.map((item, i) => (
               <li
                 key={i}
-                className={`${item.child ? "has-menu" : ""} `}
+                className={`${item.child ? "has-menu" : ""} ${
+                  item?.special ? "special_link" : ""
+                }`}
                 onClick={this.triggerChild}
               >
                 {item.child ? (

@@ -157,10 +157,10 @@ class Headerinner extends Component {
                 >
                   <div className="d-flex justify-content-center align-items-center">
                     <Menu />
-                    {/* <Link to="/contact" className="head-1-book-call ml-15">
-                      <i className="fas fa-phone fs-15 mr-10" />
-                      +1 (236) 808-6010
-                    </Link> */}
+                    <Link to="/contact" className="head-1-book-call ml-15">
+                      <i className="fas fa-envelope fs-15 mr-10" />
+                      info@gomaidz.com
+                    </Link>
                     {/* <Link
                                             to="/contact"
                                             className="head-1-book-2 bg-blue ml-15 shine-btn"

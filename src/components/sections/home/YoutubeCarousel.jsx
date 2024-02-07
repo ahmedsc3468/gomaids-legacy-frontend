@@ -51,12 +51,8 @@ class YouTubeCarousel extends Component {
         </Slider>
         {/* <div className="custom-prev">&#9664;</div>
         <div className="custom-next">&#9654;</div> */}
-        <div className="custom-prev">
-          <i className="fas fa-phone" />
-        </div>
-        <div className="custom-next">
-          <i className="fas fa-phone" />
-        </div>
+        <div className="custom-prev"></div>
+        <div className="custom-next"></div>
       </div>
     );
   }

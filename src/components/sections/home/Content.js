@@ -17,7 +17,6 @@ import "intro.js/introjs.css";
 import swal from "sweetalert";
 import config from "../../../config.json";
 import icon9 from "../../../assets/img/service/star-rating.png";
-import IntroVideos from "./IntroVideos";
 import YouTubeCarousel from "./YoutubeCarousel";
 // import { UncontrolledAlert, Button } from 'reactstrap';
 // import Callback from '../../layouts/Callback';

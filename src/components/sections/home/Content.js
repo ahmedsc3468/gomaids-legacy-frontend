@@ -18,6 +18,7 @@ import swal from "sweetalert";
 import config from "../../../config.json";
 import icon9 from "../../../assets/img/service/star-rating.png";
 import IntroVideos from "./IntroVideos";
+import YouTubeCarousel from "./YoutubeCarousel";
 // import { UncontrolledAlert, Button } from 'reactstrap';
 // import Callback from '../../layouts/Callback';
 // import Joi from "joi-browser";
@@ -172,7 +173,8 @@ class Content extends Component {
 
         <Banner findServiceProviders={this.findServiceProviders} />
         <Servicesfilter serviceblock={this.state.serviceblock} />
-        <IntroVideos />
+        {/* <IntroVideos /> */}
+        <YouTubeCarousel />
         <About />
         {/* <Service /> */}
         {/* <Cta /> */}

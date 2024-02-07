@@ -1,0 +1,62 @@
+/* YouTubeCarousel.css */
+
+.youtube-carousel-container {
+  width: 80%; /* Adjust the width as needed */
+  margin: auto;
+}
+
+.youtube-video-container {
+  padding: 20px;
+  text-align: center;
+}
+
+.slick-slider {
+  position: relative;
+}
+
+/* Hide default arrows */
+.slick-prev,
+.slick-next {
+  display: none;
+}
+
+/* Custom arrow styling */
+.youtube-carousel-container:hover .custom-prev,
+.youtube-carousel-container:hover .custom-next {
+  display: block;
+}
+
+.custom-prev,
+.custom-next {
+  font-size: 24px;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  padding: 10px;
+  z-index: 1;
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.custom-prev {
+  left: 20px;
+  color: red;
+}
+
+.custom-next {
+  right: 20px;
+  color: blue;
+}
+
+.custom-prev:hover,
+.custom-next:hover {
+  background-color: red;
+  color: #555;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}

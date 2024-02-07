@@ -6,30 +6,29 @@ export default class IntroVideos extends Component {
 
     // Replace with your actual YouTube video IDs
     this.videoIds = [
-      "jajsoXMg3hc?si=7XlLZWJtKYJMlg5W",
       "pmEvicdERg4?si=SnoRkyOvQoBEttay",
       "MBaWhV-_zeg?si=2TKCO4aosnpoK7Ys",
+      "RGKi6LSPDLU?si=ooQ9Ex5lwJ8z3Llj",
       "G2RpHt8NX0o?si=V49G-GemXopWVY30",
     ];
   }
   render() {
     return (
-      <div>
-        <h2 style={{ margin: "0 20%", maxWidth: "600px", padding: "20px" }}>
-          Explanation Videos
-        </h2>
+      <div className="container">
+        <h1 className="my-3">Explainer Videos</h1>
         <div
           style={{
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
+            flexWrap: "wrap",
           }}
         >
           {this.videoIds.map((videoId) => (
             <div key={videoId} style={{ margin: "10px" }}>
               <iframe
-                width="280"
-                height="157"
+                width="395"
+                height="225"
                 src={`https://www.youtube.com/embed/${videoId}`}
                 title={`YouTube Video ${videoId}`}
                 frameBorder="0"

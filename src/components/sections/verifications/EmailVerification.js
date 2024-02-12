@@ -26,13 +26,13 @@ class EmailVerify extends Component {
 
   constructor(props) {
     super(props);
-    // let user = AuthService.getCurrentUser();
+    let user = AuthService.getCurrentUser();
 
     //console.log("hang checking::",user.id);
 
     this.state = {
       // user_id: user.id,
-      email: "",
+      email: user.email,
       otp: "",
       errors: {},
       save_continue_button_disable: true,

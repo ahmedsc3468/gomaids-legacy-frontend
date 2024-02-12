@@ -22,14 +22,13 @@ class YouTubeCarousel extends Component {
     const { videos } = this.state;
 
     const settings = {
-      dots: true,
-      // infinite: true,
+      dots: false,
+      infinite: true,
       speed: 500,
       slidesToShow: 3,
       slidesToScroll: 1,
       autoplay: true,
-      arrows: true,
-      centerPadding: "20px",
+      arrows: false,
     };
 
     return (
@@ -40,8 +39,8 @@ class YouTubeCarousel extends Component {
             <div key={index} className="youtube-video-container">
               <iframe
                 title={`YouTube Video ${index + 1}`}
-                width="450px"
-                height="315"
+                width="350px"
+                height="300"
                 src={`https://www.youtube.com/embed/${videoId}`}
                 frameBorder="0"
                 allowFullScreen

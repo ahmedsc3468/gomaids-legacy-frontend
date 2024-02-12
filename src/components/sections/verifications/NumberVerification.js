@@ -27,7 +27,7 @@ class NumberVerify extends Component {
   constructor(props) {
     super(props);
     let user = AuthService.getCurrentUser();
-    console.log(localStorage);
+
     //console.log("hang checking::",user.id);
 
     this.state = {

@@ -106,7 +106,7 @@ class Banner extends Component {
                   (this.state.currentUser &&
                     this.state.currentUser.role.name === "service_taker")) && (
                   <div className="banner-form-4">
-                    <h4 className="fs-21 f-400 mb-2 mt-3">
+                    <h4 className="fs-21 f-400 mb-4 ">
                       I am looking for a Maid/Cleaner in
                     </h4>
                     <form action="#">

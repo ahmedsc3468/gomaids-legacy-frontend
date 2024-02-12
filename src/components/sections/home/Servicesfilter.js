@@ -178,46 +178,51 @@ class Service extends Component {
       console.log(err);
     }
     try {
-      const services_provider = await axios
-        .post(config.SERVER_URL + `/api/nearserviceproviders`, apiCalldata, {
+      const near_services_provider = await axios.post(
+        config.SERVER_URL + `/api/nearserviceproviders`,
+        apiCalldata,
+        {
           headers: authHeader(),
-        })
-        .then(function (services_provider) {
-          //    console.log("::: TEST 64::", services_provider)
-          if (services_provider.data.data.data.length > 0) {
-            for (let i = 0; i < services_provider.data.data.data.length; i++) {
-              // const maker={lat:i.lat, lng:i.lng, img_src: '../../../assets/img/lcoation.png'};
-              // that.state.markers.push({lat:i.lat, lng:i.lng, img_src: '../../../assets/img/lcoation.png'});
-              that.setState({
-                markers: [
-                  {
-                    lat: i.lat,
-                    lng: i.lng,
-                    img_src: "../../../assets/img/lcoation.png",
-                  },
-                ],
-                nearserviceProviders: services_provider.data.data.data,
+        }
+      );
 
-                //   links:near_services_provider.data.data.links,
-                //   links:[],
-                //   linklength:"",
-              });
-            }
-            //     that.setState({
-            //     nearserviceProviders: services_provider.data.data.data,
-            //   //   links:services_provider.data.data.links,
-            //   //   links:[],
-            //   //   linklength:"",
+      this.setState({
+        nearserviceProviders: near_services_provider.data.data.data,
+      });
+      //    console.log("::: TEST 64::", services_provider)
+      // if (near_services_provider.data.data.data.length > 0) {
+      //   for (let i = 0; i < near_services_provider.data.data.data.length; i++) {
+      //     // const maker={lat:i.lat, lng:i.lng, img_src: '../../../assets/img/lcoation.png'};
+      //     // that.state.markers.push({lat:i.lat, lng:i.lng, img_src: '../../../assets/img/lcoation.png'});
+      //     that.setState({
+      //       markers: [
+      //         {
+      //           lat: i.lat,
+      //           lng: i.lng,
+      //           img_src: "../../../assets/img/lcoation.png",
+      //         },
+      //       ],
 
-            //   });
-            //   console.log("hfjdshf",that.state.markers);
-            // swal("Result Found!", "Your Result has been found!", "success")
-            //   console.log("second",services_provider.data.data.data);
-            localStorage.removeItem("searchservice");
-          }
-          //"dlfjldskjf"
-          // swal("Result Not Found!", "Result not found!", "warning");
-        });
+      //       //   links:near_services_provider.data.data.links,
+      //       //   links:[],
+      //       //   linklength:"",
+      //     });
+      //   }
+
+      //   console.log(that.state.nearserviceProviders);
+      //   //     that.setState({
+      //   //     nearserviceProviders: services_provider.data.data.data,
+      //   //   //   links:services_provider.data.data.links,
+      //   //   //   links:[],
+      //   //   //   linklength:"",
+
+      //   //   });
+      //   //   console.log("hfjdshf",that.state.markers);
+      //   // swal("Result Found!", "Your Result has been found!", "success")
+      //   //   console.log("second",services_provider.data.data.data);
+      //   // localStorage.removeItem("searchservice");
+      // }
+      // swal("Result Not Found!", "Result not found!", "warning");
     } catch (err) {
       console.log(err);
     }
@@ -332,6 +337,12 @@ class Service extends Component {
       // owlLength1000 = this.state?.serviceProviders?.length < 4 ? this.state?.serviceProviders?.length : 3
       // owlLength700 = this.state?.serviceProviders?.length < 3 ? this.state?.serviceProviders?.length : 2
     }
+    console.log("service Providers", this.state?.serviceProviders);
+    console.log("service Block", this.props?.serviceblock);
+    console.log("nearby Service provier", this.state.nearserviceProviders);
+    console.log("loop1000", loop1000);
+    console.log("loop700", loop700);
+    console.log("loop0", loop0);
     const options = {
       loop: loop1000,
       items: owlLength1000,
@@ -386,7 +397,7 @@ class Service extends Component {
                     Distance
                   </h5>
                 </div>
-                <div
+                {/* <div
                   className="row justify-content-center"
                   style={{ margin: "10px" }}
                 >
@@ -410,7 +421,7 @@ class Service extends Component {
                       onClick={this.changeRadius}
                     />
                   </div>
-                </div>
+                </div> */}
                 <div className="row">
                   <div className="col-lg-12" style={{ height: "500px" }}>
                     {/* <GoogleMap
@@ -451,124 +462,124 @@ class Service extends Component {
                     </GoogleMapReact>
                   </div>
                 </div>
-                <div>
-                  <p className="mt-3">
-                    Available Service Providers in Selected Radius:
-                  </p>
-                  <div>
-                    <OwlCarousel
-                      ref="serviceslider"
-                      options={options}
-                      className="owl-carousel service-slider"
-                      style={{ marginTop: "20px" }}
-                    >
-                      {this.props.serviceblock.length > 0
-                        ? this.props.serviceblock.map((item, i) => (
-                            <div
-                              key={i}
-                              className="service-2-each shadow-2 mb-50"
-                            >
-                              <div className="service-each shadow-2 mb-30 transition-4 text-center">
-                                <Link
-                                  to={`/service-details/${item.id}`}
-                                  className="black"
-                                >
-                                  <div className="service-icn bg-light-white flex-center">
-                                    <img
-                                      style={{
-                                        borderRadius: "50px",
-                                        height: "6.5rem",
-                                        width: "15rem",
-                                      }}
-                                      src={`${item.icon}`}
-                                      alt=""
-                                    />
-                                  </div>
-
-                                  <div className="service-text">
-                                    <h3 className="fs-20 f-700 mb-10">
-                                      {item.title}
-                                    </h3>
-
-                                    <span className="mb-0 mt-5">
-                                      {item.text}
-                                      <i
-                                        className="fa fa-solid fa-tags"
-                                        style={{
-                                          marginLeft: "5px",
-                                          marginRight: "5px",
-                                          color: "#102043",
-                                        }}
-                                      ></i>
-                                    </span>
-                                    <div className="mt-5">
-                                      <Rating
-                                        value={parseInt(item.rating)}
-                                        size="large"
-                                        precision={0.5}
-                                        readOnly
-                                      />
-                                    </div>
-                                  </div>
-                                </Link>
-                              </div>
-                            </div>
-                          ))
-                        : this.state.nearserviceProviders.map((item, i) => (
-                            <div
-                              key={i}
-                              className="service-2-each shadow-2 mb-50"
-                            >
-                              <div className="service-each shadow-2 mb-30 transition-4 text-center">
-                                <Link
-                                  to={`/service-details/${item.service_provider_id}`}
-                                  className="black"
-                                >
-                                  <div className="service-icn bg-light-white flex-center">
-                                    <img
-                                      style={{
-                                        borderRadius: "50px",
-                                        height: "6.5rem",
-                                        width: "15rem",
-                                      }}
-                                      src={`${config.SERVER_URL}/${item.image}`}
-                                      alt=""
-                                    />
-                                  </div>
-
-                                  <div className="service-text">
-                                    <h3 className="fs-20 f-700 mb-10">
-                                      {item.fname !== undefined &&
-                                        item.username}
-                                    </h3>
-                                    {/* {console.log("item:", item)} */}
-
-                                    <span className="mb-0 mt-5">
-                                      {item.service_types_name}
-                                      <i
-                                        className="fa fa-solid fa-tags"
-                                        style={{
-                                          marginLeft: "5px",
-                                          marginRight: "5px",
-                                          color: "#102043",
-                                        }}
-                                      ></i>
-                                    </span>
-                                    <div className="mt-5">
-                                      <Rating
-                                        value={parseInt(item.rating)}
-                                        size="large"
-                                        precision={0.5}
-                                        readOnly
-                                      />
-                                    </div>
-                                  </div>
-                                </Link>
-                              </div>
-                            </div>
-                          ))}
-                    </OwlCarousel>
+                <div className="row mb-40 align-items-end">
+                  <div className="col-lg-9 col-md-12 text-center text-lg-left">
+                    <h3>Available Service Providers in Selected Radius:</h3>
                   </div>
+                </div>
+                <div>
+                  <OwlCarousel
+                    ref="serviceslider"
+                    options={options}
+                    className="owl-carousel service-slider"
+                    style={{ marginTop: "20px" }}
+                  >
+                    {this.props.serviceblock.length > 0 ? (
+                      this.props.serviceblock.map((item, i) => (
+                        <div key={i} className="service-2-each shadow-2 mb-50">
+                          <div>{i}</div>
+                          <div className="service-each shadow-2 mb-30 transition-4 text-center">
+                            <Link
+                              to={`/service-details/${item.id}`}
+                              className="black"
+                            >
+                              <div className="service-icn bg-light-white flex-center">
+                                <img
+                                  style={{
+                                    borderRadius: "50px",
+                                    height: "6.5rem",
+                                    width: "15rem",
+                                  }}
+                                  src={`${item.icon}`}
+                                  alt=""
+                                />
+                              </div>
+
+                              <div className="service-text">
+                                <h3 className="fs-20 f-700 mb-10">
+                                  {item.title}
+                                </h3>
+
+                                <span className="mb-0 mt-5">
+                                  {item.text}
+                                  <i
+                                    className="fa fa-solid fa-tags"
+                                    style={{
+                                      marginLeft: "5px",
+                                      marginRight: "5px",
+                                      color: "#102043",
+                                    }}
+                                  ></i>
+                                </span>
+                                <div className="mt-5">
+                                  <Rating
+                                    value={parseInt(item.rating)}
+                                    size="large"
+                                    precision={0.5}
+                                    readOnly
+                                  />
+                                </div>
+                              </div>
+                            </Link>
+                          </div>
+                        </div>
+                      ))
+                    ) : this?.state?.nearserviceProviders?.length > 0 ? (
+                      this?.state?.nearserviceProviders?.map((item, i) => (
+                        <div key={i} className="service-2-each shadow-2 mb-50">
+                          <div>{i}</div>
+
+                          <div className="service-each shadow-2 mb-30 transition-4 text-center">
+                            <Link
+                              to={`/service-details/${item.service_provider_id}`}
+                              className="black"
+                            >
+                              <div className="service-icn bg-light-white flex-center">
+                                <img
+                                  style={{
+                                    borderRadius: "50px",
+                                    height: "6.5rem",
+                                    width: "15rem",
+                                  }}
+                                  src={`${config.SERVER_URL}/${item.image}`}
+                                  alt=""
+                                />
+                              </div>
+
+                              <div className="service-text">
+                                <h3 className="fs-20 f-700 mb-10">
+                                  {item.fname !== undefined && item.username}
+                                </h3>
+                                {/* {console.log("item:", item)} */}
+
+                                <span className="mb-0 mt-5">
+                                  {item.service_types_name}
+                                  <i
+                                    className="fa fa-solid fa-tags"
+                                    style={{
+                                      marginLeft: "5px",
+                                      marginRight: "5px",
+                                      color: "#102043",
+                                    }}
+                                  ></i>
+                                </span>
+                                <div className="mt-5">
+                                  <Rating
+                                    value={parseInt(item.rating)}
+                                    size="large"
+                                    precision={0.5}
+                                    readOnly
+                                  />
+                                </div>
+                              </div>
+                            </Link>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div></div>
+                    )}
+                  </OwlCarousel>
                 </div>
               </div>
               <div className="container mt-100">

@@ -173,7 +173,15 @@ class Content extends Component {
         <Banner findServiceProviders={this.findServiceProviders} />
         <Servicesfilter serviceblock={this.state.serviceblock} />
         {/* <IntroVideos /> */}
-        <YouTubeCarousel />
+        <section class="service pt-30 pb-10 bg-light-white">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-12">
+                <YouTubeCarousel />
+              </div>
+            </div>
+          </div>
+        </section>
         <About />
         {/* <Service /> */}
         {/* <Cta /> */}

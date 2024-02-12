@@ -80,15 +80,15 @@ const password = (value) => {
   }
 };
 
-const mobile_no = (value) => {
-  if (value.length < 1 || value.length > 16) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        The Mobile Number must be enter.
-      </div>
-    );
-  }
-};
+// const mobile_no = (value) => {
+//   if (value.length < 1 || value.length > 16) {
+//     return (
+//       <div className="alert alert-danger" role="alert">
+//         The Mobile Number must be enter.
+//       </div>
+//     );
+//   }
+// };
 
 const role_id = (value) => {
   if (value.role_id == null) {
@@ -110,14 +110,14 @@ class Content extends Component {
       c_password: this.props.data.c_password,
       fname: this.props.data.fname,
       lname: this.props.data.lname,
-      mobile_no: this.props.data.mobile_no,
+      // mobile_no: this.props.data.mobile_no,
       role: [],
       role_id: this.props.data.role_id,
       usernameError: "",
       fnameError: "",
       lnameError: "",
       emailError: "",
-      mobile_noError: "",
+      // mobile_noError: "",
       passwordMatchError: "",
       passwordError: "",
       role_idError: "",
@@ -181,7 +181,7 @@ class Content extends Component {
     let c_passwordError = "";
     let fnameError = "";
     let lnameError = "";
-    let mobile_noError = "";
+    // let mobile_noError = "";
     let passwordMatchError = "";
 
     if (!this.state.username) {
@@ -196,9 +196,9 @@ class Content extends Component {
     if (!this.state.c_password) {
       c_passwordError = "Confirm Password is required";
     }
-    if (!this.state.mobile_no) {
-      mobile_noError = "Mobile Number is required";
-    }
+    // if (!this.state.mobile_no) {
+    //   mobile_noError = "Mobile Number is required";
+    // }
     if (!this.state.role_id) {
       role_idError = "Please Select Service Type";
     }
@@ -239,7 +239,7 @@ class Content extends Component {
       fnameError ||
       lnameError ||
       c_passwordError ||
-      mobile_noError ||
+      // mobile_noError ||
       role_idError
     ) {
       this.setState({
@@ -250,7 +250,7 @@ class Content extends Component {
         lnameError,
         c_passwordError,
         role_idError,
-        mobile_noError,
+        // mobile_noError,
         loader: false,
       });
       return false;
@@ -262,7 +262,7 @@ class Content extends Component {
       usernameError,
       fnameError,
       lnameError,
-      mobile_noError,
+      // mobile_noError,
     });
     return true;
   }
@@ -280,8 +280,8 @@ class Content extends Component {
         this.state.password,
         this.state.fname,
         this.state.lname,
-        this.state.role_id,
-        this.state.mobile_no
+        this.state.role_id
+        // this.state.mobile_no
       );
       console.log(register_data);
 
@@ -294,7 +294,7 @@ class Content extends Component {
           fname: this.state.fname,
           lname: this.state.lname,
           role_id: this.state.role_id,
-          mobile_no: this.state.mobile_no,
+          // mobile_no: this.state.mobile_no,
         });
         console.log(this.state.role_id);
         if (this.state.role_id === 3) {
@@ -321,9 +321,9 @@ class Content extends Component {
           if (register_data.data.error_message[i].includes("email")) {
             tempErrorUnique.email = register_data.data.error_message[i];
           }
-          if (register_data.data.error_message[i].includes("mobile")) {
-            tempErrorUnique.mobile_no = register_data.data.error_message[i];
-          }
+          // if (register_data.data.error_message[i].includes("mobile")) {
+          //   tempErrorUnique.mobile_no = register_data.data.error_message[i];
+          // }
         }
         this.setState({ loader: false, tempErrorUnique });
         // window.scrollIntoView(100, 556767);
@@ -349,8 +349,8 @@ class Content extends Component {
         this.state.password,
         this.state.fname,
         this.state.lname,
-        this.state.role_id,
-        this.state.mobile_no
+        this.state.role_id
+        // this.state.mobile_no
       )
         .then(async (response) => {
           if ("message" in response.data) {
@@ -386,7 +386,7 @@ class Content extends Component {
               fname: this.state.fname,
               lname: this.state.lname,
               role_id: this.state.role_id,
-              mobile_no: this.state.mobile_no,
+              // mobile_no: this.state.mobile_no,
             });
             if (this.state.role_id === 3) {
               axios.post(
@@ -409,9 +409,9 @@ class Content extends Component {
               if (response.data.error_message[i].includes("email")) {
                 tempErrorUnique.email = response.data.error_message[i];
               }
-              if (response.data.error_message[i].includes("mobile")) {
-                tempErrorUnique.mobile_no = response.data.error_message[i];
-              }
+              // if (response.data.error_message[i].includes("mobile")) {
+              //   tempErrorUnique.mobile_no = response.data.error_message[i];
+              // }
             }
             this.setState({ loader: false, tempErrorUnique });
             // window.scrollIntoView(100, 556767);
@@ -680,7 +680,7 @@ class Content extends Component {
                             </span>
                           )}
                         </div>
-                        <div className="form-group relative mb-25 mb-sm-20">
+                        {/* <div className="form-group relative mb-25 mb-sm-20">
                           <input
                             type="Number"
                             pattern="^(\+(([0-9]){1,2})[-.])?((((([0-9]){2,3})[-.]){1,2}([0-9]{4,10}))|([0-9]{10}))$"
@@ -702,7 +702,7 @@ class Content extends Component {
                               {this.state.tempErrorUnique.mobile_no}
                             </span>
                           )}
-                        </div>
+                        </div> */}
                         <div className="form-group">
                           <select
                             className="form-control input-white"

@@ -29,6 +29,32 @@ class YouTubeCarousel extends Component {
       slidesToScroll: 1,
       autoplay: true,
       arrows: false,
+      responsive: [
+        {
+          breakpoint: 1200,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1,
+            infinite: true,
+            dots: true,
+          },
+        },
+        {
+          breakpoint: 992,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            initialSlide: 2,
+          },
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+          },
+        },
+      ],
     };
 
     return (
@@ -39,7 +65,7 @@ class YouTubeCarousel extends Component {
             <div key={index} className="youtube-video-container">
               <iframe
                 title={`YouTube Video ${index + 1}`}
-                width="350px"
+                width="100%"
                 height="300"
                 src={`https://www.youtube.com/embed/${videoId}`}
                 frameBorder="0"
@@ -48,10 +74,10 @@ class YouTubeCarousel extends Component {
             </div>
           ))}
         </Slider>
-        {/* <div className="custom-prev">&#9664;</div>
-        <div className="custom-next">&#9654;</div> */}
-        {/* <div className="custom-prev"></div>
-        <div className="custom-next"></div> */}
+        <div className="custom-prev">&#9664;</div>
+        <div className="custom-next">&#9654;</div>
+        <div className="custom-prev"></div>
+        <div className="custom-next"></div>
       </div>
     );
   }

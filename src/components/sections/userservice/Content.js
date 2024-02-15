@@ -335,7 +335,7 @@ class UserService extends Component {
       await this.componentDidMount();
       // debugger;
       // this.filterService(this.state.service_type_id);
-      swal("SuccessFull!", "New Service Added Successfully!", "success");
+      swal("Successful!", "New Service Added Successfully!", "success");
     } catch (error) {
       console.log(error);
     }
@@ -510,7 +510,7 @@ class UserService extends Component {
 
     //             this.setState({ auto_accept: toggleAutoAccept })
     //             localStorage.removeItem('uss')
-    //             swal("SuccessFull!", "AutoAccept Change Successfully!", "success")
+    //             swal("Successful!", "AutoAccept Change Successfully!", "success")
     //         }
     //         catch (error) {
     //             console.log(error)

@@ -5087,6 +5087,7 @@ button.ui.button.add_feedback {
   margin-bottom: 0;
   padding-bottom: 0;
 }
+
 /* Asif Header Changes for responsiveness */
 @media (max-width: 1288px) {
   .main-menu-1 ul li a {
@@ -5159,4 +5160,7 @@ button.ui.button.add_feedback {
   .each-hw-works {
     padding: 0px 30px;
   }
+.red-star {
+  color: red;
+
 }

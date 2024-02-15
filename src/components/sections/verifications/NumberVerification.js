@@ -110,7 +110,7 @@ class NumberVerify extends Component {
         this.state.userData.is_mobile_verified = 1;
         this.state.userData.is_verified = 1;
         localStorage.setItem("user", JSON.stringify(this.state.userData));
-        swal("SuccessFull!", "Phone Number Verified", "success").then(() => {
+        swal("Successful!", "Phone Number Verified", "success").then(() => {
           that.history.push("/Setupwizard");
         });
       } else {
@@ -152,7 +152,7 @@ class NumberVerify extends Component {
       console.log("verifymobileno Response ", data);
 
       swal(
-        "SuccessFull!",
+        "Successful!",
         "Verification Code Sent Successfully! Please Check your Messages!",
         "success"
       );

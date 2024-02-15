@@ -11,6 +11,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { Modal } from "react-bootstrap";
 import { Button } from "semantic-ui-react";
 import Progress from "./progress";
+import Address from "../Hire/AddressAutoComplete";
 // import "../../../assets/MyCSS/progress.css"
 
 // import { checkPropTypes } from "prop-types";
@@ -93,7 +94,7 @@ class UserDetails extends Component {
         country: this.state.country,
         state: this.state.state,
         city: this.state.city,
-        default_address: this.state.default_address,
+        // default_address: this.state.default_address,
         postal_code: this.state.postal_code,
         role_id: this.state.role_id,
         description: this.state.description,
@@ -176,7 +177,7 @@ class UserDetails extends Component {
         state: UserDetails.location?.state,
         city: UserDetails.location?.city,
         street_address: UserDetails.location?.street_address,
-        default_address: UserDetails.location?.default_address,
+        default_address: UserDetails.location?.street_address,
         postal_code: UserDetails.location?.postal_code,
         username: UserDetails.username,
         fname: UserDetails.fname,
@@ -303,6 +304,53 @@ class UserDetails extends Component {
       }
     });
   }
+
+  handleAddress = (address, city, state, country, postal_code) => {
+    this.setState({
+      city: city,
+      country: country,
+      state: state,
+      postal_code: postal_code,
+      street_address: address,
+      default_address: address,
+    });
+  };
+
+  // myInterval = setInterval(() => {
+  //   if (
+  //     localStorage.getItem("streetAddress") !== "" &&
+  //     this.state.street_address !== "" &&
+  //     this.state.city != "" &&
+  //     this.state.state != "" &&
+  //     this.state.country != "" &&
+  //     this.state.postal_code != ""
+  //   ) {
+  //     const city = localStorage.getItem("city");
+  //     const country = localStorage.getItem("country");
+  //     //       console.log("country:",localStorage.getItem("country"))
+  //     const state = localStorage.getItem("state");
+  //     const postal_code = localStorage.getItem("postal_code");
+  //     if (city && country && state && postal_code) {
+  //       this.setState({
+  //         city: city,
+  //         country: localStorage.getItem("country"),
+  //         state: state,
+  //         postal_code: postal_code,
+  //         street_address: localStorage.getItem("streetAddress"),
+  //         default_address: localStorage.getItem("streetAddress"),
+  //       });
+  //     }
+  //   } else {
+  //     this.setState({
+  //       city: "",
+  //       country: "",
+  //       state: "",
+  //       postal_code: "",
+  //       street_address: "",
+  //       default_address: "",
+  //     });
+  //   }
+  // }, 1000);
 
   render() {
     // console.log(this.state.is_verified)
@@ -621,15 +669,22 @@ class UserDetails extends Component {
               </div>
               <Form.Field>
                 <label>Address</label>
+
                 <div className="form-row">
                   <div className="form-group col-md-12">
-                    <input
+                    <Address
+                      page="userdetail streetAddress"
+                      handleAddress={this.handleAddress}
+                      currentAddress={this.state.street_address}
+                    />
+                    {/* <input
                       name="street_address"
                       type="text"
                       placeholder="Street Address"
                       value={this.state.street_address}
                       onChange={this.handleInputChange}
-                    />
+                    /> */}
+
                     {this.state.errors && this.state.errors.street_address && (
                       <div
                         style={{
@@ -704,7 +759,7 @@ class UserDetails extends Component {
                       </div>
                     )}
                   </div>
-                  <div className="form-group col-md-12">
+                  {/* <div className="form-group col-md-12">
                     <input
                       name="default_address"
                       type="text"
@@ -723,7 +778,7 @@ class UserDetails extends Component {
                         {this.state.errors.default_address}
                       </div>
                     )}
-                  </div>
+                  </div> */}
 
                   <div className="form-group col-md-6">
                     <input

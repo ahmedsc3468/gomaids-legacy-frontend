@@ -100,7 +100,7 @@ class EmailVerify extends Component {
       if (data.is_email_verified === 1) {
         this.state.userData.is_email_verified = 1;
         localStorage.setItem("user", JSON.stringify(this.state.userData));
-        swal("SuccessFull!", "Email Verified.", "success").then(() => {
+        swal("Successful!", "Email Verified.", "success").then(() => {
           that.history.push("/number-verification");
         });
       } else {
@@ -137,7 +137,7 @@ class EmailVerify extends Component {
       console.log("verifyEmail Response ", data);
 
       swal(
-        "SuccessFull!",
+        "Successful!",
         "Verification Code Sent Successfully! Please Check your Email!",
         "success"
       );

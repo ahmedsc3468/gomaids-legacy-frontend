@@ -370,7 +370,7 @@ class Content extends Component {
                 loader: false,
               });
               swal(
-                "SuccessFull!",
+                "Successful!",
                 "Verification Code Sent Successfully!",
                 "success"
               );
@@ -548,7 +548,7 @@ class Content extends Component {
                             type="text"
                             className="form-control input-lg input-white shadow-5"
                             name="fname"
-                            placeholder="Firstname"
+                            placeholder="First Name"
                             value={this.state.fname}
                             onChange={this.onChangeTextFields}
                             validations={[required, fname]}
@@ -563,7 +563,7 @@ class Content extends Component {
                             type="text"
                             className="form-control input-lg input-white shadow-5"
                             name="lname"
-                            placeholder="Lastname"
+                            placeholder="Last Name"
                             value={this.state.lname}
                             onChange={this.onChangeTextFields}
                             validations={[required, lname]}

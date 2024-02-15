@@ -130,7 +130,7 @@ class StripeConfiguration extends Component {
           }
         );
         swal(
-          "SuccessFull!",
+          "Successful!",
           "Stripe Configration Added Successfully!",
           "success"
         );
@@ -152,7 +152,7 @@ class StripeConfiguration extends Component {
           }
         );
         swal(
-          "SuccessFull!",
+          "Successful!",
           "Paypal Configration Added Successfully!",
           "success"
         );
@@ -183,7 +183,7 @@ class StripeConfiguration extends Component {
         if (bank.data?.success === false) {
           swal("Error!", bank.data.message, "warning");
         } else {
-          swal("SuccessFull!", bank.data?.message, "success");
+          swal("Successful!", bank.data?.message, "success");
         }
       } catch (ex) {}
     } else {

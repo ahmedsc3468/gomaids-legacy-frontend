@@ -163,8 +163,8 @@ class Contactdetail extends Contacthelper {
       });
       this.resetForm();
       swal(
-        "SuccessFull!",
-        "Your Form Has Been Submitted SuccessFully!",
+        "Successful!",
+        "Your Form Has Been Submitted Successfully!",
         "success"
       );
     } catch (errors) {

@@ -152,8 +152,8 @@ class Contactdetail extends Contacthelper {
       });
       this.resetForm();
       swal(
-        "SuccessFull!",
-        "Your Request Has Been Sent SuccessFully!",
+        "Successful!",
+        "Your Request Has Been Sent Successfully!",
         "success"
       );
     } catch (errors) {

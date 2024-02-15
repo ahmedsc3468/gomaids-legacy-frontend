@@ -10,6 +10,9 @@ import { connect } from "react-redux";
 import Joi from "joi-browser";
 import Address from "../Hire/AddressAutoComplete";
 import "../../../assets/MyCSS/setupwizard.css";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
 
 class UserDetails extends Component {
   schema = {
@@ -53,6 +56,7 @@ class UserDetails extends Component {
       imageSelected: false,
       showInputFile: false,
       identity: props.userDetailsData.identity || "",
+      isloading: false,
     };
   }
 
@@ -240,6 +244,7 @@ class UserDetails extends Component {
   };
 
   saveAndContinue = async (e) => {
+    this.setState({ isloading: true });
     console.log(e);
     let that = this;
     e.preventDefault();
@@ -247,6 +252,7 @@ class UserDetails extends Component {
     if (errors) {
       console.log(errors);
       this.setState({ errors });
+      this.setState({ isloading: false });
       return;
     }
 
@@ -297,12 +303,15 @@ class UserDetails extends Component {
         identity: this.state.identity,
       });
       if (user.role.name === "service_provider") {
+        this.setState({ isloading: false });
         // console.log("role!!!")
         that.props.nextStep();
       } else if (user.role.name === "service_taker") {
+        this.setState({ isloading: false });
         that.props.history.push("/");
       }
     } catch (ex) {
+      this.setState({ isloading: false });
       return;
     }
   };
@@ -354,7 +363,7 @@ class UserDetails extends Component {
         localStorage.getItem("user") !== null
       ) {
         sessionStorage.setItem("reload", true);
-        window.location.reload();
+       // window.location.reload();
       } else {
         sessionStorage.removeItem("reload");
       }
@@ -369,22 +378,60 @@ class UserDetails extends Component {
   };
   render() {
     return (
-      <Grid.Column className="setupwizard-user-details">
-        <Header textAlign="center" className="setupwizard-user-details-header">
-          <h1>Profile Details</h1>
-        </Header>
+      <div className="position-relative">
+        {this.state.isloading && (
+          <div className="page_loader_global">
+            <Box
+              sx={{
+                position: "relative",
+                top: 40,
+                display: "inline-flex",
+              }}
+            >
+              <CircularProgress color="success" size={80} />
+              <Box
+                sx={{
+                  top: 0,
+                  left: 0,
+                  bottom: 0,
+                  right: 0,
+                  position: "absolute",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Typography
+                  variant="caption"
+                  component="div"
+                  color="common.white"
+                >
+                  Please Wait
+                </Typography>
+              </Box>
+            </Box>
+          </div>
+        )}
 
-        <Form
-          onSubmit={this.handleUserDetails}
-          ref={(e) => {
-            this.form = e;
-          }}
-        >
-          <Segment>
-            <Button onClick={this.completeLater}>Complete Later</Button>
-          </Segment>
-          <Segment>
-            {/* <Form.Field>
+        <Grid.Column className="setupwizard-user-details position-relative">
+          <Header
+            textAlign="center"
+            className="setupwizard-user-details-header"
+          >
+            <h1>Profile Details</h1>
+          </Header>
+
+          <Form
+            onSubmit={this.handleUserDetails}
+            ref={(e) => {
+              this.form = e;
+            }}
+          >
+            <Segment>
+              <Button onClick={this.completeLater}>Complete Later</Button>
+            </Segment>
+            <Segment>
+              {/* <Form.Field>
                             <label>Date Of Birth</label>
                             <input
                                 name="dob"
@@ -407,7 +454,7 @@ class UserDetails extends Component {
                             }
                         </Form.Field> */}
 
-            {/* <Form.Field>
+              {/* <Form.Field>
                             <label>Mobile Number</label>
                             <input
                                 name="mobile_no"
@@ -426,16 +473,16 @@ class UserDetails extends Component {
                             }
                         </Form.Field> */}
 
-            <Form.Field>
-              <label>
-                Address<span class="red-star">*</span>
-              </label>
-              <Address
-                page="setUpWizard streetAddress"
-                name="street_address"
-                value={this.state.street_address}
-              />
-              {/* <input
+              <Form.Field>
+                <label>
+                  Address<span class="red-star">*</span>
+                </label>
+                <Address
+                  page="setUpWizard streetAddress"
+                  name="street_address"
+                  value={this.state.street_address}
+                />
+                {/* <input
                                 name="street_address"
                                 type="text"
                                 placeholder="Street Address"
@@ -443,12 +490,12 @@ class UserDetails extends Component {
                                 onChange={this.onChangeTextFields}
                          
                             /> */}
-              {this.state.errors.street_address && (
-                <span className="text-danger">
-                  {this.state.errors.street_address}
-                </span>
-              )}
-              {/* <input
+                {this.state.errors.street_address && (
+                  <span className="text-danger">
+                    {this.state.errors.street_address}
+                  </span>
+                )}
+                {/* <input
                                 name="default_address"
                                 type="text"
                                 placeholder="Default Address"
@@ -456,7 +503,7 @@ class UserDetails extends Component {
                                 onChange={this.onChangeTextFields}
                           
                             /> */}
-              {/* <Address
+                {/* <Address
                                  page="setUpWizard defaultAddress"
                                  name="default_address"
                                  value={this.state.default_address} 
@@ -471,19 +518,19 @@ class UserDetails extends Component {
                                 </span>
                             } */}
 
-              <label>
-                Location<span class="red-star">*</span>
-              </label>
+                <label>
+                  Location<span class="red-star">*</span>
+                </label>
 
-              <input
-                type="select"
-                className="form-control"
-                name="country"
-                value={this.state.country}
-                onChange={this.onChangeTextFields}
-                placeholder="country"
-              />
-              {/* <option>-- Choose Country --</option>
+                <input
+                  type="select"
+                  className="form-control"
+                  name="country"
+                  value={this.state.country}
+                  onChange={this.onChangeTextFields}
+                  placeholder="country"
+                />
+                {/* <option>-- Choose Country --</option>
                                 {this.state.country.map((value, key) => {
                                     const countryName = value.name.replace(
                                         "_",
@@ -495,20 +542,22 @@ class UserDetails extends Component {
                                         </option>
                                     );
                                 })} */}
-              {/* </select> */}
+                {/* </select> */}
 
-              {this.state.errors.country && (
-                <span className="text-danger">{this.state.errors.country}</span>
-              )}
-              <input
-                type="select"
-                className="form-control"
-                name="state"
-                value={this.state.state}
-                onChange={this.onChangeTextFields}
-                placeholder="state"
-              />
-              {/* <option>-- Choose State --</option>
+                {this.state.errors.country && (
+                  <span className="text-danger">
+                    {this.state.errors.country}
+                  </span>
+                )}
+                <input
+                  type="select"
+                  className="form-control"
+                  name="state"
+                  value={this.state.state}
+                  onChange={this.onChangeTextFields}
+                  placeholder="state"
+                />
+                {/* <option>-- Choose State --</option>
                                 {this.state.state.map((value, key) => {
                                     const stateName = value.name.replace(
                                         "_",
@@ -522,19 +571,19 @@ class UserDetails extends Component {
                                 })}
                             </select> */}
 
-              {this.state.errors.state && (
-                <span className="text-danger">{this.state.errors.state}</span>
-              )}
+                {this.state.errors.state && (
+                  <span className="text-danger">{this.state.errors.state}</span>
+                )}
 
-              <input
-                type="select"
-                className="form-control"
-                name="city"
-                value={this.state.city}
-                onChange={this.onChangeTextFields}
-                placeholder="city"
-              />
-              {/* <option>-- Choose City --</option>
+                <input
+                  type="select"
+                  className="form-control"
+                  name="city"
+                  value={this.state.city}
+                  onChange={this.onChangeTextFields}
+                  placeholder="city"
+                />
+                {/* <option>-- Choose City --</option>
                                 {this.state.cities.map((value, key) => {
                                     return (
                                         <option value={value.id} key={key}>
@@ -543,71 +592,53 @@ class UserDetails extends Component {
                                     );
                                 })} */}
 
-              {this.state.errors.city && (
-                <span className="text-danger">{this.state.errors.city}</span>
-              )}
-              <input
-                name="postal_code"
-                type="text"
-                placeholder="postal code"
-                value={this.state.postal_code}
-                onChange={this.onChangeTextFields}
-                // onChange={this.props.handleChange('postal_code')}
-                // defaultValue={values.postal_code}
-              />
-              {this.state.errors.postal_code && (
-                <span className="text-danger">
-                  {this.state.errors.postal_code}
-                </span>
-              )}
-            </Form.Field>
+                {this.state.errors.city && (
+                  <span className="text-danger">{this.state.errors.city}</span>
+                )}
+                <input
+                  name="postal_code"
+                  type="text"
+                  placeholder="postal code"
+                  value={this.state.postal_code}
+                  onChange={this.onChangeTextFields}
+                  // onChange={this.props.handleChange('postal_code')}
+                  // defaultValue={values.postal_code}
+                />
+                {this.state.errors.postal_code && (
+                  <span className="text-danger">
+                    {this.state.errors.postal_code}
+                  </span>
+                )}
+              </Form.Field>
 
-            <Form.Field>
+              <Form.Field>
+                <label>
+                  User Picture<span class="red-star">*</span>
+                </label>
+                <input
+                  name="rawImage"
+                  type="file"
+                  placeholder="User Picture"
+                  onChange={this.onChangeTextFields}
+                  value={this.state.rawImage}
+                  accept=".jpg,.png,.pdf"
+                />
+                {this.state.errors.rawImage && (
+                  <span className="text-danger">
+                    {this.state.errors.rawImage}
+                  </span>
+                )}
+              </Form.Field>
+
               <label>
-                User Picture<span class="red-star">*</span>
+                Identity<span class="red-star">*</span>
               </label>
-              <input
-                name="rawImage"
-                type="file"
-                placeholder="User Picture"
-                onChange={this.onChangeTextFields}
-                value={this.state.rawImage}
-              />
-              {this.state.errors.rawImage && (
-                <span className="text-danger">
-                  {this.state.errors.rawImage}
-                </span>
-              )}
-            </Form.Field>
-
-            <label>
-              Identity<span class="red-star">*</span>
-            </label>
-            <Segment>
-              <span className="d-flex justify-content-center mt-3">
-                <span>
-                  <input
-                    className="form-check-input"
-                    style={{ marginLeft: "1px" }}
-                    onChange={this.radioBtn}
-                    type="radio"
-                    name="flexRadioDefault"
-                    id="flexRadioDefault1"
-                  />
-                  <label
-                    className="form-check-label"
-                    htmlFor="flexRadioDefault1"
-                    style={{ marginLeft: "20px" }}
-                    name="driversLicense"
-                  >
-                    Driver's License
-                  </label>
-                </span>
-
-                <span>
-                  <span style={{ marginLeft: "3rem" }}>
+              <Segment>
+                <span className="d-flex justify-content-center mt-3">
+                  <span>
                     <input
                       className="form-check-input"
+                      style={{ marginLeft: "1px" }}
                       onChange={this.radioBtn}
                       type="radio"
                       name="flexRadioDefault"
@@ -616,44 +647,65 @@ class UserDetails extends Component {
                     <label
                       className="form-check-label"
                       htmlFor="flexRadioDefault1"
-                      name="passportNumber"
+                      style={{ marginLeft: "20px" }}
+                      name="driversLicense"
                     >
-                      Passport Number
+                      Driver's License
                     </label>
                   </span>
-                </span>
-              </span>
-              {this.state.errors.identity && (
-                <span className="text-danger">
-                  {this.state.errors.identity}
-                </span>
-              )}
 
-              {this.state.showInputFile === true && (
-                <span>
-                  <div>
-                    <label className="mt-3">Upload Image</label>
-                  </div>
                   <span>
-                    <input
-                      type="file"
-                      name="identity"
-                      onChange={this.onChangeTextFields}
-                      placeholder="Upload"
-                      required
-                    />
+                    <span style={{ marginLeft: "3rem" }}>
+                      <input
+                        className="form-check-input"
+                        onChange={this.radioBtn}
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault1"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexRadioDefault1"
+                        name="passportNumber"
+                      >
+                        Passport Number
+                      </label>
+                    </span>
                   </span>
                 </span>
-              )}
-            </Segment>
-          </Segment>
+                {this.state.errors.identity && (
+                  <span className="text-danger">
+                    {this.state.errors.identity}
+                  </span>
+                )}
 
-          <Segment>
-            <Button onClick={this.completeLater}>Complete Later</Button>
-            <Button onClick={this.saveAndContinue}>Save And Continue</Button>
-          </Segment>
-        </Form>
-      </Grid.Column>
+                {this.state.showInputFile === true && (
+                  <span>
+                    <div>
+                      <label className="mt-3">Upload Image</label>
+                    </div>
+                    <span>
+                      <input
+                        type="file"
+                        name="identity"
+                        onChange={this.onChangeTextFields}
+                        placeholder="Upload"
+                        accept=".jpg,.png,.pdf"
+                        required
+                      />
+                    </span>
+                  </span>
+                )}
+              </Segment>
+            </Segment>
+
+            <Segment>
+              <Button onClick={this.completeLater}>Complete Later</Button>
+              <Button onClick={this.saveAndContinue}>Save And Continue</Button>
+            </Segment>
+          </Form>
+        </Grid.Column>
+      </div>
     );
   }
 }

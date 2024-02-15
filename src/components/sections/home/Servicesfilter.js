@@ -32,7 +32,6 @@ const AnyReactComponent = ({ img_src }) => (
 class Service extends Component {
   constructor(props) {
     let user = AuthService.getCurrentUser();
-    // console.log("user",user);
     super(props);
     if (user != null && (user.lat != null || user.lng != null)) {
       this.state = {
@@ -82,28 +81,11 @@ class Service extends Component {
             lng: position.coords.longitude,
           },
         });
-        //    that.componentDidMount()
-
-        //     console.log("center",this.state.center);
-
-        //   console.log("got position");
-        //   console.log("Latitude is :", position.coords.latitude);
-        //   console.log("Longitude is :", position.coords.longitude);
       });
     };
     let user = AuthService.getCurrentUser();
     let that = this;
-    // if(user!=null){
-    //     console.log(user.lat,user.lng)
-    //    const lat=parseFloat(user.lat);
-    //    const lng=parseFloat(user.lng);
-    //     that.setState({
-    //         center:{lat:lat,lng:lng}
-    //     })
-    //     // that.componentDidMount()
-    //     console.log("centeruser",lat,lng);
-    // }
-
+  
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         function (position) {
@@ -122,30 +104,16 @@ class Service extends Component {
           });
           that.componentDidMount();
 
-          //     console.log("center",that.state.center);
-
-          //   console.log("got position");
-          //   console.log("Latitude is :", position.coords.latitude);
-          //   console.log("Longitude is :", position.coords.longitude);
         },
         function errorCallback(error) {
-          // console.log(error);
           navigator.permissions
             .query({ name: "geolocation" })
             .then(function (result) {
               if (result.state === "granted") {
-                // {this.getlocation()};
-                //    console.log(result.state);
-                //If granted then you can directly call your function here
               } else if (result.state === "prompt") {
-                // console.log(result.state);
               } else if (result.state === "denied") {
-                // window.location.reload();
-                // console.log("location access denied by user");
-                //If denied then you have to show instructions to enable location
               }
               result.onchange = function () {
-                // console.log(result.state);
               };
             });
         },
@@ -154,12 +122,7 @@ class Service extends Component {
         }
       );
     } else {
-      // console.log("Not Available");
     }
-
-    // navigator.geolocation.getCurrentPosition(function(position) {
-    //     console.log(position)
-    //   });
 
     const apiCalldata = {
       lat: that.state.center.lat,
@@ -189,42 +152,7 @@ class Service extends Component {
       this.setState({
         nearserviceProviders: near_services_provider.data.data.data,
       });
-      console.log(this.state.serviceProviders);
-      console.log(this.state.nearserviceProviders);
-      //    console.log("::: TEST 64::", services_provider)
-      // if (near_services_provider.data.data.data.length > 0) {
-      //   for (let i = 0; i < near_services_provider.data.data.data.length; i++) {
-      //     // const maker={lat:i.lat, lng:i.lng, img_src: '../../../assets/img/lcoation.png'};
-      //     // that.state.markers.push({lat:i.lat, lng:i.lng, img_src: '../../../assets/img/lcoation.png'});
-      //     that.setState({
-      //       markers: [
-      //         {
-      //           lat: i.lat,
-      //           lng: i.lng,
-      //           img_src: "../../../assets/img/lcoation.png",
-      //         },
-      //       ],
-
-      //       //   links:near_services_provider.data.data.links,
-      //       //   links:[],
-      //       //   linklength:"",
-      //     });
-      //   }
-
-      //   console.log(that.state.nearserviceProviders);
-      //   //     that.setState({
-      //   //     nearserviceProviders: services_provider.data.data.data,
-      //   //   //   links:services_provider.data.data.links,
-      //   //   //   links:[],
-      //   //   //   linklength:"",
-
-      //   //   });
-      //   //   console.log("hfjdshf",that.state.markers);
-      //   // swal("Result Found!", "Your Result has been found!", "success")
-      //   //   console.log("second",services_provider.data.data.data);
-      //   // localStorage.removeItem("searchservice");
-      // }
-      // swal("Result Not Found!", "Result not found!", "warning");
+     
     } catch (err) {
       console.log(err);
     }
@@ -236,9 +164,8 @@ class Service extends Component {
       inputRad: e.target.value * 1000,
     });
   };
-  changeRadius = () => {
+  changeRadius = async() => {
     let that = this;
-    // console.log(Number(this.state.inputRad));
     circle.setRadius(Number(this.state.inputRad));
     const apiCaldata = {
       lat: that.state.center.lat,
@@ -247,42 +174,19 @@ class Service extends Component {
     };
 
     try {
-      const near_services_provider = axios
+      const near_services_provider = await axios
         .post(config.SERVER_URL + `/api/nearserviceproviders`, apiCaldata, {
           headers: authHeader(),
-        })
-        //   console.log("::: TEST 64::", near_services_provider)
-        .then(function (near_services_provider) {
+        });
+        
+    
           if (near_services_provider.data.data.data.length > 0) {
-            for (
-              let i = 0;
-              i < near_services_provider.data.data.data.length;
-              i++
-            ) {
-              // this.state.markers.push({lat:i.lat, lng:i.lng, img_src: '../../../assets/img/lcoation.png'});
-              that.setState({
-                markers: [
-                  {
-                    lat: i.lat,
-                    lng: i.lng,
-                    img_src: "../../../assets/img/lcoation.png",
-                  },
-                ],
-                //   links:near_services_provider.data.data.links,
-                //   links:[],
-                //   linklength:"",
-              });
-            }
-            that.setState({
+   
+            this.setState({
               nearserviceProviders: near_services_provider.data.data.data,
-
-              //   links:near_services_provider.data.data.links,
-              //   links:[],
-              //   linklength:"",
             });
             window.scrollTo(0, 800);
             swal("Result Found!", "Your Result has been found!", "success");
-            // console.log("thek",near_services_provider.data.data.data);
             localStorage.removeItem("searchservice");
           } else {
             that.setState({
@@ -297,7 +201,7 @@ class Service extends Component {
           }
           //"dlfjldskjf"
           // swal("Result Not Found!", "Result not found!", "warning");
-        });
+     
     } catch (err) {
       console.log(err);
     }
@@ -306,7 +210,6 @@ class Service extends Component {
   render() {
     var pDoc = document.getElementById("locationicons");
     var pagrent = pDoc?.parentNode;
-    // console.log('dskfj',pagrent);
     let owlLength1000 = 3;
     let owlLength700 = 2;
     let loop1000 = false;
@@ -339,9 +242,7 @@ class Service extends Component {
       // owlLength1000 = this.state?.serviceProviders?.length < 4 ? this.state?.serviceProviders?.length : 3
       // owlLength700 = this.state?.serviceProviders?.length < 3 ? this.state?.serviceProviders?.length : 2
     }
-    console.log(this.props?.serviceblock);
     const options = {
-      loop: loop1000,
       items: owlLength1000,
       margin: 30,
       nav: false,
@@ -352,15 +253,12 @@ class Service extends Component {
       responsive: {
         0: {
           items: 1,
-          loop: loop0,
         },
         768: {
           items: owlLength700,
-          loop: loop700,
         },
         1000: {
           items: owlLength1000,
-          loop: loop1000,
         },
       },
     };
@@ -459,10 +357,12 @@ class Service extends Component {
                     </GoogleMapReact>
                   </div>
                 </div>
-                <div className="row mb-40 align-items-end">
+                
+                <div className="row mb-40 mt-40 align-items-end">
                   <div className="col-lg-9 col-md-12 text-center text-lg-left">
                     <h3>Available Service Providers in Selected Radius:</h3>
                   </div>
+          
                 </div>
                 <div>
                   <OwlCarousel
@@ -551,7 +451,6 @@ class Service extends Component {
                                 <h3 className="fs-20 f-700 mb-10">
                                   {item.fname !== undefined && item.username}
                                 </h3>
-                                {/* {console.log("item:", item)} */}
 
                                 <ul className="service_providers_list">
                                   {/* <li>
@@ -605,18 +504,9 @@ class Service extends Component {
               <div className="container" style={{ marginTop: "250px" }}>
                 <div className="row mb-40 align-items-end">
                   <div className="col-lg-9 col-md-12 text-center text-lg-left">
-                    <h1>Top Rated Service Providers</h1>
+                    <h3>Top Rated Service Providers</h3>
                   </div>
-                  {/* <div className="col-lg-3 col-md-12 text-center text-lg-right">
-                                                <div className="blog-nav mb-10 mt-md-25">
-                                                <Link to="#" className="service-nav-icon left" onClick={() => this.refs.serviceslider.prev()}>
-                                                <i className="fas fa-chevron-left" />
-                                                </Link>
-                                                <Link to="#" className="service-nav-icon ml-10 right" onClick={() => this.refs.serviceslider.next()}>
-                                                <i className="fas fa-chevron-right" />
-                                                </Link>
-                                                </div>
-                                            </div> */}
+          
                 </div>
                 <div className="row">
                   <div className="col-lg-12">

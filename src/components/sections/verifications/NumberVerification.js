@@ -13,6 +13,8 @@ import "../../../assets/MyCSS/setupwizard.css";
 import "../../../assets/MyCSS/loginpage.css";
 import swal from "sweetalert";
 import { withRouter } from "react-router-dom";
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css';
 class NumberVerify extends Component {
   objectSchema = Joi.object({
     label: Joi.string().required().label("Service").required(),
@@ -100,12 +102,11 @@ class NumberVerify extends Component {
       const data = await axios.post(
         `${config.SERVER_URL}/api/verifymobile`,
         {
-          mobile_no: this.state.mobileno,
+          mobile_no: `+${this.state.mobileno}`,
           otp: this.state.otp,
         },
         header
       );
-      console.log(data);
       if (data.data.success === true) {
         this.state.userData.is_mobile_verified = 1;
         this.state.userData.is_verified = 1;
@@ -142,7 +143,7 @@ class NumberVerify extends Component {
         `${config.SERVER_URL}/api/verifyphone`,
         {
           email: this.state.user_email,
-          mobile_no: this.state.mobileno,
+          mobile_no: `+${this.state.mobileno}`,
         },
         header
       );
@@ -170,7 +171,7 @@ class NumberVerify extends Component {
           textAlign="center"
           className="setupwizard-personal-details-header"
         >
-          <h1>Verify Your Detail</h1>
+          <h1>Verify Your Mobile Number</h1>
         </Header>
         <Form
           ref={(e) => {
@@ -179,15 +180,16 @@ class NumberVerify extends Component {
         >
           <Segment>
             <Form.Field>
-              <label>Verify your Number</label>
-              <input
+              <label>Mobile Number</label>
+              <PhoneInput id="mobile_no"  country={'ca'} placeholder="Enter phone number" onChange={phone => this.setState({ ['mobileno']: phone })}/>
+              {/* <input
                 name="mobileno"
                 type="text"
                 pattern="^(\+(([0-9]){1,2})[-.])?((((([0-9]){2,3})[-.]){1,2}([0-9]{4,10}))|([0-9]{10}))$"
                 placeholder="Enter your Mobile No"
                 value={this.state.mobileno}
                 onChange={this.onChangeTextFields}
-              />
+              /> */}
               {this.state.errors.mobileno && (
                 <span className="text-danger">
                   {this.state.errors.mobileno}
@@ -195,7 +197,7 @@ class NumberVerify extends Component {
               )}
             </Form.Field>
             <Form.Field>
-              <Button type="submit" onClick={this.sendOTP}>
+              <Button type="submit" onClick={this.sendOTP} primary>
                 Send OTP
               </Button>
             </Form.Field>
@@ -215,6 +217,7 @@ class NumberVerify extends Component {
               <Button
                 onClick={this.saveAndContinue}
                 disabled={this.state.save_continue_button_disable ?? ""}
+                secondary
               >
                 Verify
               </Button>

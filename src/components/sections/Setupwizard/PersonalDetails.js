@@ -11,6 +11,9 @@ import { Row, Col } from "reactstrap";
 import Switch from "@mui/material/Switch";
 import "../../../assets/MyCSS/setupwizard.css";
 import "../../../assets/MyCSS/loginpage.css";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
 class PersonalDetails extends Component {
   objectSchema = Joi.object({
     label: Joi.string().required().label("Service").required(),
@@ -62,6 +65,7 @@ class PersonalDetails extends Component {
       auto_accept: true,
       servicesPayload: [],
       defaultCurrencyValue: { label: "", value: "" },
+      isloading: false,
     };
   }
 
@@ -116,6 +120,7 @@ class PersonalDetails extends Component {
 
   saveAndContinue = (e) => {
     e.preventDefault();
+    this.setState({ isloading: true });
 
     let errors = this.validate();
     let user = AuthService.getCurrentUser();
@@ -123,6 +128,7 @@ class PersonalDetails extends Component {
     if (errors) {
       // console.log(errors)
       this.setState({ errors });
+      this.setState({ isloading: false });
       return;
     }
 
@@ -180,8 +186,10 @@ class PersonalDetails extends Component {
       //     .then(function (response) {
       //         console.log(response);
       //     });
+      this.setState({ isloading: false });
       this.props.nextStep();
     } catch (err) {
+      this.setState({ isloading: false });
       // console.log(err)
     }
   };
@@ -356,206 +364,244 @@ class PersonalDetails extends Component {
     const { values } = this.props;
     const label = { inputProps: { "aria-label": "Switch demo" } };
     return (
-      <Grid.Column className="setupwizard-personal-details">
-        <Header
-          textAlign="center"
-          className="setupwizard-personal-details-header"
-        >
-          <h1>Personal Details</h1>
-        </Header>
-        <Form
-          // onSubmit={this.saveAndContinue}
-          ref={(e) => {
-            this.form = e;
-          }}
-        >
-          <Segment>
-            <Form.Field>
-              <label>
-                Date Of Birth <span class="red-star">*</span>
-              </label>
-              <input
-                name="dob"
-                type="date"
-                max={new Date().toISOString().split("T")[0]}
-                placeholder="Date Of Birth"
-                value={this.state.dob}
-                onChange={this.onChangeTextFields}
-                //defaultValue={values.dob}
-              />
-              {this.state.errors.dob && (
-                <span className="text-danger">{this.state.errors.dob}</span>
-              )}
-            </Form.Field>
-          </Segment>
+      <div className="position-relative">
+        {this.state.isloading && (
+          <div className="page_loader_global">
+            <Box
+              sx={{
+                position: "relative",
+                top: 40,
+                display: "inline-flex",
+              }}
+            >
+              <CircularProgress color="success" size={80} />
+              <Box
+                sx={{
+                  top: 0,
+                  left: 0,
+                  bottom: 0,
+                  right: 0,
+                  position: "absolute",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Typography
+                  variant="caption"
+                  component="div"
+                  color="common.white"
+                >
+                  Please Wait
+                </Typography>
+              </Box>
+            </Box>
+          </div>
+        )}
 
-          <Segment>
-            <Form.Field>
-              <label>
-                Service Type<span class="red-star">*</span>
-              </label>
-              {/* <Select
+        <Grid.Column className="setupwizard-personal-details position-relative">
+          <Header
+            textAlign="center"
+            className="setupwizard-personal-details-header"
+          >
+            <h1>Personal Details</h1>
+          </Header>
+          <Form
+            // onSubmit={this.saveAndContinue}
+            ref={(e) => {
+              this.form = e;
+            }}
+          >
+            <Segment>
+              <Form.Field>
+                <label>
+                  Date Of Birth <span class="red-star">*</span>
+                </label>
+                <input
+                  name="dob"
+                  type="date"
+                  max={new Date().toISOString().split("T")[0]}
+                  placeholder="Date Of Birth"
+                  value={this.state.dob}
+                  onChange={this.onChangeTextFields}
+                  //defaultValue={values.dob}
+                />
+                {this.state.errors.dob && (
+                  <span className="text-danger">{this.state.errors.dob}</span>
+                )}
+              </Form.Field>
+            </Segment>
+
+            <Segment>
+              <Form.Field>
+                <label>
+                  Service Type<span class="red-star">*</span>
+                </label>
+                {/* <Select
                             onChange={this.servicesSelected}
                             name="service_type_id"
                             isMulti
 
                             options={this.getDropDownSerivces()}
                         /> */}
-              <Dropdown
-                placeholder="Select Service"
-                fluid
-                selection
-                onChange={this.servicesSelected}
-                options={this.getDropDownSerivces()}
-                value={this.state.service_type_id}
-              />
-              {this.state.errors.service_type_id && (
-                <span className="text-danger">
-                  {this.state.errors.service_type_id}
-                </span>
-              )}
-            </Form.Field>
-            <Form.Field>
-              <Row>
-                <Col md={8}>
-                  <label>
-                    Price Per hour<span class="red-star">*</span>
-                  </label>
-                  <input
-                    name="price"
-                    type="number"
-                    placeholder="price"
-                    onChange={this.onChangeTextFields}
-                    value={this.state.price}
-                    autoComplete="off"
-                  />
-                  {this.state.errors.price && (
-                    <span className="text-danger">
-                      {this.state.errors.price}
-                    </span>
-                  )}
-                </Col>
+                <Dropdown
+                  placeholder="Select Service"
+                  fluid
+                  selection
+                  onChange={this.servicesSelected}
+                  options={this.getDropDownSerivces()}
+                  value={this.state.service_type_id}
+                />
+                {this.state.errors.service_type_id && (
+                  <span className="text-danger">
+                    {this.state.errors.service_type_id}
+                  </span>
+                )}
+              </Form.Field>
+              <Form.Field>
+                <Row>
+                  <Col md={8}>
+                    <label>
+                      Price Per hour<span class="red-star">*</span>
+                    </label>
+                    <input
+                      name="price"
+                      type="number"
+                      placeholder="price"
+                      onChange={this.onChangeTextFields}
+                      value={this.state.price}
+                      autoComplete="off"
+                    />
+                    {this.state.errors.price && (
+                      <span className="text-danger">
+                        {this.state.errors.price}
+                      </span>
+                    )}
+                  </Col>
 
-                <Col md={4}>
-                  <label>
-                    Currency<span class="red-star">*</span>
-                  </label>
-                  <Select
-                    onChange={this.handleCurrency}
-                    value={this.state.defaultCurrencyValue}
-                    placeholder="Currency"
-                    name="currency_id"
-                    options={this.getDropDownCurrencies()}
-                  />
-                  {this.state.errors.currency_id && (
-                    <span className="text-danger">
-                      {this.state.errors.currency_id}
-                    </span>
-                  )}
-                </Col>
-              </Row>
-            </Form.Field>
-            <Form.Field>
-              <label>
-                Experience (In Years)<span class="red-star">*</span>
-              </label>
-              <input
-                name="experience"
-                type="text"
-                placeholder="Experience"
-                onChange={this.onChangeTextFields}
-                value={this.state.experience}
-              />
-              {this.state.errors.experience && (
-                <span className="text-danger">
-                  {this.state.errors.experience}
-                </span>
-              )}
-            </Form.Field>
+                  <Col md={4}>
+                    <label>
+                      Currency<span class="red-star">*</span>
+                    </label>
+                    <Select
+                      onChange={this.handleCurrency}
+                      value={this.state.defaultCurrencyValue}
+                      placeholder="Currency"
+                      name="currency_id"
+                      options={this.getDropDownCurrencies()}
+                    />
+                    {this.state.errors.currency_id && (
+                      <span className="text-danger">
+                        {this.state.errors.currency_id}
+                      </span>
+                    )}
+                  </Col>
+                </Row>
+              </Form.Field>
+              <Form.Field>
+                <label>
+                  Experience (In Years)<span class="red-star">*</span>
+                </label>
+                <input
+                  name="experience"
+                  type="text"
+                  placeholder="Experience"
+                  onChange={this.onChangeTextFields}
+                  value={this.state.experience}
+                />
+                {this.state.errors.experience && (
+                  <span className="text-danger">
+                    {this.state.errors.experience}
+                  </span>
+                )}
+              </Form.Field>
 
-            <Form.Field>
-              <label>Education</label>
-              <input
-                name="education"
-                type="text"
-                placeholder="Education (optional)"
-                onChange={this.onChangeTextFields}
-                value={this.state.education}
-              />
-            </Form.Field>
+              <Form.Field>
+                <label>Education</label>
+                <input
+                  name="education"
+                  type="text"
+                  placeholder="Education (optional)"
+                  onChange={this.onChangeTextFields}
+                  value={this.state.education}
+                />
+              </Form.Field>
 
-            <Form.Field>
-              <label>
-                Languages you can speak<span class="red-star">*</span>
-              </label>
-              <Select
-                className="react-select"
-                classNamePrefix="select"
-                onChange={this.languageSelected}
-                name="language_id"
-                isClearable={false}
-                isMulti
-                value={this.state.language_ids}
-                options={this.getDropDownLanguage()}
-                placeholder="Select Language"
-              />
-              {this.state.errors.language_id && (
-                <span className="text-danger">
-                  {this.state.errors.language_id}
-                </span>
-              )}
-            </Form.Field>
+              <Form.Field>
+                <label>
+                  Languages you can speak<span class="red-star">*</span>
+                </label>
+                <Select
+                  className="react-select"
+                  classNamePrefix="select"
+                  onChange={this.languageSelected}
+                  name="language_id"
+                  isClearable={false}
+                  isMulti
+                  value={this.state.language_ids}
+                  options={this.getDropDownLanguage()}
+                  placeholder="Select Language"
+                />
+                {this.state.errors.language_id && (
+                  <span className="text-danger">
+                    {this.state.errors.language_id}
+                  </span>
+                )}
+              </Form.Field>
 
-            <Form.Field>
-              <label>
-                Description<span class="red-star">*</span>
-              </label>
+              <Form.Field>
+                <label>
+                  Description<span class="red-star">*</span>
+                </label>
 
-              <textarea
-                id="w3review"
-                name="description"
-                placeholder="Description"
-                rows="4"
-                cols="50"
-                onChange={this.onChangeTextFields}
-                value={this.state.description}
-              ></textarea>
-              {this.state.errors.description && (
-                <span className="text-danger">
-                  {this.state.errors.description}
-                </span>
-              )}
-              {/* <input
+                <textarea
+                  id="w3review"
+                  name="description"
+                  placeholder="Description"
+                  rows="4"
+                  cols="50"
+                  onChange={this.onChangeTextFields}
+                  value={this.state.description}
+                ></textarea>
+                {this.state.errors.description && (
+                  <span className="text-danger">
+                    {this.state.errors.description}
+                  </span>
+                )}
+                {/* <input
                             name="description"
                             type="textarea"
                             placeholder="Description"
                             onChange={this.onChangeDescription}
                         /> */}
-            </Form.Field>
+              </Form.Field>
 
-            <Form.Field>
-              <Row>
-                <Col md={8} className="mt-0 mb-0">
-                  <label>Auto Accept My Requests</label>
-                  <Switch {...label} defaultChecked onChange={this.switch} />
-                </Col>
+              <Form.Field>
+                <Row>
+                  <Col md={8} className="mt-0 mb-0">
+                    <label>Auto Accept My Requests</label>
+                    <Switch {...label} defaultChecked onChange={this.switch} />
+                  </Col>
 
-                <Col md={3}></Col>
-              </Row>
+                  <Col md={3}></Col>
+                </Row>
 
-              <Button onClick={this.back}>Back</Button>
-              <Button onClick={this.saveAndContinue}>Save And Continue</Button>
-              <button
-                className="ui inverted green button another_service_btn"
-                onClick={this.AddAnotherService}
-                disabled={this.state.servicetype.length === 1 ? true : false}
-              >
-                Add Another Service
-              </button>
-            </Form.Field>
-          </Segment>
-        </Form>
-      </Grid.Column>
+                <Button onClick={this.back}>Back</Button>
+                <Button onClick={this.saveAndContinue}>
+                  Save And Continue
+                </Button>
+                <button
+                  className="ui inverted green button another_service_btn"
+                  onClick={this.AddAnotherService}
+                  disabled={this.state.servicetype.length === 1 ? true : false}
+                >
+                  Add Another Service
+                </button>
+              </Form.Field>
+            </Segment>
+          </Form>
+        </Grid.Column>
+      </div>
     );
   }
 }

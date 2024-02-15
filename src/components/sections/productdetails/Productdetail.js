@@ -14,8 +14,10 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { withRouter } from 'react-router-dom';
 import { UncontrolledAlert } from 'reactstrap';
-import { Form } from "react-bootstrap";
-import { Dimmer, Loader } from "semantic-ui-react";
+import MobileDatePicker from '@mui/lab/MobileDatePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DateAdapter from '@mui/lab/AdapterDateFns'; // You can also use other date adapters
+import TextField from '@mui/material/TextField';
 import "../../../assets/MyCSS/productdetail.css";
 import Rating from '@mui/material/Rating';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -273,7 +275,40 @@ class Productdetail extends Component {
 
 
     }
+    onChangeDate = async (date) => {
 
+          // You can create a Date object by passing the date string
+const newDate = new Date(date);
+
+
+// Extract year, month, and day
+const year = newDate.getFullYear();
+const month = String(newDate.getMonth() + 1).padStart(2, '0'); // Month is zero-based, so we add 1
+const day = String(newDate.getDate()).padStart(2, '0');
+
+// Create the required format: yyyy-MM-dd
+const formattedDate = `${month}/${day}/${year}`;
+  this.setState({
+    ["date"]: formattedDate,
+  });
+        // const temp = e.currentTarget.value.split("-");
+
+        // const date = temp[1] + "/" + temp[2] + "/" + temp[0];
+        // const dated = temp[1] + "/" + temp[2] + "/" + temp[0];
+        const seleted_data = { date: formattedDate }
+        // this.setState({ [Name]: date })
+        // this.setState({ [Name]: e.currentTarget.value })
+        const user_ID = this.props.match.params.serviceProviderID;
+        // console.log(user_ID);
+        var slots = await axios.post(config.SERVER_URL + `/api/slotbydate/${user_ID}`, seleted_data, {
+            headers: authHeader(),
+        });
+        const avaiable_slots = slots.data.data
+        // console.log("slot_bydate", avaiable_slots)
+        this.setState({
+            slot_by_date: avaiable_slots
+        })
+    };
     handleDateClick = async (e) => {
         let user = AuthService.getCurrentUser();
 
@@ -444,7 +479,7 @@ class Productdetail extends Component {
             const d = temp[1] + "/" + temp[2] + "/" + temp[0]
             const serviceDetails = {
                 service_taker_id: service_taker.id || service_taker.user_id,
-                date: d,
+                date: this.state.date,
                 slot_start_time: this.state.timeForm,
                 slot_end_time: this.state.timeTo
             }
@@ -635,8 +670,18 @@ class Productdetail extends Component {
                                     <div className="container">
                                         <div
                                             className="hireNow-date-container" >
-
-                                            <input type="date"
+ <LocalizationProvider dateAdapter={DateAdapter}>
+      <MobileDatePicker
+      mode="legacy" 
+       name="date"
+        label="Select Date"
+        value={this.state.date}
+        onChange={this.onChangeDate}
+        maxDate={new Date()} 
+        renderInput={(params) => <TextField {...params} />} // Use TextField for the input
+      />
+    </LocalizationProvider>
+                                            {/* <input type="date"
                                                 name="date"
                                                 min={new Date().toISOString().split('T')[0]}
                                                 max={new Date().toISOString().split('T')[30]}
@@ -645,7 +690,7 @@ class Productdetail extends Component {
                                                 onChange={
                                                     this.onChangeTextFields}
                                                 value={this.state.date}
-                                            />
+                                            /> */}
                                         </div>
                                     </div>
                                     {this.state.errors &&

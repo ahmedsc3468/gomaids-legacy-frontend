@@ -38,7 +38,9 @@
 .profile-img-container {
   margin-top: 0.5rem;
   text-align: center;
-  /* margin-right: 0.5rem; */
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 @media screen and (max-width: 769px) {
   /* nav bar */

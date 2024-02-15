@@ -46,7 +46,6 @@ class Banner extends Component {
       cities.data.data.map(function (currentValue, index) {
         tempcit.push({ value: index, label: currentValue.city });
       });
-      console.log(tempcit);
       this.setState({ cities: tempcit });
 
       //service_type api

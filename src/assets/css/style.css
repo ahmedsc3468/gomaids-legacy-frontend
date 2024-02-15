@@ -1563,6 +1563,7 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: auto;
   border-radius: 60px;
   margin-bottom: 20px;
+  object-fit: cover;
 }
 .line-servcie {
   width: 40px;
@@ -4742,8 +4743,10 @@ ul.theme-ul li img {
 }
 
 /*Banner button css*/
-
-.arrow {
+.youtube-carousel-container .custom-prev,.youtube-carousel-container .custom-next{
+display: none !important;
+}
+/* .arrow {
   position: relative;
   background: green;
   padding: 6px 16px;
@@ -4754,7 +4757,7 @@ ul.theme-ul li img {
   font-size: 20px;
   font-weight: 500;
   border-radius: 5px;
-}
+} */
 
 .arrow-bottom:after {
   position: absolute;
@@ -5163,4 +5166,30 @@ button.ui.button.add_feedback {
 .red-star {
   color: red;
 
+}
+}
+/** naim styling **/
+.dob-field .MuiFormControl-root {
+  width: 100%;
+}
+.form-loader {
+  width:100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 999;
+}
+.form-loader .MuiBox-root{
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+}
+.react-tel-input input{
+  padding-left: 45px !important;
+}
+.bgprimary-color{
+  background-color:#0b6818 ;
+  color:#fff ;
+}
+.hireNow-date-container .MuiFormControl-root{
+  width: 100%;
 }

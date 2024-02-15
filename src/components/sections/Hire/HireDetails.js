@@ -128,11 +128,19 @@ class HireDetails extends React.Component {
   checkOut = async () => {
     this.setState({ isPending: true });
     const user = authService.getCurrentUser();
+   // Parse the order_date string into a Date object
+const dateObject = new Date(this.state.date);
 
+// Extract year, month, and date components
+const year = dateObject.getFullYear();
+// JavaScript months are 0-based, so we add 1 to get the correct month
+const month = dateObject.getMonth() + 1;
+const date = dateObject.getDate();
+const parsedDate=`${year}/${month}/${date}`;
     const obj = {
       service_taker_id: user.id,
       service_provider_id: this.props.location.state.currentServiceProvider.id,
-      order_date: this.state.date,
+      order_date: parsedDate,
       slot_start_time: this.state.slot_start_time,
       slot_end_time: this.state.slot_end_time,
       cost: this.state.costAccumulation,

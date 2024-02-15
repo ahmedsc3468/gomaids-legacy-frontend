@@ -8,10 +8,15 @@ import Joi from "joi-browser";
 import swal from "sweetalert";
 import "../../../assets/MyCSS/userdashboard.css";
 import CircularProgress from "@mui/material/CircularProgress";
+import MobileDatePicker from '@mui/lab/MobileDatePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DateAdapter from '@mui/lab/AdapterDateFns'; // You can also use other date adapters
+import TextField from '@mui/material/TextField'; 
 import { Modal } from "react-bootstrap";
 import { Button } from "semantic-ui-react";
 import Progress from "./progress";
 import Address from "../Hire/AddressAutoComplete";
+import Loader from "../Loader/Loader";
 // import "../../../assets/MyCSS/progress.css"
 
 // import { checkPropTypes } from "prop-types";
@@ -35,6 +40,7 @@ class UserDetails extends Component {
     role_id: Joi.string().required().label("Chose Service Type"),
     name: Joi.string().required().label("Service Name"),
     description: Joi.string().required().label("Service Description"),
+    isLoading: false,
   };
 
   constructor(props) {
@@ -211,6 +217,22 @@ class UserDetails extends Component {
       [name]: value,
     });
   }
+handleDateChange=(date)=>{
+  // You can create a Date object by passing the date string
+const newDate = new Date(date);
+
+
+// Extract year, month, and day
+const year = newDate.getFullYear();
+const month = String(newDate.getMonth() + 1).padStart(2, '0'); // Month is zero-based, so we add 1
+const day = String(newDate.getDate()).padStart(2, '0');
+
+// Create the required format: yyyy-MM-dd
+const formattedDate = `${year}-${month}-${day}`;
+  this.setState({
+    ["dob"]: formattedDate,
+  });
+  };
   onChangeModal = (e) => {
     const value = e.currentTarget.value;
     const name = e.currentTarget.name;
@@ -287,7 +309,9 @@ class UserDetails extends Component {
         that.setState({
           image: that.state.image.replace(config.SERVER_URL + "/", ""),
           identity: that.state.identity.replace(config.SERVER_URL + "/", ""),
+          isLoading:true,
         });
+     
         const update = await axios.put(
           config.SERVER_URL + `/api/user/${that.userDet.id}/profile`,
           that.state
@@ -296,6 +320,7 @@ class UserDetails extends Component {
         that.setState({
           image: config.SERVER_URL + "/" + update.data.data.image,
           identity: config.SERVER_URL + "/" + update.data.data.identity,
+          isLoading:false,
         });
         // console.log("::::::: After Upload ::::::", update)
         swal("Updated!", "Your Profile Has Been Update!", "success");
@@ -357,13 +382,16 @@ class UserDetails extends Component {
 
     return (
       <>
+        {this.state.isLoading && <Loader />}
         {this.state.isPending ? (
           <div className="text-center">
             <CircularProgress color="success" />
           </div>
         ) : (
           <Grid.Column className="cust-userprofile-container">
+         
             <Form>
+          
               <div className="form-row">
                 <div className="form-group col cust-barProg">
                   <h4> Profile Status </h4>
@@ -444,6 +472,7 @@ class UserDetails extends Component {
                           type="file"
                           name="image"
                           id="image"
+                          accept=".jpg,.png,.pdf"
                           onChange={this.handleImageUpload}
                           style={{ display: "none" }}
                         />
@@ -551,18 +580,22 @@ class UserDetails extends Component {
                   </Form.Field>
                 </div>
 
-                <div className="form-group col-md-6">
+                <div className="form-group col-md-6 dob-field">
                   <Form.Field>
                     <label>Date Of Birth</label>
 
-                    <input
-                      name="dob"
-                      type="date"
-                      placeholder="Date Of Birth"
-                      max={new Date().toISOString().split("T")[0]}
-                      value={this.state.dob}
-                      onChange={this.handleInputChange}
-                    />
+                   
+                     <LocalizationProvider dateAdapter={DateAdapter}>
+      <MobileDatePicker
+      mode="legacy" 
+       name="dob"
+        label=""
+        value={this.state.dob}
+        onChange={this.handleDateChange}
+        maxDate={new Date()} 
+        renderInput={(params) => <TextField {...params} />} // Use TextField for the input
+      />
+    </LocalizationProvider>
                     {this.state.errors && this.state.errors.dob && (
                       <div
                         style={{
@@ -653,7 +686,7 @@ class UserDetails extends Component {
                     )}
                   </Form.Field>
                 </div>
-                <div className="form-group verifybuton col-md-6">
+                {/* <div className="form-group verifybuton col-md-6">
                   <button
                     hidden={
                       this.state.is_verified === "2" ||
@@ -665,7 +698,7 @@ class UserDetails extends Component {
                   >
                     verify
                   </button>
-                </div>
+                </div> */}
               </div>
               <Form.Field>
                 <label>Address</label>
@@ -833,6 +866,7 @@ class UserDetails extends Component {
                       type="file"
                       name="identity"
                       id="identity"
+                      accept=".jpg,.png,.pdf"
                       onChange={this.handleImageUpload}
                     />
                   </Form.Field>

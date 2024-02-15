@@ -8,6 +8,9 @@ import Switch from "@mui/material/Switch";
 import axios from "axios";
 import Joi from "joi-browser";
 import swal from "sweetalert";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
 
 class SetAvailability extends Component {
   schema = {
@@ -84,6 +87,7 @@ class SetAvailability extends Component {
       noChoosenDay: "",
       makeTimeDropDownRedClass: "",
       hasSelectedDay: true,
+      isloading: false,
     };
   }
 
@@ -172,6 +176,7 @@ class SetAvailability extends Component {
   }
 
   continue = async () => {
+    this.setState({ isloading: true });
     let errors = this.validate();
 
     if (errors && errors.timeForm) this.setState({ TimeFromclass: "time" });
@@ -243,10 +248,12 @@ class SetAvailability extends Component {
       await axios.post(config.SERVER_URL + `/api/workingslot`, chosenDay, {
         headers: authHeader(),
       });
+      this.setState({ isloading: true });
       swal("Successful!", "All Information Added Successfully!", "success");
 
       window.location = "/";
     } catch (ex) {
+      this.setState({ isloading: true });
       console.log(ex);
     }
   };
@@ -262,171 +269,207 @@ class SetAvailability extends Component {
 
   render() {
     return (
-      <article style={{}}>
-        <Grid.Column className="setupwizard-setavailability-details">
-          <article
-            style={{
-              border: "2px solid #F0F0F0",
-              padding: "1rem 2rem",
-              borderRadius: "5px",
-              paddingBottom: "3.8rem",
-            }}
-          >
-            <Header
-              textAlign="center"
-              className="setupwizard-setavailability-details-header"
-            >
-              <h2>Set Your Availability</h2>
-            </Header>
-            <Form
-              onSubmit={this.saveAndContinue}
-              ref={(e) => {
-                this.form = e;
+      <div className="position-relative">
+        {this.state.isloading && (
+          <div className="page_loader_global">
+            <Box
+              sx={{
+                position: "relative",
+                top: 40,
+                display: "inline-flex",
               }}
             >
-              <h5 style={{ display: "flex", marginLeft: "1rem" }}>
-                Available Hours
-              </h5>
-
-              <div className="container">
-                <div className="row">
-                  <div className="col-sm-12 col-md-6 cust-setavailibility-time-input">
-                    <select
-                      type="select"
-                      className={`form-control ${this.state.TimeFromclass}`}
-                      name="timeForm"
-                      onChange={this.onFromTimeChange}
-                      // style={{
-                      //     border: "1.5px solid #DA1212",
-                      // }}
-                      // value={this.state.service_type_id}
-                      // onChange={this.onChangeServiceType}
-                    >
-                      <option>-- Select Start Time --</option>
-                      {this.state.time.map((data) => (
-                        <option value={data} key={data}>
-                          {data}
-                        </option>
-                      ))}
-                    </select>
-                    {this.state.errors && this.state.errors.timeForm && (
-                      <div
-                        style={{
-                          color: "#DA1212",
-                          fontWeight: "500",
-                          fontSize: "0.95rem",
-                        }}
-                      >
-                        {this.state.errors.timeForm}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="col">
-                    <select
-                      type="select"
-                      className={`form-control ${this.state.TimeToclass}`}
-                      name="timeTo"
-                      onChange={this.onToTimeChange}
-                      // value={this.state.service_type_id}
-                      // onChange={this.onChangeServiceType}
-                    >
-                      <option>-- Select End Time --</option>
-                      {this.state.time.map((data) => (
-                        <option value={data} key={data}>
-                          {data}
-                        </option>
-                      ))}
-                    </select>
-
-                    {this.state.errors && this.state.errors.timeTo && (
-                      <div
-                        style={{
-                          color: "#DA1212",
-                          fontWeight: "500",
-                          fontSize: "0.95rem",
-                        }}
-                      >
-                        {this.state.errors.timeTo}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <article
-                className="container setupwizard-setavailibility-availibletime"
-                style={{
-                  marginTop: "3rem",
-                  padding: "1rem 1rem",
-                  border: "2px solid #F0F0F0",
-                  borderRadius: "5px",
+              <CircularProgress color="success" size={80} />
+              <Box
+                sx={{
+                  top: 0,
+                  left: 0,
+                  bottom: 0,
+                  right: 0,
+                  position: "absolute",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
+                <Typography
+                  variant="caption"
+                  component="div"
+                  color="common.white"
+                >
+                  Please Wait
+                </Typography>
+              </Box>
+            </Box>
+          </div>
+        )}
+
+        <article style={{}}>
+          <Grid.Column className="setupwizard-setavailability-details">
+            <article
+              style={{
+                border: "2px solid #F0F0F0",
+                padding: "1rem 2rem",
+                borderRadius: "5px",
+                paddingBottom: "3.8rem",
+              }}
+            >
+              <Header
+                textAlign="center"
+                className="setupwizard-setavailability-details-header"
+              >
+                <h2>Set Your Availability</h2>
+              </Header>
+              <Form
+                onSubmit={this.saveAndContinue}
+                ref={(e) => {
+                  this.form = e;
+                }}
+              >
+                <h5 style={{ display: "flex", marginLeft: "1rem" }}>
+                  Available Hours
+                </h5>
+
                 <div className="container">
                   <div className="row">
-                    {this.state.dayAvailabilities.map((day) => (
-                      <div className="col-sm" key={day.id}>
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name={day.name}
-                          value={day.id}
-                          checked={this.CheckedOrNot(day.name)}
-                          id={day.id}
-                          onChange={this.handleChangeForCheckBox}
-                        />
-                        <label className="form-check-label" htmlFor={day.id}>
-                          {day.name}
-                        </label>
-                      </div>
-                    ))}
+                    <div className="col-sm-12 col-md-6 cust-setavailibility-time-input">
+                      <select
+                        type="select"
+                        className={`form-control ${this.state.TimeFromclass}`}
+                        name="timeForm"
+                        onChange={this.onFromTimeChange}
+                        // style={{
+                        //     border: "1.5px solid #DA1212",
+                        // }}
+                        // value={this.state.service_type_id}
+                        // onChange={this.onChangeServiceType}
+                      >
+                        <option>-- Select Start Time --</option>
+                        {this.state.time.map((data) => (
+                          <option value={data} key={data}>
+                            {data}
+                          </option>
+                        ))}
+                      </select>
+                      {this.state.errors && this.state.errors.timeForm && (
+                        <div
+                          style={{
+                            color: "#DA1212",
+                            fontWeight: "500",
+                            fontSize: "0.95rem",
+                          }}
+                        >
+                          {this.state.errors.timeForm}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="col">
+                      <select
+                        type="select"
+                        className={`form-control ${this.state.TimeToclass}`}
+                        name="timeTo"
+                        onChange={this.onToTimeChange}
+                        // value={this.state.service_type_id}
+                        // onChange={this.onChangeServiceType}
+                      >
+                        <option>-- Select End Time --</option>
+                        {this.state.time.map((data) => (
+                          <option value={data} key={data}>
+                            {data}
+                          </option>
+                        ))}
+                      </select>
+
+                      {this.state.errors && this.state.errors.timeTo && (
+                        <div
+                          style={{
+                            color: "#DA1212",
+                            fontWeight: "500",
+                            fontSize: "0.95rem",
+                          }}
+                        >
+                          {this.state.errors.timeTo}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  {/* {this.state.noChoosenDay && (
+                </div>
+
+                <article
+                  className="container setupwizard-setavailibility-availibletime"
+                  style={{
+                    marginTop: "3rem",
+                    padding: "1rem 1rem",
+                    border: "2px solid #F0F0F0",
+                    borderRadius: "5px",
+                  }}
+                >
+                  <div className="container">
+                    <div className="row">
+                      {this.state.dayAvailabilities.map((day) => (
+                        <div className="col-sm" key={day.id}>
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            name={day.name}
+                            value={day.id}
+                            checked={this.CheckedOrNot(day.name)}
+                            id={day.id}
+                            onChange={this.handleChangeForCheckBox}
+                          />
+                          <label className="form-check-label" htmlFor={day.id}>
+                            {day.name}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                    {/* {this.state.noChoosenDay && (
                                         <div className="alert alert-danger">
                                             {this.state.noChoosenDay}
                                         </div>
                                     )} */}
-                </div>
-              </article>
-              {!this.state.hasSelectedDay && (
-                <div
-                  style={{
-                    color: "#DA1212",
-                    fontWeight: "500",
-                    fontSize: "0.95rem",
-                  }}
-                >
-                  {this.state.noChoosenDay}
-                </div>
-              )}
+                  </div>
+                </article>
+                {!this.state.hasSelectedDay && (
+                  <div
+                    style={{
+                      color: "#DA1212",
+                      fontWeight: "500",
+                      fontSize: "0.95rem",
+                    }}
+                  >
+                    {this.state.noChoosenDay}
+                  </div>
+                )}
 
-              {/* <Button onClick={this.back}>Back</Button>
+                {/* <Button onClick={this.back}>Back</Button>
                         <Button onClick={this.saveAndContinue}>
                             Save And Continue
                         </Button> */}
-            </Form>
-          </article>
-        </Grid.Column>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <button
-            type="button"
-            className="btn btn-primary setavailiblity-continue-btn"
+              </Form>
+            </article>
+          </Grid.Column>
+          <div
             style={{
-              borderRadius: "18px",
-              width: "8rem",
+              display: "flex",
+              justifyContent: "center",
             }}
-            onClick={this.continue}
           >
-            Continue
-          </button>
-        </div>
-      </article>
+            <button
+              type="button"
+              className="btn btn-primary setavailiblity-continue-btn"
+              style={{
+                borderRadius: "18px",
+                width: "8rem",
+              }}
+              onClick={this.continue}
+            >
+              Continue
+            </button>
+          </div>
+        </article>
+      </div>
     );
   }
 }

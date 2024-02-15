@@ -155,7 +155,7 @@ class EmailVerify extends Component {
           textAlign="center"
           className="setupwizard-personal-details-header"
         >
-          <h1>Verify Your Detail</h1>
+          <h1>Verify Your Email</h1>
         </Header>
         <Form
           ref={(e) => {
@@ -164,7 +164,7 @@ class EmailVerify extends Component {
         >
           <Segment>
             <Form.Field>
-              <label>Verify your Email</label>
+              <label>Email</label>
               <input
                 name="email"
                 type="email"
@@ -178,7 +178,7 @@ class EmailVerify extends Component {
               )}
             </Form.Field>
             <Form.Field>
-              <Button type="submit" onClick={this.sendOTP}>
+              <Button type="submit" primary  onClick={this.sendOTP}>
                 Send OTP
               </Button>
             </Form.Field>
@@ -198,6 +198,7 @@ class EmailVerify extends Component {
               <Button
                 onClick={this.saveAndContinue}
                 disabled={this.state.save_continue_button_disable ?? ""}
+                 secondary
               >
                 Verify
               </Button>

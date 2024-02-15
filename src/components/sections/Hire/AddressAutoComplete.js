@@ -84,10 +84,10 @@ function Search({ page, handleAddress, currentAddress }) {
         (x) => x.types[0] === "postal_code"
       );
 
-      localStorage.setItem("city", city[0].long_name);
-      localStorage.setItem("state", state[0].long_name);
-      localStorage.setItem("country", country[0].long_name);
-      localStorage.setItem("postal_code", postal_code[0].long_name);
+      localStorage.setItem("city", city[0]?.long_name);
+      localStorage.setItem("state", state[0]?.long_name);
+      localStorage.setItem("country", country[0]?.long_name);
+      localStorage.setItem("postal_code", postal_code[0]?.long_name);
     } else {
       if (page === "setUpWizard streetAddress") {
         const results = await geocodeByAddress(address);

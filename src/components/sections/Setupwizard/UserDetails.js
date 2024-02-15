@@ -427,7 +427,9 @@ class UserDetails extends Component {
                         </Form.Field> */}
 
             <Form.Field>
-              <label>Address</label>
+              <label>
+                Address<span class="red-star">*</span>
+              </label>
               <Address
                 page="setUpWizard streetAddress"
                 name="street_address"
@@ -469,7 +471,9 @@ class UserDetails extends Component {
                                 </span>
                             } */}
 
-              <label>Location</label>
+              <label>
+                Location<span class="red-star">*</span>
+              </label>
 
               <input
                 type="select"
@@ -559,7 +563,9 @@ class UserDetails extends Component {
             </Form.Field>
 
             <Form.Field>
-              <label>User Picture</label>
+              <label>
+                User Picture<span class="red-star">*</span>
+              </label>
               <input
                 name="rawImage"
                 type="file"
@@ -574,7 +580,9 @@ class UserDetails extends Component {
               )}
             </Form.Field>
 
-            <label>Identity</label>
+            <label>
+              Identity<span class="red-star">*</span>
+            </label>
             <Segment>
               <span className="d-flex justify-content-center mt-3">
                 <span>

@@ -110,8 +110,8 @@ class Smallcallback extends Component {
       });
       this.resetForm();
       swal(
-        "SuccessFull!",
-        "Your Request Has Been Sent SuccessFully!",
+        "Successful!",
+        "Your Request Has Been Sent Successfully!",
         "success"
       );
     } catch (errors) {

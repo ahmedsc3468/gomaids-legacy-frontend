@@ -68,7 +68,7 @@ function Rate() {
           temp,
           { headers: authHeader() }
         );
-        swal("SuccessFully!", "Your Rating Has Been Save!", "success");
+        swal("Successful!", "Your Rating Has Been Save!", "success");
         console.log("after all 59", response);
         window.location.reload();
         handleClose();
@@ -100,8 +100,8 @@ function Rate() {
                 { headers: authHeader() }
               );
               swal(
-                "SuccessFully!",
-                "Your Rating and tip payment Has Been Succesfull!",
+                "Successful!",
+                "Your Rating and tip payment Has Been Succesful!",
                 "success"
               );
               // console.log("after all 74", response)
@@ -116,7 +116,7 @@ function Rate() {
               temp,
               { headers: authHeader() }
             );
-            swal("SuccessFully!", "Your Rating Has Been Save!", "success");
+            swal("Successful!", "Your Rating Has Been Save!", "success");
             // console.log("after all 74", response)
             window.location.reload();
             handleClose();

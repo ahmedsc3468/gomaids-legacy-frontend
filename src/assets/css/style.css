@@ -4995,3 +4995,6 @@ button.ui.button.add_feedback {
   margin-bottom: 0;
   padding-bottom: 0;
 }
+.red-star {
+  color: red;
+}

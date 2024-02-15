@@ -111,30 +111,7 @@ const navigationmenu = [
     //     },
     // ]
   },
-  {
-    id: 4,
-    linkText: "Partner With Us",
-    link: "/partner-with-us",
-    child: false,
-    special: true,
-    // submenu: [
-    //     {
-    //         id: 31,
-    //         link: '/services-v1',
-    //         linkText: 'Services 1'
-    //     },
-    //     {
-    //         id: 32,
-    //         link: '/services-v2',
-    //         linkText: 'Services 2'
-    //     },
-    //     {
-    //         id: 33,
-    //         link: '/service-details',
-    //         linkText: 'Service Details'
-    //     },
-    // ]
-  },
+
   // {
   //     id: 4,
   //     linkText: 'Blog',
@@ -304,6 +281,30 @@ const navigationmenu = [
     //         id: 613,
     //         link: '/error',
     //         linkText: 'Error'
+    //     },
+    // ]
+  },
+  {
+    id: 4,
+    linkText: "Partner With Us",
+    link: "/partner-with-us",
+    child: false,
+    special: true,
+    // submenu: [
+    //     {
+    //         id: 31,
+    //         link: '/services-v1',
+    //         linkText: 'Services 1'
+    //     },
+    //     {
+    //         id: 32,
+    //         link: '/services-v2',
+    //         linkText: 'Services 2'
+    //     },
+    //     {
+    //         id: 33,
+    //         link: '/service-details',
+    //         linkText: 'Service Details'
     //     },
     // ]
   },

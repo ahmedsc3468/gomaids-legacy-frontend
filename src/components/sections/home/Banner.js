@@ -146,14 +146,15 @@ class Banner extends Component {
                         {/* <input type="text" className="form-control input-white shadow-2 ml-15 ml-xs-00 step-three" placeholder="Enter Keyword" /> */}
                         <button
                           type="submit"
-                          onClick={(event) =>{
-                            this.props.history.push('/find-a-services',{ city: this.state.city_id });
+                          onClick={(event) => {
+                            //   this.props.history.push('/find-a-services',{ city: this.state.city_id });
+                            // }
+                            this.props.findServiceProviders(
+                              event,
+                              this.state.city_id,
+                              this.state.service_type_id
+                            )
                           }
-                            // this.props.findServiceProviders(
-                            //   event,
-                            //   this.state.city_id,
-                            //   this.state.service_type_id
-                            // )
                           }
                           className="btn btn-black ml-15 ml-xs-00 mt-xs-15 step-four"
                         >

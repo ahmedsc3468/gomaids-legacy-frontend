@@ -252,7 +252,7 @@ function App() {
           <Route exact path="/checkout" component={Checkout} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
-          <Route exact path="/find-a-services/:id?" component={Serviceone} />
+          <Route exact path="/find-a-services" component={Serviceone} />
           <Route exact path="/near-by-providers" component={NearByContent} />
           <Route exact path="/partner-with-us" component={PartnerWithUs} />
           <Route

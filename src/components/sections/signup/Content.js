@@ -482,39 +482,6 @@ class Content extends Component {
                 ></div>
               </div>
               <div className="col-xl-5 col-lg-6 login-form-container position-relative">
-                {this.state.loader && (
-                  <div className="position-absolute loader-login">
-                    <Box
-                      sx={{
-                        position: "relative",
-                        top: 40,
-                        display: "inline-flex",
-                      }}
-                    >
-                      <CircularProgress color="success" size={80} />
-                      <Box
-                        sx={{
-                          top: 0,
-                          left: 0,
-                          bottom: 0,
-                          right: 0,
-                          position: "absolute",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <Typography
-                          variant="caption"
-                          component="div"
-                          color="common.white"
-                        >
-                          Please Wait
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </div>
-                )}
                 <div className="form-area bg-blue">
                   <h2 className="f-700 mb-5 white">Create an Account</h2>
                   <form>
@@ -616,7 +583,7 @@ class Content extends Component {
                                 ? "fa fa-eye-slash transform-v-center"
                                 : "fa fa-eye transform-v-center"
                             }
-                            style={{ cursor: "pointer" }}
+                            style={{ cursor: "pointer", bottom: "-4px" }}
                             onClick={this.toggleShow}
                           ></i>
 
@@ -659,7 +626,7 @@ class Content extends Component {
                                 ? "fa fa-eye-slash transform-v-center"
                                 : "fa fa-eye transform-v-center"
                             }
-                            style={{ cursor: "pointer" }}
+                            style={{ cursor: "pointer", bottom: "-4px" }}
                             onClick={this.toggleShowConfirm}
                           ></i>
 
@@ -823,7 +790,7 @@ class Content extends Component {
                         >
                           Sign Up
                         </button>
-                        <div className="signup-login text-center mb-0">
+                        <div className="signup-login text-center mb-0 mt-2">
                           <p className="mt-15 fs-13 white">
                             Already a member?{" "}
                             <Link
@@ -852,6 +819,39 @@ class Content extends Component {
                     )}
                   </form>
                 </div>
+                {this.state.loader && (
+                  <div className="Sign_up_loader">
+                    <Box
+                      sx={{
+                        position: "relative",
+                        top: 40,
+                        display: "inline-flex",
+                      }}
+                    >
+                      <CircularProgress color="success" size={80} />
+                      <Box
+                        sx={{
+                          top: 0,
+                          left: 0,
+                          bottom: 0,
+                          right: 0,
+                          position: "absolute",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Typography
+                          variant="caption"
+                          component="div"
+                          color="common.white"
+                        >
+                          Please Wait
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </div>
+                )}
               </div>
             </div>
           </div>

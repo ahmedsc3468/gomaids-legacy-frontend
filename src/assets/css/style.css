@@ -4990,3 +4990,8 @@ button.ui.button.add_feedback {
   background: #0b6818;
   color: white !important;
 }
+
+.service_providers_list li {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}

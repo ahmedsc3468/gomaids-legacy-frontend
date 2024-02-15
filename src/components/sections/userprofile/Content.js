@@ -71,6 +71,7 @@ class UserDetails extends Component {
       otpError: "",
       is_verified: user.is_verified,
       profile_completion: "",
+      profile_completion_message: [],
     };
     this.source = axios.CancelToken.source();
   }
@@ -125,11 +126,11 @@ class UserDetails extends Component {
       }
     );
     const requestBody = {
-      user_id: this.state.user_id,
+      email: this.state.email,
       mobile_no: this.state.mobile_no,
     };
     const { data } = await axios.post(
-      config.SERVER_URL + `/api/resendsms`,
+      config.SERVER_URL + `/api/verifyphone`,
       requestBody,
       {
         headers: authHeader(),
@@ -164,7 +165,11 @@ class UserDetails extends Component {
 
       const UserDetails = data.data;
       // console.log(":::: 145 :::::",UserDetails)
-
+      let temp_profile_completion =
+        parseInt(UserDetails.profile_completion) > 100
+          ? "100"
+          : UserDetails.profile_completion;
+      console.log(temp_profile_completion);
       this.setState({
         user: user,
         country: UserDetails.location?.country,
@@ -185,7 +190,8 @@ class UserDetails extends Component {
         // roleData,
         isPending: false,
         is_verified: UserDetails.is_verified,
-        profile_completion: UserDetails.profile_completion,
+        profile_completion: temp_profile_completion,
+        profile_completion_message: UserDetails.profile_completion_message,
       });
     } catch (e) {
       console.log(e);
@@ -232,7 +238,6 @@ class UserDetails extends Component {
     event.preventDefault();
 
     const ob = {
-      id: this.state.user_id,
       otp: this.state.verifyCode,
       mobile_no: this.state.mobile_no,
     };
@@ -240,7 +245,10 @@ class UserDetails extends Component {
     try {
       const result = await axios.post(
         config.SERVER_URL + `/api/verifymobile`,
-        ob
+        ob,
+        {
+          headers: authHeader(),
+        }
       );
       console.log("result", result.data.message);
 
@@ -275,28 +283,23 @@ class UserDetails extends Component {
       dangerMode: true,
     }).then(async function (isConfirm) {
       if (isConfirm) {
-        localStorage.setItem("DD", 1);
-        let confirmation = localStorage.getItem("DD");
+        that.setState({
+          image: that.state.image.replace(config.SERVER_URL + "/", ""),
+          identity: that.state.identity.replace(config.SERVER_URL + "/", ""),
+        });
+        const update = await axios.put(
+          config.SERVER_URL + `/api/user/${that.userDet.id}/profile`,
+          that.state
+        );
 
-        if (confirmation === 1) {
-          that.setState({
-            image: that.state.image.replace(config.SERVER_URL + "/", ""),
-            identity: that.state.identity.replace(config.SERVER_URL + "/", ""),
-          });
-          const update = await axios.put(
-            config.SERVER_URL + `/api/user/${that.userDet.id}/profile`,
-            that.state
-          );
-
-          that.setState({
-            image: config.SERVER_URL + "/" + update.data.data.image,
-            identity: config.SERVER_URL + "/" + update.data.data.identity,
-          });
-          // console.log("::::::: After Upload ::::::", update)
-          swal("Updated!", "Your Profile Has Been Update!", "success");
-          localStorage.removeItem("DD");
-          that.componentDidMount();
-        }
+        that.setState({
+          image: config.SERVER_URL + "/" + update.data.data.image,
+          identity: config.SERVER_URL + "/" + update.data.data.identity,
+        });
+        // console.log("::::::: After Upload ::::::", update)
+        swal("Updated!", "Your Profile Has Been Update!", "success");
+        localStorage.removeItem("DD");
+        that.componentDidMount();
       }
     });
   }
@@ -306,10 +309,8 @@ class UserDetails extends Component {
 
     return (
       <>
-        {" "}
         {this.state.isPending ? (
           <div className="text-center">
-            {" "}
             <CircularProgress color="success" />
           </div>
         ) : (
@@ -317,7 +318,7 @@ class UserDetails extends Component {
             <Form>
               <div className="form-row">
                 <div className="form-group col cust-barProg">
-                  {/* <p> profile complition </p> */}
+                  <h4> Profile Status </h4>
                   <Progress
                     profile_completion={this.state.profile_completion}
                   />
@@ -337,6 +338,19 @@ class UserDetails extends Component {
                             </Form.Field> */}
                 </div>
               </div>
+              {this.state.profile_completion_message?.length > 0 && (
+                <div>
+                  <p>
+                    <b>
+                      Complete Your Profile: You need to fulfill the following
+                      details to complete your profile.
+                    </b>
+                  </p>
+                </div>
+              )}
+              {this.state.profile_completion_message.map((message) => {
+                return <div className="text-danger">{message}</div>;
+              })}
               <span className="text-danger">{this.state.error}</span>
               <div className="form-row ">
                 <div
@@ -390,7 +404,6 @@ class UserDetails extends Component {
                   </Form.Field>
                 </div>
               </div>
-
               <div className="form-row">
                 <div className="form-group col">
                   <Form.Field>
@@ -416,7 +429,6 @@ class UserDetails extends Component {
                   </Form.Field>
                 </div>
               </div>
-
               <div className="form-row">
                 <div className="form-group col-md-6">
                   <Form.Field>
@@ -465,7 +477,6 @@ class UserDetails extends Component {
                   </Form.Field>
                 </div>
               </div>
-
               <div className="form-row">
                 <div className="form-group col-md-6">
                   <Form.Field>
@@ -608,7 +619,6 @@ class UserDetails extends Component {
                   </button>
                 </div>
               </div>
-
               <Form.Field>
                 <label>Address</label>
                 <div className="form-row">
@@ -737,11 +747,9 @@ class UserDetails extends Component {
                   </div>
                 </div>
               </Form.Field>
-
               <Form.Field>
                 <label>Identity Verification</label>
               </Form.Field>
-
               <div className="form-row">
                 <div className="form-group col-md-12">
                   <Form.Field>
@@ -775,7 +783,6 @@ class UserDetails extends Component {
                   </Form.Field>
                 </div>
               </div>
-
               <button
                 type="submit"
                 className="btn btn-black btn-block mt-20"

@@ -506,14 +506,28 @@ class Serviceblock extends Component {
                     </div>
                     <div className="service-text">
                       <h3 className="fs-20 f-700 mb-10">{item.username}</h3>
-                      <p className="fs-20 f-700 mb-10">
+                      {/* <p className="fs-20 f-700 mb-10">
                         {item.service_types_name}
                       </p>
                       <p className="mb-0">{item.description} </p>
                       <p className="mb-0 pt-30">
-                        {" "}
                         {`${item.price_per_hour}/hr`}
-                      </p>
+                      </p> */}
+                      <ul className="service_providers_list">
+                        <li>
+                          {item.city},{item.state}
+                        </li>
+                        <li>
+                          <span className="f-700">{item.country}</span>
+                        </li>
+                      </ul>
+                      <div>
+                        <h3 className="main-price mt-15 mb-15">
+                          <span className="sup">$</span>
+                          {item.price_per_hour}
+                          <span className="sub">/ per hour</span>
+                        </h3>
+                      </div>
                       <Rating
                         value={parseInt(item.rating)}
                         size="large"
@@ -602,14 +616,28 @@ class Serviceblock extends Component {
                             <h3 className="fs-20 f-700 mb-10">
                               {item.username}
                             </h3>
-                            <p className="fs-20 f-700 mb-10">
+                            {/* <p className="fs-20 f-700 mb-10">
                               {item.service_types_name}
                             </p>
                             <p className="mb-0">{item.description} </p>
                             <p className="mb-0 pt-30">
-                              {" "}
                               {`${item.price_per_hour}/hr`}
-                            </p>
+                            </p> */}
+                            <ul className="service_providers_list">
+                              <li>
+                                {item.city},{item.state}
+                              </li>
+                              <li>
+                                <span className="f-700">{item.country}</span>
+                              </li>
+                            </ul>
+                            <div>
+                              <h3 className="main-price mt-15 mb-15">
+                                <span className="sup">$</span>
+                                {item.price_per_hour}
+                                <span className="sub">/ per hour</span>
+                              </h3>
+                            </div>
                             <Rating
                               value={parseInt(item.rating)}
                               size="large"

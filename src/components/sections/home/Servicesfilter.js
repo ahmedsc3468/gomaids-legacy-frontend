@@ -129,7 +129,7 @@ class Service extends Component {
           //   console.log("Longitude is :", position.coords.longitude);
         },
         function errorCallback(error) {
-          console.log(error);
+          // console.log(error);
           navigator.permissions
             .query({ name: "geolocation" })
             .then(function (result) {
@@ -154,7 +154,7 @@ class Service extends Component {
         }
       );
     } else {
-      console.log("Not Available");
+      // console.log("Not Available");
     }
 
     // navigator.geolocation.getCurrentPosition(function(position) {
@@ -189,6 +189,8 @@ class Service extends Component {
       this.setState({
         nearserviceProviders: near_services_provider.data.data.data,
       });
+      console.log(this.state.serviceProviders);
+      console.log(this.state.nearserviceProviders);
       //    console.log("::: TEST 64::", services_provider)
       // if (near_services_provider.data.data.data.length > 0) {
       //   for (let i = 0; i < near_services_provider.data.data.data.length; i++) {
@@ -337,12 +339,7 @@ class Service extends Component {
       // owlLength1000 = this.state?.serviceProviders?.length < 4 ? this.state?.serviceProviders?.length : 3
       // owlLength700 = this.state?.serviceProviders?.length < 3 ? this.state?.serviceProviders?.length : 2
     }
-    console.log("service Providers", this.state?.serviceProviders);
-    console.log("service Block", this.props?.serviceblock);
-    console.log("nearby Service provier", this.state.nearserviceProviders);
-    console.log("loop1000", loop1000);
-    console.log("loop700", loop700);
-    console.log("loop0", loop0);
+    console.log(this.props?.serviceblock);
     const options = {
       loop: loop1000,
       items: owlLength1000,
@@ -476,8 +473,7 @@ class Service extends Component {
                   >
                     {this.props.serviceblock.length > 0 ? (
                       this.props.serviceblock.map((item, i) => (
-                        <div key={i} className="service-2-each shadow-2 mb-50">
-                          <div>{i}</div>
+                        <div className="service-2-each shadow-2 mb-50" key={i}>
                           <div className="service-each shadow-2 mb-30 transition-4 text-center">
                             <Link
                               to={`/service-details/${item.id}`}
@@ -511,7 +507,14 @@ class Service extends Component {
                                     }}
                                   ></i>
                                 </span>
-                                <div className="mt-5">
+                                <div>
+                                  <h3 className="main-price mt-15 mb-15">
+                                    <span className="sup">$</span>
+                                    {parseInt(item.prize)}
+                                    <span className="sub">/ per hour</span>
+                                  </h3>
+                                </div>
+                                <div className="mt-2">
                                   <Rating
                                     value={parseInt(item.rating)}
                                     size="large"
@@ -526,9 +529,7 @@ class Service extends Component {
                       ))
                     ) : this?.state?.nearserviceProviders?.length > 0 ? (
                       this?.state?.nearserviceProviders?.map((item, i) => (
-                        <div key={i} className="service-2-each shadow-2 mb-50">
-                          <div>{i}</div>
-
+                        <div className="service-2-each shadow-2 mb-50" key={i}>
                           <div className="service-each shadow-2 mb-30 transition-4 text-center">
                             <Link
                               to={`/service-details/${item.service_provider_id}`}
@@ -552,18 +553,37 @@ class Service extends Component {
                                 </h3>
                                 {/* {console.log("item:", item)} */}
 
-                                <span className="mb-0 mt-5">
-                                  {item.service_types_name}
-                                  <i
-                                    className="fa fa-solid fa-tags"
-                                    style={{
-                                      marginLeft: "5px",
-                                      marginRight: "5px",
-                                      color: "#102043",
-                                    }}
-                                  ></i>
-                                </span>
-                                <div className="mt-5">
+                                <ul className="service_providers_list">
+                                  {/* <li>
+                                        <span className="mb-0 mt-5">
+                                          {item.service_types_name}
+                                          <i
+                                            className="fa fa-solid fa-tags"
+                                            style={{
+                                              marginLeft: "5px",
+                                              marginRight: "5px",
+                                              color: "#102043",
+                                            }}
+                                          ></i>
+                                        </span>
+                                      </li> */}
+                                  <li>
+                                    {item.city},{item.state}
+                                  </li>
+                                  <li>
+                                    <span className="f-700">
+                                      {item.country}
+                                    </span>
+                                  </li>
+                                </ul>
+                                <div>
+                                  <h3 className="main-price mt-15 mb-15">
+                                    <span className="sup">$</span>
+                                    {item.price_per_hour}
+                                    <span className="sub">/ per hour</span>
+                                  </h3>
+                                </div>
+                                <div className="mt-2">
                                   <Rating
                                     value={parseInt(item.rating)}
                                     size="large"
@@ -582,7 +602,7 @@ class Service extends Component {
                   </OwlCarousel>
                 </div>
               </div>
-              <div className="container mt-100">
+              <div className="container" style={{ marginTop: "250px" }}>
                 <div className="row mb-40 align-items-end">
                   <div className="col-lg-9 col-md-12 text-center text-lg-left">
                     <h1>Top Rated Service Providers</h1>
@@ -644,7 +664,14 @@ class Service extends Component {
                                         }}
                                       ></i>
                                     </span>
-                                    <div className="mt-5">
+                                    <div>
+                                      <h3 className="main-price mt-15 mb-15">
+                                        <span className="sup">$</span>
+                                        {parseInt(item.prize)}
+                                        <span className="sub">/ per hour</span>
+                                      </h3>
+                                    </div>
+                                    <div className="mt-2">
                                       <Rating
                                         value={parseInt(item.rating)}
                                         size="large"
@@ -684,20 +711,25 @@ class Service extends Component {
                                       {item.fname !== undefined &&
                                         item.username}
                                     </h3>
-                                    {/* {console.log("item:", item)} */}
 
-                                    <span className="mb-0 mt-5">
-                                      {item.service_types_name}
-                                      <i
-                                        className="fa fa-solid fa-tags"
-                                        style={{
-                                          marginLeft: "5px",
-                                          marginRight: "5px",
-                                          color: "#102043",
-                                        }}
-                                      ></i>
-                                    </span>
-                                    <div className="mt-5">
+                                    <ul className="service_providers_list">
+                                      <li>
+                                        {item.city},{item.state}
+                                      </li>
+                                      <li>
+                                        <span className="f-700">
+                                          {item.country}
+                                        </span>
+                                      </li>
+                                    </ul>
+                                    <div>
+                                      <h3 className="main-price mt-15 mb-15">
+                                        <span className="sup">$</span>
+                                        {item.price_per_hour}
+                                        <span className="sub">/ per hour</span>
+                                      </h3>
+                                    </div>
+                                    <div className="mt-2">
                                       <Rating
                                         value={parseInt(item.rating)}
                                         size="large"

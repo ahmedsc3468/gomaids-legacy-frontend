@@ -14,18 +14,21 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Joi from "joi-browser";
 class Contactdetail extends Contacthelper {
-  // objectSchema = Joi.object({
-  //     label: Joi.string().required().label("Service").required(),
-  //     value: Joi.number().required().label("Service").required()
-  // }).required()
+  objectSchema = Joi.object({
+    label: Joi.string().required().label("Service").required(),
+    value: Joi.number().required().label("Service").required(),
+  }).required();
 
-  // schema = {
-  //     name: Joi.string().required().label("Name"),
-  //     email: Joi.string().required().label("Email"),
-  //     mobile_no: Joi.string().required().label("Phone No"),
-  //     message: Joi.string().required().label("Message"),
-  //     service_type_id: Joi.required().label("Service Type"),
-  // };
+  schema = {
+    name: Joi.string().required().label("Name"),
+    email: Joi.string().email().required().label("Email"),
+    mobile_no: Joi.number().required().label("Phone No"),
+    city: Joi.string().required().label("City"),
+    language: Joi.string().required().label("Language"),
+    work_experience: Joi.string().required().label("Work Expierence"),
+    message: Joi.string().required().label("Message"),
+    service_type_id: Joi.required().label("Field of Experience"),
+  };
 
   _isMounted = false;
   constructor(props) {
@@ -38,38 +41,39 @@ class Contactdetail extends Contacthelper {
       name: "",
       email: "",
       mobile_no: "",
+      city: "",
+      language: "",
+      work_experience: "",
       message: "",
-      status: 0,
       errors: "",
       loader: false,
     };
   }
 
-  // validate = () => {
-  //     let obj = {
-  //         name: this.state.name,
-  //         email: this.state.email,
-  //         mobile_no: this.state.mobile_no,
-  //         message: this.state.message,
-  //         service_type_id: this.state.service_type_id,
-  //     }
-  //     const { error } = Joi.validate(
-  //         obj,
-  //         this.schema,
-  //         {
-  //             abortEarly: false,
-  //         }
-  //     );
-  //     if (!error) return null;
-  //     let errors = {};
-  //     if (error) {
-  //         for (let item of error.details) {
-  //             errors[item.path] = item.message;
-  //         }
-  //     }
+  validate = () => {
+    let obj = {
+      name: this.state.name,
+      email: this.state.email,
+      mobile_no: this.state.mobile_no,
+      city: this.state.city,
+      language: this.state.language,
+      work_experience: this.state.work_experience,
+      message: this.state.message,
+      service_type_id: this.state.service_type_id,
+    };
+    const { error } = Joi.validate(obj, this.schema, {
+      abortEarly: false,
+    });
+    if (!error) return null;
+    let errors = {};
+    if (error) {
+      for (let item of error.details) {
+        errors[item.path] = item.message;
+      }
+    }
 
-  //     return Object.keys(errors).length === 0 ? null : errors;
-  // };
+    return Object.keys(errors).length === 0 ? null : errors;
+  };
 
   validateProperty = ({ value, name }) => {
     let dataProperty = { [name]: value };
@@ -88,6 +92,7 @@ class Contactdetail extends Contacthelper {
         headers: authHeader(),
       }
     );
+    console.log(services_type.data.data);
     this.setState({ services_type: services_type.data.data });
     // console.log("SERVICE TYPE", services_type.data.data)
   }
@@ -109,6 +114,9 @@ class Contactdetail extends Contacthelper {
       name: "",
       mobile_no: "",
       email: "",
+      city: "",
+      language: "",
+      work_experience: "",
       service_type_id: "",
       message: "",
     });
@@ -117,12 +125,12 @@ class Contactdetail extends Contacthelper {
   async submit(e) {
     e.preventDefault();
 
-    // let errors = this.validate();
-    // if (errors) {
-    //     // console.log(errors)
-    //     this.setState({ errors });
-    //     return;
-    // }
+    let errors = this.validate();
+    if (errors) {
+      // console.log(errors)
+      this.setState({ errors });
+      return;
+    }
 
     this.setState({
       loader: true,
@@ -130,17 +138,21 @@ class Contactdetail extends Contacthelper {
     });
 
     const tempData = {
-      name: this.state.name,
+      full_name: this.state.name,
       email: this.state.email,
-      mobile_no: this.state.mobile_no,
-      service_type_id: parseInt(this.state.service_type_id),
-      status: this.state.status,
+      phone_number: this.state.mobile_no,
+      service: this.state.service_type_id,
+      field: this.state.service_type_id,
+      location: this.state.city,
+      languages: this.state.language,
+      experience: this.state.work_experience,
       message: this.state.message,
     };
 
     try {
+      console.log(this.state);
       const storeContactForm = await axios.post(
-        config.SERVER_URL + `/api/contactdetail`,
+        config.SERVER_URL + `/api/partnerwithus`,
         tempData,
         {
           headers: authHeader(),
@@ -152,7 +164,7 @@ class Contactdetail extends Contacthelper {
       this.resetForm();
       swal(
         "SuccessFull!",
-        "Your Request Has Been Sent SuccessFully!",
+        "Your Form Has Been Submitted SuccessFully!",
         "success"
       );
     } catch (errors) {
@@ -249,16 +261,11 @@ class Contactdetail extends Contacthelper {
                           required
                         />
                         <i className="far fa-user transform-v-center" />
-                        {/* {
-                                                    this.state.errors.name
-                                                    &&
-                                                    <span className="text-danger">
-                                                        {
-                                                            this.state.errors.name
-
-                                                        }
-                                                    </span>
-                                                } */}
+                        {this.state.errors.name && (
+                          <span className="text-danger">
+                            {this.state.errors.name}
+                          </span>
+                        )}
                       </div>
                     </div>
                     <div className="col-lg-6">
@@ -273,16 +280,11 @@ class Contactdetail extends Contacthelper {
                           required
                         />
                         <i className="far fa-envelope transform-v-center" />
-                        {/* {
-                                                    this.state.errors.email
-                                                    &&
-                                                    <span className="text-danger">
-                                                        {
-                                                            this.state.errors.email
-
-                                                        }
-                                                    </span>
-                                                } */}
+                        {this.state.errors.email && (
+                          <span className="text-danger">
+                            {this.state.errors.email}
+                          </span>
+                        )}
                       </div>
                     </div>
                     <div className="col-lg-6">
@@ -298,34 +300,13 @@ class Contactdetail extends Contacthelper {
                           required
                         />
                         <i className="fas fa-phone transform-v-center" />
-                        {/* {
-                                                    this.state.errors.mobile_no
-                                                    &&
-                                                    <span className="text-danger">
-                                                        {
-                                                            this.state.errors.mobile_no
-
-                                                        }
-                                                    </span>
-                                                } */}
+                        {this.state.errors.mobile_no && (
+                          <span className="text-danger">
+                            {this.state.errors.mobile_no}
+                          </span>
+                        )}
                       </div>
                     </div>
-                    {/* <div className="col-lg-6">
-                                            <div className="form-group relative">
-                                                <label for="service_type_id"><h5>Search by Category</h5></label>
-                                                <select className="form-control input-white select-nice mb-xs-15 step-two" name='service_type_id' id='service_type_id' onChange={(e) => { this.setState({ service_type_id: e.target.value }) }} required>
-                                                    <option value=''>Select Service</option>
-                                                    {this.state.services_type.map((value) => {
-                                                        return (
-                                                            <option value={value.id} key={value.id}>
-                                                                {value.name}
-                                                            </option>
-                                                        )
-                                                    }
-                                                    )}
-                                                </select>
-                                            </div>
-                                        </div> */}
 
                     <div className="col-lg-6">
                       <div className="form-group relative">
@@ -337,35 +318,22 @@ class Contactdetail extends Contacthelper {
                           onChange={this.handleInputChange}
                           required
                         >
-                          <option value="">Select Service</option>
+                          <option value="">Field of Experience</option>
                           {this.state.services_type.map((value) => {
                             return (
-                              <option value={value.id} key={value.id}>
+                              <option value={value.name} key={value.id}>
                                 {value.name}
                               </option>
                             );
                           })}
                         </select>
-                        {/* {
-                                                    this.state.errors.service_type_id &&
-                                                    <span className="text-danger">
-                                                        {
-                                                            this.state.errors.service_type_id
-                                                        }
-                                                    </span>
-                                                } */}
+                        {this.state.errors.service_type_id && (
+                          <span className="text-danger">
+                            {this.state.errors.service_type_id}
+                          </span>
+                        )}
                       </div>
                     </div>
-                    {/* <div className="col-lg-6">
-                                            <div className="form-group relative">
-                                                <select className="form-control input-white select-nice mb-xs-15" name="subject" value={this.state.subject} onChange={this.onSubjectChange} required>
-                                                    <option>Select Your Service</option>
-                                                    <option>Home Cleaning</option>
-                                                    <option>Office Cleaning</option>
-                                                    <option>Carpet Cleaning</option>
-                                                </select>
-                                            </div>
-                                        </div> */}
                     <div className="col-lg-6">
                       <div className="form-group relative">
                         <input
@@ -373,11 +341,16 @@ class Contactdetail extends Contacthelper {
                           className="form-control input-white"
                           placeholder="Current Location (City)"
                           name="city"
-                          // value={this.state.name}
-                          // onChange={this.handleInputChange}
+                          value={this.state.city}
+                          onChange={this.handleInputChange}
                           required
                         />
                         <i className="fas fa-map-marker-alt transform-v-center" />
+                        {this.state.errors.city && (
+                          <span className="text-danger">
+                            {this.state.errors.city}
+                          </span>
+                        )}
                       </div>
                     </div>
                     <div className="col-lg-6">
@@ -386,43 +359,37 @@ class Contactdetail extends Contacthelper {
                           type="text"
                           className="form-control input-white"
                           placeholder="Languages Known"
-                          name="knownlanguages"
-                          // value={this.state.name}
-                          // onChange={this.handleInputChange}
+                          name="language"
+                          value={this.state.language}
+                          onChange={this.handleInputChange}
                           required
                         />
+                        {this.state.errors.language && (
+                          <span className="text-danger">
+                            {this.state.errors.language}
+                          </span>
+                        )}
                       </div>
                     </div>
-                    <div className="col-lg-6">
+                    <div className="col-lg-12">
                       <div className="form-group relative">
                         <input
                           type="number"
                           className="form-control input-white"
                           placeholder="Total Work Experience (in Years)"
-                          name="experience"
-                          // value={this.state.name}
-                          // onChange={this.handleInputChange}
+                          name="work_experience"
+                          value={this.state.work_experience}
+                          onChange={this.handleInputChange}
                           required
                         />
+                        {this.state.errors.work_experience && (
+                          <span className="text-danger">
+                            {this.state.errors.work_experience}
+                          </span>
+                        )}
                       </div>
                     </div>
 
-                    <div className="col-lg-6">
-                      <div className="form-group relative">
-                        <select
-                          className="form-control input-white select-nice mb-xs-15"
-                          name="subject"
-                          value={this.state.subject}
-                          onChange={this.onSubjectChange}
-                          required
-                        >
-                          <option>Field of Experience</option>
-                          <option>Maid</option>
-                          <option>Cleaner</option>
-                          <option>Other</option>
-                        </select>
-                      </div>
-                    </div>
                     <div className="col-lg-12">
                       <div className="form-group relative">
                         <textarea
@@ -435,16 +402,11 @@ class Contactdetail extends Contacthelper {
                           onChange={this.handleInputChange}
                           required
                         />
-                        {/* {
-                                                    this.state.errors.message
-                                                    &&
-                                                    <span className="text-danger">
-                                                        {
-                                                            this.state.errors.message
-
-                                                        }
-                                                    </span>
-                                                } */}
+                        {this.state.errors.message && (
+                          <span className="text-danger">
+                            {this.state.errors.message}
+                          </span>
+                        )}
                       </div>
                     </div>
 

@@ -18,7 +18,6 @@ class EmailVerify extends Component {
     label: Joi.string().required().label("Service").required(),
     value: Joi.number().required().label("Service").required(),
   }).required();
-
   schema = {
     email: Joi.string().required().label("Email"),
     otp: Joi.string().required().label("Otp"),
@@ -36,6 +35,7 @@ class EmailVerify extends Component {
       otp: "",
       errors: {},
       save_continue_button_disable: true,
+      userData: user,
     };
   }
 
@@ -97,7 +97,9 @@ class EmailVerify extends Component {
         code: this.state.otp,
       });
       console.log(data);
-      if (data.is_verified === 1) {
+      if (data.is_email_verified === 1) {
+        this.state.userData.is_email_verified = 1;
+        localStorage.setItem("user", JSON.stringify(this.state.userData));
         swal("SuccessFull!", "Email Verified.", "success").then(() => {
           that.history.push("/number-verification");
         });
@@ -168,7 +170,8 @@ class EmailVerify extends Component {
                 type="email"
                 placeholder="Enter your Email"
                 value={this.state.email}
-                onChange={this.onChangeTextFields}
+                // onChange={this.onChangeTextFields}
+                disabled
               />
               {this.state.errors.email && (
                 <span className="text-danger">{this.state.errors.email}</span>

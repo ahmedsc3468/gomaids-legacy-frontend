@@ -9,6 +9,7 @@ import ThankYou from "./components/sections/Hire/ThankYouOrder";
 import authHeader from "./services/auth-header";
 import EmailVerification from "./components/pages/EmailVerification";
 import config from "./config.json";
+import AuthRoute from "./components/auth/AuthRoute";
 window.Pusher = require("pusher-js");
 
 // Preloader
@@ -294,32 +295,33 @@ function App() {
             component={Galleryafterbeforetwo}
           />
           <Route exact path="/contact" component={Contact} />
-          <Route exact path="/Setupwizard" component={Setupwizard} />
-          <Route exact path="/userdashboard" component={Userdashboard} />
-          <Route exact path="/Userprofile" component={Userprofile} />
-          <Route exact path="/Useravail" component={Useravail} />
-          <Route exact path="/Userservice" component={Userservice} />
-          <Route
+          <AuthRoute exact path="/Setupwizard" component={Setupwizard} />
+
+          <AuthRoute exact path="/userdashboard" component={Userdashboard} />
+          <AuthRoute exact path="/Userprofile" component={Userprofile} />
+          <AuthRoute exact path="/Useravail" component={Useravail} />
+          <AuthRoute exact path="/Userservice" component={Userservice} />
+          <AuthRoute
             exact
             path="/order_details_:order_id?"
             component={ServiceTakerOrderDetails}
           />
-          <Route exact path="/AllOrder" component={AllOrder} />
+          <AuthRoute exact path="/AllOrder" component={AllOrder} />
 
-          <Route exact path="/wallet" component={Wallet} />
-          {/* <Route exact path="/chat" component={Chat} /> */}
-          <Route exact path="/formdetail" component={FormDetail} />
-          <Route exact path="/error" component={Error404} />
-          <Route exact path="/calendly" component={Views} />
-          <Route exact path="/hire/details" component={HireDetails} />
-          <Route exact path="/maps/location" component={ZMap} />
-          <Route exact path="/signup/login/hire" component={SignUpLogin} />
-          <Route exact path="/forgot_password" component={Forgot} />
-          <Route exact path="/order/thankyou" component={ThankYou} />
-          {/* <Route exact path="/myChat" component={MyChat} /> */}
-          <Route exact path="/payment" component={Payment} />
-          <Route exact path="/dispute" component={Dispute} />
-          <Route exact component={Error404} />
+          <AuthRoute exact path="/wallet" component={Wallet} />
+          {/* <AuthRoute exact path="/chat" component={Chat} /> */}
+          <AuthRoute exact path="/formdetail" component={FormDetail} />
+          <AuthRoute exact path="/error" component={Error404} />
+          <AuthRoute exact path="/calendly" component={Views} />
+          <AuthRoute exact path="/hire/details" component={HireDetails} />
+          <AuthRoute exact path="/maps/location" component={ZMap} />
+          <AuthRoute exact path="/signup/login/hire" component={SignUpLogin} />
+          <AuthRoute exact path="/forgot_password" component={Forgot} />
+          <AuthRoute exact path="/order/thankyou" component={ThankYou} />
+          {/* <AuthRoute exact path="/myChat" component={MyChat} /> */}
+          <AuthRoute exact path="/payment" component={Payment} />
+          <AuthRoute exact path="/dispute" component={Dispute} />
+          <AuthRoute exact component={Error404} />
         </Switch>
       </Suspense>
     </Router>

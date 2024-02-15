@@ -39,6 +39,7 @@ class NumberVerify extends Component {
       errors: {},
       save_continue_button_disable: true,
       checkOTP: "",
+      userData: user,
     };
   }
 
@@ -104,8 +105,11 @@ class NumberVerify extends Component {
         },
         header
       );
-      console.log(data.data);
+      console.log(data);
       if (data.data.success === true) {
+        this.state.userData.is_mobile_verified = 1;
+        this.state.userData.is_verified = 1;
+        localStorage.setItem("user", JSON.stringify(this.state.userData));
         swal("SuccessFull!", "Phone Number Verified", "success").then(() => {
           that.history.push("/Setupwizard");
         });

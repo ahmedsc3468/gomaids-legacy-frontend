@@ -2,6 +2,7 @@
 
 .youtube-carousel-container {
   width: 100%; /* Adjust the width as needed */
+  max-width: 100%;
   margin: auto;
 }
 
@@ -56,5 +57,24 @@
 .custom-next:hover {
   background-color: red;
   color: #555;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+.youtube-video {
+  width: 450px;
+}
+@media (min-width: 768px) {
+  .youtube-video-container {
+    width: 80%; /* Set the desired width for screens wider than 768px */
+  }
+}
+
+@media (min-width: 1024px) {
+  .youtube-video-container {
+    width: 150%; /* Set the desired width for screens wider than 1024px */
+  }
+  .youtube-video {
+    width: 5000px;
+  }
 }

@@ -19,7 +19,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 import Select from "react-select";
-
+import { withRouter } from 'react-router-dom';
 <script
   async
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM&callback=initMap"
@@ -39,6 +39,7 @@ const AnyReactComponent = ({ img_src }) => (
 class Serviceblock extends Component {
   _isMounted = false;
   constructor(props) {
+
     let user = authService.getCurrentUser();
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -270,6 +271,8 @@ class Serviceblock extends Component {
   };
 
   render() {
+    const { city } = this.props.location.state;
+    console.log("city",city);
     const apiIsLoaded = (map, maps) => {
       circle = new maps.Circle({
         strokeColor: "#FF0000",
@@ -705,4 +708,4 @@ class Serviceblock extends Component {
   }
 }
 
-export default Serviceblock;
+export default withRouter(Serviceblock);

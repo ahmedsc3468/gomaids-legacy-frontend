@@ -179,7 +179,7 @@ class Service extends Component {
           headers: authHeader(),
         });
         
-    
+        console.log("near_services_provider",near_services_provider.data.data.data);
           if (near_services_provider.data.data.data.length > 0) {
    
             this.setState({
@@ -371,63 +371,7 @@ class Service extends Component {
                     className="owl-carousel service-slider"
                     style={{ marginTop: "20px" }}
                   >
-                    {this.props.serviceblock.length > 0 ? (
-                      this.props.serviceblock.map((item, i) => (
-                        <div className="service-2-each shadow-2 mb-50" key={i}>
-                          <div className="service-each shadow-2 mb-30 transition-4 text-center">
-                            <Link
-                              to={`/service-details/${item.id}`}
-                              className="black"
-                            >
-                              <div className="service-icn bg-light-white flex-center">
-                                <img
-                                  style={{
-                                    borderRadius: "50px",
-                                    height: "6.5rem",
-                                    width: "15rem",
-                                  }}
-                                  src={`${item.icon}`}
-                                  alt=""
-                                />
-                              </div>
-
-                              <div className="service-text">
-                                <h3 className="fs-20 f-700 mb-10">
-                                  {item.title}
-                                </h3>
-
-                                <span className="mb-0 mt-5">
-                                  {item.text}
-                                  <i
-                                    className="fa fa-solid fa-tags"
-                                    style={{
-                                      marginLeft: "5px",
-                                      marginRight: "5px",
-                                      color: "#102043",
-                                    }}
-                                  ></i>
-                                </span>
-                                <div>
-                                  <h3 className="main-price mt-15 mb-15">
-                                    <span className="sup">$</span>
-                                    {parseInt(item.prize)}
-                                    <span className="sub">/ per hour</span>
-                                  </h3>
-                                </div>
-                                <div className="mt-2">
-                                  <Rating
-                                    value={parseInt(item.rating)}
-                                    size="large"
-                                    precision={0.5}
-                                    readOnly
-                                  />
-                                </div>
-                              </div>
-                            </Link>
-                          </div>
-                        </div>
-                      ))
-                    ) : this?.state?.nearserviceProviders?.length > 0 ? (
+                    {this?.state?.nearserviceProviders?.length > 0 ? (
                       this?.state?.nearserviceProviders?.map((item, i) => (
                         <div className="service-2-each shadow-2 mb-50" key={i}>
                           <div className="service-each shadow-2 mb-30 transition-4 text-center">
@@ -495,9 +439,66 @@ class Service extends Component {
                           </div>
                         </div>
                       ))
-                    ) : (
+                    ):this.props.serviceblock.length > 0 ? (
+                      this.props.serviceblock.map((item, i) => (
+                        <div className="service-2-each shadow-2 mb-50" key={i}>
+                          <div className="service-each shadow-2 mb-30 transition-4 text-center">
+                            <Link
+                              to={`/service-details/${item.id}`}
+                              className="black"
+                            >
+                              <div className="service-icn bg-light-white flex-center">
+                                <img
+                                  style={{
+                                    borderRadius: "50px",
+                                    height: "6.5rem",
+                                    width: "15rem",
+                                  }}
+                                  src={`${item.icon}`}
+                                  alt=""
+                                />
+                              </div>
+
+                              <div className="service-text">
+                                <h3 className="fs-20 f-700 mb-10">
+                                  {item.title}
+                                </h3>
+
+                                <span className="mb-0 mt-5">
+                                  {item.text}
+                                  <i
+                                    className="fa fa-solid fa-tags"
+                                    style={{
+                                      marginLeft: "5px",
+                                      marginRight: "5px",
+                                      color: "#102043",
+                                    }}
+                                  ></i>
+                                </span>
+                                <div>
+                                  <h3 className="main-price mt-15 mb-15">
+                                    <span className="sup">$</span>
+                                    {parseInt(item.prize)}
+                                    <span className="sub">/ per hour</span>
+                                  </h3>
+                                </div>
+                                <div className="mt-2">
+                                  <Rating
+                                    value={parseInt(item.rating)}
+                                    size="large"
+                                    precision={0.5}
+                                    readOnly
+                                  />
+                                </div>
+                              </div>
+                            </Link>
+                          </div>
+                        </div>
+                      ))
+                    )  : (
                       <div></div>
                     )}
+                    
                   </OwlCarousel>
                 </div>
               </div>

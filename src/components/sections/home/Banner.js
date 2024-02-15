@@ -9,7 +9,7 @@ import axios from "axios";
 import bannerbg from "../../../assets/img/banner/banner-2.jpg";
 import authService from "../../../services/auth.service";
 import Select from "react-select";
-
+import { withRouter } from 'react-router-dom';
 class Banner extends Component {
   _isMounted = false;
   constructor(props) {
@@ -146,12 +146,14 @@ class Banner extends Component {
                         {/* <input type="text" className="form-control input-white shadow-2 ml-15 ml-xs-00 step-three" placeholder="Enter Keyword" /> */}
                         <button
                           type="submit"
-                          onClick={(event) =>
-                            this.props.findServiceProviders(
-                              event,
-                              this.state.city_id,
-                              this.state.service_type_id
-                            )
+                          onClick={(event) =>{
+                            this.props.history.push('/find-a-services',{ city: this.state.city_id });
+                          }
+                            // this.props.findServiceProviders(
+                            //   event,
+                            //   this.state.city_id,
+                            //   this.state.service_type_id
+                            // )
                           }
                           className="btn btn-black ml-15 ml-xs-00 mt-xs-15 step-four"
                         >
@@ -170,4 +172,4 @@ class Banner extends Component {
   }
 }
 
-export default Banner;
+export default withRouter(Banner);

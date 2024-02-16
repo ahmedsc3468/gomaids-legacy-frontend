@@ -85,7 +85,7 @@ class Service extends Component {
     };
     let user = AuthService.getCurrentUser();
     let that = this;
-  
+
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         function (position) {
@@ -103,7 +103,6 @@ class Service extends Component {
             ],
           });
           that.componentDidMount();
-
         },
         function errorCallback(error) {
           navigator.permissions
@@ -113,8 +112,7 @@ class Service extends Component {
               } else if (result.state === "prompt") {
               } else if (result.state === "denied") {
               }
-              result.onchange = function () {
-              };
+              result.onchange = function () {};
             });
         },
         {
@@ -152,7 +150,6 @@ class Service extends Component {
       this.setState({
         nearserviceProviders: near_services_provider.data.data.data,
       });
-     
     } catch (err) {
       console.log(err);
     }
@@ -164,7 +161,7 @@ class Service extends Component {
       inputRad: e.target.value * 1000,
     });
   };
-  changeRadius = async() => {
+  changeRadius = async () => {
     let that = this;
     circle.setRadius(Number(this.state.inputRad));
     const apiCaldata = {
@@ -174,34 +171,34 @@ class Service extends Component {
     };
 
     try {
-      const near_services_provider = await axios
-        .post(config.SERVER_URL + `/api/nearserviceproviders`, apiCaldata, {
+      const near_services_provider = await axios.post(
+        config.SERVER_URL + `/api/nearserviceproviders`,
+        apiCaldata,
+        {
           headers: authHeader(),
+        }
+      );
+
+      console.log(
+        "near_services_provider",
+        near_services_provider.data.data.data
+      );
+      if (near_services_provider.data.data.data.length > 0) {
+        this.setState({
+          nearserviceProviders: near_services_provider.data.data.data,
         });
-        
-        console.log("near_services_provider",near_services_provider.data.data.data);
-          if (near_services_provider.data.data.data.length > 0) {
-   
-            this.setState({
-              nearserviceProviders: near_services_provider.data.data.data,
-            });
-            window.scrollTo(0, 800);
-            swal("Result Found!", "Your Result has been found!", "success");
-            localStorage.removeItem("searchservice");
-          } else {
-            that.setState({
-              nearserviceProviders: [],
-            });
-            window.scrollTo(0, 0);
-            swal(
-              "No Result Found!",
-              "No provider found in this radius!",
-              "failed"
-            );
-          }
-          //"dlfjldskjf"
-          // swal("Result Not Found!", "Result not found!", "warning");
-     
+        window.scrollTo(0, 800);
+        swal("Result Found!", "Your Result has been found!", "success");
+        localStorage.removeItem("searchservice");
+      } else {
+        that.setState({
+          nearserviceProviders: [],
+        });
+        window.scrollTo(0, 0);
+        swal("No Result Found!", "No provider found in this radius!", "failed");
+      }
+      //"dlfjldskjf"
+      // swal("Result Not Found!", "Result not found!", "warning");
     } catch (err) {
       console.log(err);
     }
@@ -296,7 +293,7 @@ class Service extends Component {
                   className="row justify-content-center"
                   style={{ margin: "10px" }}
                 >
-                  <div className="col-sm-2 mb-3">
+                  <div className="col-lg-2 mb-3">
                     <input
                       placeholder="Enter radius"
                       type="number"
@@ -308,7 +305,7 @@ class Service extends Component {
                     />
                     <span className="transform-v-center homeradius">Km</span>
                   </div>
-                  <div className="col-sm-2">
+                  <div className="col-lg-2">
                     <input
                       value="Change Distance"
                       type="submit"
@@ -357,12 +354,11 @@ class Service extends Component {
                     </GoogleMapReact>
                   </div>
                 </div>
-                
+
                 <div className="row mb-40 mt-40 align-items-end">
                   <div className="col-lg-9 col-md-12 text-center text-lg-left">
                     <h3>Available Service Providers in Selected Radius:</h3>
                   </div>
-          
                 </div>
                 <div>
                   <OwlCarousel
@@ -439,7 +435,7 @@ class Service extends Component {
                           </div>
                         </div>
                       ))
-                    ):this.props.serviceblock.length > 0 ? (
+                    ) : this.props.serviceblock.length > 0 ? (
                       this.props.serviceblock.map((item, i) => (
                         <div className="service-2-each shadow-2 mb-50" key={i}>
                           <div className="service-each shadow-2 mb-30 transition-4 text-center">
@@ -495,10 +491,9 @@ class Service extends Component {
                           </div>
                         </div>
                       ))
-                    )  : (
+                    ) : (
                       <div></div>
                     )}
-                    
                   </OwlCarousel>
                 </div>
               </div>
@@ -507,7 +502,6 @@ class Service extends Component {
                   <div className="col-lg-9 col-md-12 text-center text-lg-left">
                     <h3>Top Rated Service Providers</h3>
                   </div>
-          
                 </div>
                 <div className="row">
                   <div className="col-lg-12">

@@ -173,7 +173,7 @@ class Serviceblock extends Component {
 
     let tempcit = [];
     cities.data.data.map(function (currentValue, index) {
-      tempcit.push({ value: index, label: currentValue.city });
+      tempcit.push({ value:currentValue.city, label: currentValue.city });
     });
     this.setState({ cities: tempcit });
     // this.setState({ cities: cities.data.data });
@@ -278,7 +278,6 @@ class Serviceblock extends Component {
     });
   }
   handleChange = (selectedOption) => {
-    console.log(`Option selected:`, selectedOption.label);
     this.setState({ city_name: selectedOption.label });
   };
  
@@ -295,8 +294,37 @@ class Serviceblock extends Component {
 
   handleCityChange = (selectedOption) => {
     this.setState({ city_name: selectedOption?.value });
+    this.handleGeocode( selectedOption?.value);
   };
+  handleGeocode = (city) => {
 
+    // Construct the URL for the Google Maps Geocoding API
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(city)}&key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM`;
+    
+    // Make the API request using fetch
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        if (data.results && data.results.length > 0) {
+          const { lat, lng } = data.results[0].geometry.location;
+          console.log("lat",lat);
+          console.log("lng",lng);
+         
+          this.setState({
+            markers:[{ lat, lng, img_src: "../../../assets/img/lcoation.png"}],
+            center: {
+              lat: lat,
+              lng: lng,
+            },
+            lat: lat,
+            lng: lng,
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  };
   loadOptions = async (inputValue, callback) => {
     try {
       const cities = await axios.get(config.SERVER_URL + `/api/cities?search=${inputValue}`, {

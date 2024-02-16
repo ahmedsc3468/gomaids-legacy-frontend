@@ -208,13 +208,13 @@ class Banner extends Component {
                         <button
                           type="submit"
                           onClick={(event) => {
-                            //   this.props.history.push('/find-a-services',{ city: this.state.city_id });
+                           this.props.history.push('/find-a-services',{ city: this.state.city_id });
                             // }
-                            this.props.findServiceProviders(
-                              event,
-                              this.state.city_id,
-                              this.state.service_type_id
-                            )
+                            // this.props.findServiceProviders(
+                            //   event,
+                            //   this.state.city_id,
+                            //   this.state.service_type_id
+                            // )
                           }
                           }
                           className="btn btn-black ml-15 ml-xs-00 mt-xs-15 step-four"

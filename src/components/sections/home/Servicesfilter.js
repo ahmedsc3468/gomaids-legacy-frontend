@@ -12,6 +12,7 @@ import GoogleMapReact from "google-map-react";
 import AuthService from "../../../services/auth.service";
 import img_src from "../../../assets/img/lcoation.png";
 import swal from "sweetalert";
+import { withRouter } from 'react-router-dom';
 <script
   async
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM&callback=initMap"
@@ -167,6 +168,7 @@ class Service extends Component {
   changeRadius = async() => {
     let that = this;
     circle.setRadius(Number(this.state.inputRad));
+    this.props.history.push('/find-a-services',{ radius: this.state.inputRad / 1000 });
     const apiCaldata = {
       lat: that.state.center.lat,
       lng: that.state.center.lng,
@@ -644,4 +646,4 @@ class Service extends Component {
   }
 }
 
-export default Service;
+export default  withRouter(Service);

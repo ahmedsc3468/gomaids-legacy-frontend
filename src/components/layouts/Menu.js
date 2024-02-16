@@ -91,7 +91,7 @@ const navigationmenu = [
   {
     id: 3,
     linkText: "Find a Service",
-    link: "/",
+    link: "/find-a-services",
     child: false,
     // submenu: [
     //     {
@@ -390,12 +390,12 @@ class Menu extends Component {
             ))
           : null}
         <li>
-          <a href="" className="mobileonly" hidden={userObj == null}>
+          <span className="mobileonly" hidden={userObj == null}>
             <Link to="/Userdashboard">Dashboard</Link>
-          </a>
+          </span>
         </li>
         <li>
-          <a className="mobileonly" href="" hidden={userObj == null}>
+          <span className="mobileonly" href="" hidden={userObj == null}>
             <Link
               to="/login"
               onClick={() => {
@@ -404,36 +404,19 @@ class Menu extends Component {
             >
               Logout
             </Link>
-          </a>
+          </span>
         </li>
 
         <li>
-          <a className="mobileonly" href="" hidden={userObj != null}>
+          <span className="mobileonly"  hidden={userObj != null}>
             <Link to="/login">Login</Link>
-          </a>
+          </span>
         </li>
         <li>
-          <a href="" className="mobileonly" hidden={userObj != null}>
+          <span  className="mobileonly" hidden={userObj != null}>
             <Link to="/signup">Register</Link>
-          </a>
+          </span>
         </li>
-
-        {/* <li className="has-menu"> <Link to="#">Pages<span>+</span></Link>
-                    <ul className="submenu">
-                        <li><Link to="/portfolio-col-3"><span />Portfolio 3 Column</Link>
-                        </li>
-                        <li><Link to="/portfolio-col-4"><span />Portfolio 4 Column</Link>
-                        </li>
-                        <li><Link to="/portfolio-masonry"><span />Portfolio Masonry</Link>
-                        </li>
-                        <li><Link to="/portfolio-details"><span />Portfolio Details</Link>
-                        </li>
-                        <li><Link to="/coming-soon"><span />Coming Soon</Link>
-                        </li>
-                        <li><Link to="/error"><span />Error</Link>
-                        </li>
-                    </ul>
-                </li> */}
       </ul>
     );
   }

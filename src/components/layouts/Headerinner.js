@@ -158,17 +158,6 @@ class Headerinner extends Component {
                 >
                   <div className="d-flex justify-content-center align-items-center">
                     <Menu />
-                    {/* <Link to="/contact" className="head-1-book-call ml-15">
-                      <i className="fas fa-envelope fs-15 mr-10" />
-                      info@gomaidz.com
-                    </Link> */}
-                    {/* <Link
-                                            to="/contact"
-                                            className="head-1-book-2 bg-blue ml-15 shine-btn"
-
-                                        >
-                                            Call us Now
-                                        </Link> */}
                     <div className="header-1">
                       <nav
                         className={classNames("menu-2", {
@@ -176,17 +165,6 @@ class Headerinner extends Component {
                         })}
                       >
                         <div className="d-flex justify-content-end align-items-center ml-15">
-                          {/* <span className="headerprofile">
-                            {this.state.userDetials && (
-                              // <Link to="/login"
-                              // className="head-1-book ml-15 mr-30">Login
-                              // </Link>
-                              // :
-                              <UserAccount
-                              // dontShowDashboard="true"
-                              />
-                            )}
-                          </span> */}
                           <span className="headerprofile">
                             {!this.state.userDetials ? (
                               <Link

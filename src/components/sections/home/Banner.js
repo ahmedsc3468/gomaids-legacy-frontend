@@ -10,6 +10,7 @@ import bannerbg from "../../../assets/img/banner/banner-2.jpg";
 import authService from "../../../services/auth.service";
 import Select from "react-select";
 import { withRouter } from 'react-router-dom';
+import AsyncSelect from 'react-select/async';
 class Banner extends Component {
   _isMounted = false;
   constructor(props) {
@@ -78,7 +79,47 @@ class Banner extends Component {
     console.log(`Option selected:`, selectedOption.label);
     this.setState({ city_id: selectedOption.label });
   };
+  handleCityInputChange = (newValue) => {
+    const inputValue = newValue.replace(/\W/g, '');
+    return inputValue;
+  };
 
+  handleCityChange = (selectedOption) => {
+    this.setState({ city_id: selectedOption?.value });
+  };
+
+  loadOptions = async (inputValue, callback) => {
+    try {
+      const cities = await axios.get(config.SERVER_URL + `/api/cities?search=${inputValue}`, {
+        headers: authHeader(),
+      });
+  
+      let options = cities.data.data.map(option => {
+        return {
+        value: option.city,
+        label: option.city
+      }});
+      
+      this.setState({ cities: options });
+      callback(options);
+    } catch (error) {
+      console.error('Error loading options:', error);
+      callback([]);
+    }
+  };
+    // Check if the entered value is valid for creation
+    isValidNewOption = (inputValue, selectValue, selectOptions) => {
+      if (inputValue.trim() === '') {
+        return false;
+      }
+      return !selectOptions.find(option => option.label === inputValue);
+    };
+  
+    // Create a new option based on the entered value
+    createOption = (inputValue) => ({
+      label: inputValue,
+      value: inputValue.toLowerCase().replace(/\W/g, ''),
+    });
   render() {
     return (
       <section
@@ -110,7 +151,7 @@ class Banner extends Component {
                     </h4>
                     <form action="#">
                       <div className=" d-flex flex-column flex-md-row">
-                        <Select
+                        {/* <Select
                           options={this.state.cities}
                           className="custom_Cities_selectbox"
                           placeholder={"Search City...."}
@@ -124,8 +165,28 @@ class Banner extends Component {
                               primary: "#036905",
                             },
                           })}
-                        />
-
+                        /> */}
+                         <AsyncSelect
+          cacheOptions
+          id="city"
+          className="find_service_cities"
+          classNamePrefix="find_service_cities"
+          defaultOptions={this.state.cities} 
+          loadOptions={this.loadOptions}
+          onInputChange={this.handleCityInputChange}
+          onChange={this.handleCityChange}
+          defaultInputValue={this.state.city_name}
+          placeholder="Select City...."
+          theme={(theme) => ({
+            ...theme,
+            borderRadius: 5,
+            colors: {
+              ...theme.colors,
+              primary25: "#036905",
+              primary: "transparent",
+            },
+          })}
+        ></AsyncSelect>
                         {/* <select
                           className="form-control input-white select-nice mb-xs-15 step-two"
                           id="sel1"

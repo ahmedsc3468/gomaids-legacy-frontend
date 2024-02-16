@@ -19,13 +19,14 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 import Select from "react-select";
+import AsyncSelect from 'react-select/async';
 import { withRouter } from 'react-router-dom';
-<script
-  async
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM&callback=initMap"
-></script>;
-let circle;
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-places-autocomplete';
 
+let circle;
 const AnyReactComponent = ({ img_src }) => (
   <div id="locationicons">
     <img
@@ -44,18 +45,19 @@ class Serviceblock extends Component {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleRadiusChange = this.handleRadiusChange.bind(this);
-
+    const { city , radius } = this.props.location.state || {};
     this.state = {
       cities: [],
+      
       services_type: [],
       services_providers: [],
       filter_service_provider: [],
       service_type_id: 1,
-      city_name: "",
+      city_name: city,
       services_provider: "",
       providername: "",
       price: "",
-      radius: "",
+      radius: radius,
       searchvalue: localStorage.getItem("searchservice"),
       currentUser: authService.getCurrentUser(),
       links: [],
@@ -77,12 +79,14 @@ class Serviceblock extends Component {
       lat: 49.34288,
       lng: -123.11484,
       loader: false,
+      address:''
     };
   }
 
   async componentDidMount() {
-    window.scrollTo(0, 500);
 
+    window.scrollTo(0, 500);
+    const { city , radius } = this.props.location.state || {};
     let that = this;
     var searchservice = localStorage.getItem("searchservice");
     // console.log(":::::40::::::",searchservice)
@@ -94,20 +98,27 @@ class Serviceblock extends Component {
         });
       }
       popup();
-
+      let finalRadius = "20";
+      if(radius){
+        finalRadius = radius;
+      }
+      let finalCity = "";
+      if(city){
+        finalCity = city;
+      }
       const apiCalldata = {
         name: this.state.providername,
         price: this.state.price,
-        radius: this.state.radius,
-        city: this.state.city_name,
-        service_type: this.state.searchvalue,
+        radius: this.state.radius ?? finalRadius,
+        city: this.state.city_name ?? finalCity,
+        service_type: this.state.searchvalue ?? 1,
         lng: this.state.lng,
         lat: this.state.lat,
       };
 
-      // console.log("Before Api Call", apidata)
+      console.log("Before Api Call", apiCalldata)
 
-      if (this.state.searchvalue > 0) {
+      if (this.state.searchvalue > 0 || apiCalldata.city?.length > 0 ||apiCalldata.radius?.length > 0  ) {
         try {
           const services_provider = await axios
             .post(config.SERVER_URL + `/api/searchforprovider`, apiCalldata, {
@@ -115,16 +126,16 @@ class Serviceblock extends Component {
             })
             .then(function (services_provider) {
               // console.log("::: TEST 64::", services_provider)
-              if (services_provider.data.data.length > 0) {
+              if (services_provider.data.data.data.length > 0) {
                 that.setState({
-                  filter_service_provider: services_provider.data.data,
+                  filter_service_provider: services_provider.data.data.data,
                   searchlinks: services_provider.data.data.links,
                   //   links:services_provider.data.data.links,
                   links: [],
                   linklength: "",
                 });
 
-                // swal("Result Found!", "Your Result has been found!", "success")
+                 swal("Result Found!", "Your Result has been found!", "success")
                 localStorage.removeItem("searchservice");
                 // console.log("searchlinks",this.state.searchlinks);
               }
@@ -164,7 +175,6 @@ class Serviceblock extends Component {
     cities.data.data.map(function (currentValue, index) {
       tempcit.push({ value: index, label: currentValue.city });
     });
-    console.log(tempcit);
     this.setState({ cities: tempcit });
     // this.setState({ cities: cities.data.data });
     // console.log("CITIES", cities.data.data)
@@ -191,7 +201,9 @@ class Serviceblock extends Component {
       [name]: value,
     });
   }
+  getServiceProviderData = () =>{
 
+  }
   handleRadiusChange = (event) => {
     const value = event.target.value;
     console.log("value", value);
@@ -269,10 +281,57 @@ class Serviceblock extends Component {
     console.log(`Option selected:`, selectedOption.label);
     this.setState({ city_name: selectedOption.label });
   };
+ 
+  handleSelect = address => {
+    geocodeByAddress(address)
+      .then(results => getLatLng(results[0]))
+      .then(latLng => console.log('Success', latLng))
+      .catch(error => console.error('Error', error));
+  };
+  handleCityInputChange = (newValue) => {
+    const inputValue = newValue.replace(/\W/g, '');
+    return inputValue;
+  };
 
+  handleCityChange = (selectedOption) => {
+    this.setState({ city_name: selectedOption?.value });
+  };
+
+  loadOptions = async (inputValue, callback) => {
+    try {
+      const cities = await axios.get(config.SERVER_URL + `/api/cities?search=${inputValue}`, {
+        headers: authHeader(),
+      });
+  
+      let options = cities.data.data.map(option => {
+        return {
+        value: option.city,
+        label: option.city
+      }});
+      
+      this.setState({ cities: options });
+      callback(options);
+    } catch (error) {
+      console.error('Error loading options:', error);
+      callback([]);
+    }
+  };
+    // Check if the entered value is valid for creation
+    isValidNewOption = (inputValue, selectValue, selectOptions) => {
+      if (inputValue.trim() === '') {
+        return false;
+      }
+      return !selectOptions.find(option => option.label === inputValue);
+    };
+  
+    // Create a new option based on the entered value
+    createOption = (inputValue) => ({
+      label: inputValue,
+      value: inputValue.toLowerCase().replace(/\W/g, ''),
+    });
   render() {
-    const { city } = this.props.location.state;
-    console.log("city",city);
+    
+    
     const apiIsLoaded = (map, maps) => {
       circle = new maps.Circle({
         strokeColor: "#FF0000",
@@ -294,7 +353,7 @@ class Serviceblock extends Component {
             <div className="row align-items-center mb-90">
               <div className="col-lg-6 col-md-6">
                 <div className="form-group">
-                  <label for="proivdername">
+                  <label htmlFor="proivdername">
                     <h5>Search by Name :</h5>
                   </label>
                   <input
@@ -310,7 +369,7 @@ class Serviceblock extends Component {
               </div>
               <div className="col-lg-6 col-md-6">
                 <div className="form-group">
-                  <label for="price">
+                  <label htmlFor="price">
                     <h5>Search by Hourly Rate (in CAD):</h5>
                   </label>
                   <input
@@ -327,35 +386,41 @@ class Serviceblock extends Component {
               </div>
               <div className="col-lg-6 col-md-6">
                 <div className="form-group">
-                  <label for="city">
+                  <label htmlFor="city">
                     <h5>Search by City</h5>
                   </label>
-                  {/* <select
-                    className="form-control input-white select-nice mr-15 mb-xs-15 step-one"
-                    name="city"
-                    id="city"
-                    onChange={(e) => {
-                      this.setState({ city_name: e.target.value });
-                    }}
-                  > */}
-                  {/* <option value="">Select city</option> */}
-                  {/* {this.state.cities
-                      .filter(({ city }) => city !== null)
-                      .map(({ city }, index) => {
-                        return (
-                          <option value={city} key={index}>
-                            {city}
-                          </option>
-                        );
-                      })} */}
-                  {/* </select> */}
-                  <Select
+                  <div className="find_service_cities">
+                  <AsyncSelect
+          cacheOptions
+          defaultOptions={this.state.cities} 
+          id="city"
+          className="find_service_cities"
+          classNamePrefix="find_service_cities"
+          loadOptions={this.loadOptions}
+          onInputChange={this.handleCityInputChange}
+          onChange={this.handleCityChange}
+          defaultInputValue={this.state.city_name}
+          placeholder="Select City...."
+          theme={(theme) => ({
+            ...theme,
+            borderRadius: 5,
+            colors: {
+              ...theme.colors,
+              primary25: "#036905",
+              primary: "transparent",
+            },
+          })}
+        />
+        </div>
+                  {/* <Select
                     id="city"
                     options={this.state.cities}
                     className="find_service_cities"
                     classNamePrefix="find_service_cities"
                     placeholder={"Select City...."}
                     onChange={this.handleChange}
+                    defaultValue={this.state.city_name}
+                    defaultInputValue={this.state.city_name}
                     theme={(theme) => ({
                       ...theme,
                       borderRadius: 5,
@@ -365,12 +430,12 @@ class Serviceblock extends Component {
                         primary: "transparent",
                       },
                     })}
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="col-lg-6 col-md-6">
                 <div className="form-group">
-                  <label for="service_type_id">
+                  <label htmlFor="service_type_id">
                     <h5>Category</h5>
                   </label>
                   <select
@@ -395,7 +460,7 @@ class Serviceblock extends Component {
               </div>
               <div className="col-lg-6 col-md-6">
                 <div className="form-group">
-                  <label for="price">
+                  <label htmlFor="price">
                     <h5>Search by Radius Near You:</h5>
                   </label>
                   <input
@@ -441,6 +506,7 @@ class Serviceblock extends Component {
               {this.state.markers.map((marker, i) => {
                 return (
                   <AnyReactComponent
+                  key={i}
                     lat={marker.lat}
                     lng={marker.lng}
                     img_src={marker.img_src}
@@ -562,6 +628,7 @@ class Serviceblock extends Component {
 
                     return (
                       <Button
+                        key={index}
                         className="buttongroudp"
                         hidden={
                           index < 1 ||
@@ -686,6 +753,7 @@ class Serviceblock extends Component {
 
                   return (
                     <Button
+                      key={index}
                       className="buttongroudp"
                       hidden={index < 1 || index == this.state.linklength - 1}
                       onClick={() => this.handlepage(value.url)}

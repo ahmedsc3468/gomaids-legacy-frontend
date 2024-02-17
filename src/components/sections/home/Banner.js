@@ -249,7 +249,7 @@ class Banner extends Component {
                         <button
                           type="submit"
                           onClick={(event) => {
-                           this.props.history.push('/find-a-services',{ city: this.state.city_id });
+                           this.props.history.push('/find-a-services',{ city: this.state.city_id,plng:this.props.lng,plat:this.props.lat });
                             // }
                             // this.props.findServiceProviders(
                             //   event,

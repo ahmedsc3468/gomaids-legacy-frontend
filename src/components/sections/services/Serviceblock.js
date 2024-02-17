@@ -45,7 +45,9 @@ class Serviceblock extends Component {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleRadiusChange = this.handleRadiusChange.bind(this);
-    const { city , radius } = this.props.location.state || {};
+    const { city , radius,plat,plng } = this.props.location.state || {};
+    console.log("plang",plng);
+    console.log("plat",plat);
     this.state = {
       cities: [],
       
@@ -65,19 +67,19 @@ class Serviceblock extends Component {
       searchlinklength: [],
       linklength: "",
       center: {
-        lat: parseFloat(user?.lat) || 49.34288,
-        lng: parseFloat(user?.lng) || -123.11484,
+        lat: plat || parseFloat(user?.lat) || 49.34288,
+        lng: plng || parseFloat(user?.lng) || -123.11484,
       },
       inputRad: 20000,
       markers: [
         {
-          lat: user?.lat || 49.34288,
-          lng: user?.lng || -123.11484,
+          lat: plat || user?.lat || 49.34288,
+          lng: plng || user?.lng || -123.11484,
           img_src: "../../../assets/img/lcoation.png",
         },
       ],
-      lat: 49.34288,
-      lng: -123.11484,
+      lat: plat || 49.34288,
+      lng: plat || -123.11484,
       loader: false,
       address:''
     };

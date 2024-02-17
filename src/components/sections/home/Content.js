@@ -41,7 +41,7 @@ class Content extends Component {
       status: false,
       webTour: false,
       currentUser: authService.getCurrentUser(),
-      center: {lat: parseFloat(user.lat) || 49.34288, lng: parseFloat(user.lng) || -123.11484  },
+      center: {lat: parseFloat(user?.lat) || 49.34288, lng: parseFloat(user?.lng) || -123.11484  },
       markers: [
         {
           lat: user?.lat || 49.34288,

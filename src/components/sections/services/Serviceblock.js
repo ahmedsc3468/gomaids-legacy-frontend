@@ -46,8 +46,7 @@ class Serviceblock extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleRadiusChange = this.handleRadiusChange.bind(this);
     const { city , radius,plat,plng } = this.props.location.state || {};
-    console.log("plang",plng);
-    console.log("plat",plat);
+    
     this.state = {
       cities: [],
       

@@ -34,21 +34,16 @@ class Service extends Component {
   constructor(props) {
     let user = AuthService.getCurrentUser();
     super(props);
+   
     if (user != null && (user.lat != null || user.lng != null)) {
       this.state = {
         serviceblock: this.props.serviceblock,
         serviceProviders: [],
         nearserviceProviders: [],
-        center: { lat: parseFloat(user.lat), lng: parseFloat(user.lng) },
+        center: { lat: parseFloat(user.lat) || 49.34288, lng: parseFloat(user.lng) || -123.11484 },
         inputRad: 20000,
         currentUser: authService.getCurrentUser(),
-        markers: [
-          {
-            lat: user?.lat,
-            lng: user?.lng,
-            img_src: "../../../assets/img/lcoation.png",
-          },
-        ],
+       
       };
     } else {
       this.state = {
@@ -58,74 +53,74 @@ class Service extends Component {
         center: { lat: 49.34288, lng: -123.11484 },
         inputRad: 20000,
         currentUser: authService.getCurrentUser(),
-        markers: [],
       };
     }
   }
 
   async componentDidMount() {
-    this.setState({
-      markers: [
-        {
-          lat: 49.34288,
-          lng: -123.11484,
-          img_src: "../../../assets/img/lcoation.png",
-        },
-      ],
-    });
+    console.log("this",this.props.markers);
+    // this.setState({
+    //   markers: [
+    //     {
+    //       lat: 49.34288,
+    //       lng: -123.11484,
+    //       img_src: "../../../assets/img/lcoation.png",
+    //     },
+    //   ],
+    // });
 
-    const getlocation = () => {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        this.setState({
-          center: {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          },
-        });
-      });
-    };
-    let user = AuthService.getCurrentUser();
-    let that = this;
+    // const getlocation = () => {
+    //   navigator.geolocation.getCurrentPosition(function (position) {
+    //     this.setState({
+    //       center: {
+    //         lat: position.coords.latitude,
+    //         lng: position.coords.longitude,
+    //       },
+    //     });
+    //   });
+    // };
+    // let user = AuthService.getCurrentUser();
+    // let that = this;
 
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        function (position) {
-          that.setState({
-            center: {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            },
-            markers: [
-              {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-                img_src: "../../../assets/img/lcoation.png",
-              },
-            ],
-          });
-          that.componentDidMount();
-        },
-        function errorCallback(error) {
-          navigator.permissions
-            .query({ name: "geolocation" })
-            .then(function (result) {
-              if (result.state === "granted") {
-              } else if (result.state === "prompt") {
-              } else if (result.state === "denied") {
-              }
-              result.onchange = function () {};
-            });
-        },
-        {
-          timeout: 5000,
-        }
-      );
-    } else {
-    }
+    // if ("geolocation" in navigator) {
+    //   navigator.geolocation.getCurrentPosition(
+    //     function (position) {
+    //       that.setState({
+    //         center: {
+    //           lat: position.coords.latitude,
+    //           lng: position.coords.longitude,
+    //         },
+    //         markers: [
+    //           {
+    //             lat: position.coords.latitude,
+    //             lng: position.coords.longitude,
+    //             img_src: "../../../assets/img/lcoation.png",
+    //           },
+    //         ],
+    //       });
+    //       that.componentDidMount();
+    //     },
+    //     function errorCallback(error) {
+    //       navigator.permissions
+    //         .query({ name: "geolocation" })
+    //         .then(function (result) {
+    //           if (result.state === "granted") {
+    //           } else if (result.state === "prompt") {
+    //           } else if (result.state === "denied") {
+    //           }
+    //           result.onchange = function () {};
+    //         });
+    //     },
+    //     {
+    //       timeout: 5000,
+    //     }
+    //   );
+    // } else {
+    // }
 
     const apiCalldata = {
-      lat: that.state.center.lat,
-      lng: that.state.center.lng,
+      lat: this.props.center.lat,
+      lng: this.props.center.lng,
       radius: this.state.inputRad / 1000,
     };
     try {
@@ -337,14 +332,14 @@ class Service extends Component {
                         libraries: ["places"],
                       }}
                       defaultZoom={10}
-                      center={this.state.center}
-                      defaultCenter={this.state.center}
+                      center={this.props.center}
+                      defaultCenter={this.props.center}
                       yesIWantToUseGoogleMapApiInternals
                       onGoogleApiLoaded={({ map, maps }) =>
-                        apiIsLoaded(map, maps)
+                        apiIsLoaded(map, maps)  
                       }
                     >
-                      {this.state.markers.map((marker, i) => {
+                      {this.props.markers.map((marker, i) => {
                         return (
                           <AnyReactComponent
                             lat={marker.lat}

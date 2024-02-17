@@ -5228,3 +5228,6 @@ button.ui.button.add_feedback {
   align-items: center;
   z-index: 99;
 }
+.no-record  {
+  margin: auto;
+}

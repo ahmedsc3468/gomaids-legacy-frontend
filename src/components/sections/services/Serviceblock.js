@@ -68,7 +68,7 @@ class Serviceblock extends Component {
         lat: parseFloat(user?.lat) || 49.34288,
         lng: parseFloat(user?.lng) || -123.11484,
       },
-      inputRad: 10000,
+      inputRad: 20000,
       markers: [
         {
           lat: user?.lat || 49.34288,
@@ -116,7 +116,6 @@ class Serviceblock extends Component {
         lat: this.state.lat,
       };
 
-      console.log("Before Api Call", apiCalldata)
 
       if (this.state.searchvalue > 0 || apiCalldata.city?.length > 0 ||apiCalldata.radius?.length > 0  ) {
         try {
@@ -135,12 +134,19 @@ class Serviceblock extends Component {
                   linklength: "",
                 });
 
-                 swal("Result Found!", "Your Result has been found!", "success")
                 localStorage.removeItem("searchservice");
                 // console.log("searchlinks",this.state.searchlinks);
+              } else {
+                that.setState({
+                  filter_service_provider: [],
+                  searchlinks: [],
+                  //   links:services_provider.data.data.links,
+                  links: [],
+                  linklength: "",
+                });
               }
               //"dlfjldskjf"
-              else swal("Result Not Found!", "Result not found!", "warning");
+              
             });
         } catch (err) {
           console.log(err);
@@ -201,12 +207,9 @@ class Serviceblock extends Component {
       [name]: value,
     });
   }
-  getServiceProviderData = () =>{
 
-  }
   handleRadiusChange = (event) => {
     const value = event.target.value;
-    console.log("value", value);
     this.setState({
       radius: value,
       inputRad: value * 1000,
@@ -230,7 +233,7 @@ class Serviceblock extends Component {
     };
 
     try {
-      const services_provider = await axios
+       await axios
         .post(config.SERVER_URL + `/api/searchforprovider`, apidata, {
           headers: authHeader(),
         })
@@ -245,7 +248,14 @@ class Serviceblock extends Component {
               links: [],
               linklength: "",
             });
-          } else swal("Result Not Found!", services_provider.data.message, "warning");
+          } else {
+            that.setState({
+              filter_service_provider: [],
+              searchlinks: [],
+              links: [],
+              linklength: "",
+            });
+          };
         });
     } catch (err) {
       console.log(err);
@@ -309,9 +319,18 @@ class Serviceblock extends Component {
           const { lat, lng } = data.results[0].geometry.location;
           console.log("lat",lat);
           console.log("lng",lng);
-         
           this.setState({
             markers:[{ lat, lng, img_src: "../../../assets/img/lcoation.png"}],
+           
+            lat: lat,
+            lng: lng,
+          });
+          const newCenter =  {
+            lat: lat,
+            lng: lng
+          };
+          circle.setCenter(newCenter); // Update circle center
+          this.setState({
             center: {
               lat: lat,
               lng: lng,
@@ -379,7 +398,7 @@ class Serviceblock extends Component {
         <div className="container">
           <form action="#">
             <div className="row align-items-center mb-90">
-              <div className="col-lg-6 col-md-6">
+              {/* <div className="col-lg-6 col-md-6">
                 <div className="form-group">
                   <label htmlFor="proivdername">
                     <h5>Search by Name :</h5>
@@ -411,7 +430,7 @@ class Serviceblock extends Component {
                     placeholder="$45/hr"
                   />
                 </div>
-              </div>
+              </div> */}
               <div className="col-lg-6 col-md-6">
                 <div className="form-group">
                   <label htmlFor="city">
@@ -499,7 +518,7 @@ class Serviceblock extends Component {
                     id="radius"
                     value={this.state.radius}
                     onChange={(event) => this.handleRadiusChange(event)}
-                    placeholder="10 km"
+                    placeholder="20 km"
                   />
                 </div>
               </div>
@@ -527,7 +546,6 @@ class Serviceblock extends Component {
               }}
               defaultZoom={10}
               center={this.state.center}
-              defaultCenter={this.state.center}
               yesIWantToUseGoogleMapApiInternals
               onGoogleApiLoaded={({ map, maps }) => apiIsLoaded(map, maps)}
             >
@@ -575,7 +593,7 @@ class Serviceblock extends Component {
             </div>
           )}
           <div className="row">
-            {this.state.filter_service_provider.map((item, i) => (
+            {this.state.filter_service_provider?.length > 0 ? this.state.filter_service_provider?.map((item, i) => (
               <div
                 key={i}
                 className="col-lg-4 col-xl-3 col-md-6 wow fadeInUp"
@@ -586,9 +604,6 @@ class Serviceblock extends Component {
                     to={`/service-details/${item.service_provider_id}`}
                     className="black"
                   >
-                    {/* <div className="service-icn bg-light-white flex-center">
-                                            <img src={`${config.SERVER_URL}/${item.image}`} alt="" />
-                                        </div> */}
                     <div className="service-icn bg-light-white flex-center">
                       <img
                         style={{
@@ -603,13 +618,6 @@ class Serviceblock extends Component {
                     </div>
                     <div className="service-text">
                       <h3 className="fs-20 f-700 mb-10">{item.username}</h3>
-                      {/* <p className="fs-20 f-700 mb-10">
-                        {item.service_types_name}
-                      </p>
-                      <p className="mb-0">{item.description} </p>
-                      <p className="mb-0 pt-30">
-                        {`${item.price_per_hour}/hr`}
-                      </p> */}
                       <ul className="service_providers_list">
                         <li>
                           {item.city},{item.state}
@@ -637,7 +645,9 @@ class Serviceblock extends Component {
                   </Link>
                 </div>
               </div>
-            ))}
+            )):<div className="no-record">
+              <h2 className="p-2 ">No Result Found</h2>
+              </div>}
           </div>
           <div className="container">
             <div className="row">

@@ -12,6 +12,7 @@ import Servicesfilter from "./Servicesfilter";
 import { withRouter } from "react-router-dom";
 import { Steps } from "intro.js-react";
 import authService from "../../../services/auth.service";
+import AuthService from "../../../services/auth.service";
 import axios from "axios";
 import "intro.js/introjs.css";
 import swal from "sweetalert";
@@ -29,6 +30,7 @@ class Content extends Component {
 
   constructor(props) {
     super(props);
+    let user = AuthService.getCurrentUser();
     this.state = {
       serviceblock: [],
       showSteps: 0,
@@ -39,7 +41,16 @@ class Content extends Component {
       status: false,
       webTour: false,
       currentUser: authService.getCurrentUser(),
+      center: {lat: parseFloat(user.lat) || 49.34288, lng: parseFloat(user.lng) || -123.11484  },
+      markers: [
+        {
+          lat: user?.lat || 49.34288,
+          lng: user?.lng  || -123.11484,
+          img_src: "../../../assets/img/lcoation.png",
+        },
+      ],
     };
+    this.updateMarkers = this.updateMarkers.bind(this);
   }
   checkwebTour = () => {
     // get webtour varible value from native storage and set into setstate
@@ -156,6 +167,16 @@ class Content extends Component {
       alert("Please select city first");
     }
   };
+ // Callback function to update marker state
+ updateMarkers = (newMarkers) => {
+  console.log("update",newMarkers);
+  this.setState({ markers: newMarkers });
+}
+
+// Callback function to update center state
+updateCenter = (newCenter) => {
+  this.setState({ center: newCenter });
+}
 
   render() {
     const { stepsEnabled, steps, initialStep, webTour } = this.state;
@@ -170,8 +191,8 @@ class Content extends Component {
                         ?
                         <Steps enabled={stepsEnabled} steps={steps} initialStep={initialStep} onExit={() => { this.setWebTour() }} options={{ exitOnOverlayClick: false, tooltipClass: 'webtour', showBullets: false }} /> : "")} */}
 
-        <Banner findServiceProviders={this.findServiceProviders} />
-        <Servicesfilter serviceblock={this.state.serviceblock} />
+        <Banner findServiceProviders={this.findServiceProviders} center={this.state.center} markers={this.state.markers} updateCenter={this.updateCenter} updateMarkers={this.updateMarkers}  />
+        <Servicesfilter serviceblock={this.state.serviceblock} center={this.state.center} markers={this.state.markers} updateCenter={this.updateCenter} updateMarkers={this.updateMarkers} />
         {/* <IntroVideos /> */}
         <section class="service pt-30 pb-10 bg-light-white">
           <div class="container">

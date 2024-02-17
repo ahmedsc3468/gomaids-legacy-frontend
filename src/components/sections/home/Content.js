@@ -24,7 +24,7 @@ import YouTubeCarousel from "./YoutubeCarousel";
 // import Joi from "joi-browser";
 //import authHeader from "../../../services/auth-header";
 //import OwlCarousel from 'react-owl-carousel2';
-
+let circle;
 class Content extends Component {
   _isMounted = false;
 
@@ -49,8 +49,12 @@ class Content extends Component {
           img_src: "../../../assets/img/lcoation.png",
         },
       ],
+      lat: 49.34288,
+      lng: -123.11484,
     };
     this.updateMarkers = this.updateMarkers.bind(this);
+    this.updateCenter = this.updateCenter.bind(this);
+    this.apiIsLoaded = this.apiIsLoaded.bind(this);
   }
   checkwebTour = () => {
     // get webtour varible value from native storage and set into setstate
@@ -169,15 +173,26 @@ class Content extends Component {
   };
  // Callback function to update marker state
  updateMarkers = (newMarkers) => {
-  console.log("update",newMarkers);
   this.setState({ markers: newMarkers });
 }
 
 // Callback function to update center state
 updateCenter = (newCenter) => {
-  this.setState({ center: newCenter });
+  this.setState({ center: newCenter,lat:newCenter.lat,lng:newCenter.lng });
+  
 }
-
+ apiIsLoaded = (map, maps) => {
+  circle = new maps.Circle({
+    strokeColor: "#FF0000",
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: "#FF0000",
+    fillOpacity: 0.3,
+    map,
+    center: this.props.center,
+    radius: this.state.inputRad,
+  });
+};
   render() {
     const { stepsEnabled, steps, initialStep, webTour } = this.state;
     window.scrollTo(0, 0);
@@ -191,8 +206,8 @@ updateCenter = (newCenter) => {
                         ?
                         <Steps enabled={stepsEnabled} steps={steps} initialStep={initialStep} onExit={() => { this.setWebTour() }} options={{ exitOnOverlayClick: false, tooltipClass: 'webtour', showBullets: false }} /> : "")} */}
 
-        <Banner findServiceProviders={this.findServiceProviders} center={this.state.center} markers={this.state.markers} updateCenter={this.updateCenter} updateMarkers={this.updateMarkers}  />
-        <Servicesfilter serviceblock={this.state.serviceblock} center={this.state.center} markers={this.state.markers} updateCenter={this.updateCenter} updateMarkers={this.updateMarkers} />
+        <Banner findServiceProviders={this.findServiceProviders} lat={this.state.lat} lng={this.state.lng} center={this.state.center} markers={this.state.markers} updateCenter={this.updateCenter} updateMarkers={this.updateMarkers}  />
+        <Servicesfilter serviceblock={this.state.serviceblock} lat={this.state.lat} lng={this.state.lng} center={this.state.center} markers={this.state.markers} updateCenter={this.updateCenter} updateMarkers={this.updateMarkers} apiIsLoaded={this.apiIsLoaded}/>
         {/* <IntroVideos /> */}
         <section class="service pt-30 pb-10 bg-light-white">
           <div class="container">

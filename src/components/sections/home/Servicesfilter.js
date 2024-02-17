@@ -58,7 +58,7 @@ class Service extends Component {
   }
 
   async componentDidMount() {
-    console.log("this",this.props.markers);
+  
     // this.setState({
     //   markers: [
     //     {
@@ -162,8 +162,8 @@ class Service extends Component {
     circle.setRadius(Number(this.state.inputRad));
     this.props.history.push('/find-a-services',{ radius: this.state.inputRad / 1000 });
     const apiCaldata = {
-      lat: that.state.center.lat,
-      lng: that.state.center.lng,
+      lat: that.props.center.lat,
+      lng: that.props.center.lng,
       radius: this.state.inputRad / 1000,
     };
 
@@ -200,8 +200,16 @@ class Service extends Component {
       console.log(err);
     }
   };
+  componentDidUpdate(prevProps) {
+    // Check if markers prop has changed
 
+   
+    if (this.props.lat !== prevProps.lat || this.props.lng !== prevProps.lng ) {
+      circle.setCenter(this.props.center); // Update circle cente
+    }
+  }
   render() {
+
     var pDoc = document.getElementById("locationicons");
     var pagrent = pDoc?.parentNode;
     let owlLength1000 = 3;
@@ -218,7 +226,7 @@ class Service extends Component {
         fillColor: "#FF0000",
         fillOpacity: 0.3,
         map,
-        center: this.state.center,
+        center: this.props.center,
         radius: this.state.inputRad,
       });
     };

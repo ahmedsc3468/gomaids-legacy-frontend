@@ -146,6 +146,7 @@ class Banner extends Component {
               lat: lat,
               lng: lng
             };
+            this.props.updateCenter(newCenter)
             // this.setState({
             //   center: {
             //     lat: lat,

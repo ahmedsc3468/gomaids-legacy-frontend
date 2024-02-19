@@ -5,6 +5,7 @@
   border: 2px solid;
   border-color: #102043;
   cursor: pointer;
+  object-fit: cover;
   /* margin-left: 0.5rem; */
   /* margin: 0 1rem; */
 }

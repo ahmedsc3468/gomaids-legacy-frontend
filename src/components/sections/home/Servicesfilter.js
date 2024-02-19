@@ -13,10 +13,7 @@ import AuthService from "../../../services/auth.service";
 import img_src from "../../../assets/img/lcoation.png";
 import swal from "sweetalert";
 import { withRouter } from 'react-router-dom';
-<script
-  async
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM&callback=initMap"
-></script>;
+
 
 let circle;
 

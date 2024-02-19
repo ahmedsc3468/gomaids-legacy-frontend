@@ -24,7 +24,13 @@ import YouTubeCarousel from "./YoutubeCarousel";
 // import Joi from "joi-browser";
 //import authHeader from "../../../services/auth-header";
 //import OwlCarousel from 'react-owl-carousel2';
+<script
+  async
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM&callback=initMap"
+></script>;
 let circle;
+const defaultLng = -79.34;
+const defaultLat =  43.65;
 class Content extends Component {
   _isMounted = false;
 
@@ -41,16 +47,16 @@ class Content extends Component {
       status: false,
       webTour: false,
       currentUser: authService.getCurrentUser(),
-      center: {lat: parseFloat(user?.lat) || 49.34288, lng: parseFloat(user?.lng) || -123.11484  },
+      center: {lat: parseFloat(user?.lat) || defaultLat, lng: parseFloat(user?.lng) || defaultLng  },
       markers: [
         {
-          lat: user?.lat || 49.34288,
-          lng: user?.lng  || -123.11484,
+          lat: user?.lat || defaultLat,
+          lng: user?.lng  || defaultLng,
           img_src: "../../../assets/img/lcoation.png",
         },
       ],
-      lat: 49.34288,
-      lng: -123.11484,
+      lat: defaultLat,
+      lng: defaultLng,
     };
     this.updateMarkers = this.updateMarkers.bind(this);
     this.updateCenter = this.updateCenter.bind(this);
@@ -79,7 +85,44 @@ class Content extends Component {
     this._isMounted = true;
 
     window.scrollTo(0, 0);
+    const that = this;
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          that.setState({
+            center: {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            },
+            markers: [
+              {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+                img_src: "../../../assets/img/lcoation.png",
+              },
+            ],
+          });
+          that.componentDidMount();
 
+        },
+        function errorCallback(error) {
+          navigator.permissions
+            .query({ name: "geolocation" })
+            .then(function (result) {
+              if (result.state === "granted") {
+              } else if (result.state === "prompt") {
+              } else if (result.state === "denied") {
+              }
+              result.onchange = function () {
+              };
+            });
+        },
+        {
+          timeout: 5000,
+        }
+      );
+    } else {
+    }
     // if (this._isMounted) {
 
     //     this.checkwebTour();

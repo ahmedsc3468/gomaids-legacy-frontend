@@ -183,10 +183,7 @@ class UserService extends Component {
       buttons: ["No, cancel it!", "Yes, I am sure!"],
       dangerMode: true,
     }).then(async function (isConfirm) {
-      localStorage.setItem("cs", 1);
-      // });
-      var confirmation = localStorage.getItem("cs");
-      if (confirmation === 1) {
+      if (isConfirm) {
         const updateData = {
           service_type_id:
             that.state.service_type_id !== ""
@@ -199,8 +196,6 @@ class UserService extends Component {
           price_per_hour: that.state.price,
           auto_accept: that.state.auto_accept,
         };
-        console.log("UPDATE DATA :::::", updateData);
-        console.log("get type", typeof that.state.service_type_id);
         try {
           await axios.put(
             config.SERVER_URL +
@@ -370,7 +365,7 @@ class UserService extends Component {
         }
       );
 
-      // console.log(data)
+  console.log('providerServices',data);
 
       this.setState({ providerServices: data });
       const { data: temp } = await axios.get(
@@ -546,12 +541,10 @@ class UserService extends Component {
     const servicesArr = [...this.state.servicesArr];
 
     const filteredService = servicesArr.filter((s) => s.value === value);
-    console.log(":::: 556 ::::", filteredService);
     const temp =
       this.state.providerServices.data[0].serviceprovider_services.filter(
         (s) => s.service_type.name === filteredService[0].label
       );
-    console.log(":::: 558 ::::", temp);
     this.setState({ description: temp[0].description });
     this.setState({ education: temp[0].education });
     this.setState({ experience: temp[0].experience });
@@ -567,7 +560,16 @@ class UserService extends Component {
         {this.state.isPending ? (
           <div className="text-center">
             {" "}
-            <CircularProgress color="success" />
+            <h1>Add a Service</h1>
+    <p>No services found. Please add a service to proceed.</p>
+    <button
+                  type="submit"
+                  className="ui inverted green button another_service_btn"
+                  onClick={this.openModal}
+                >
+                  Add New Service
+                </button>
+            {/* <CircularProgress color="success" /> */}
           </div>
         ) : (
           <Grid.Column
@@ -599,6 +601,8 @@ class UserService extends Component {
                   ))}
                 </Dropdown.Menu>
               </Dropdown>
+              {this.state.providerServices?.data[0]?.serviceprovider_services
+                ?.length > 0 && <div>
               <Form.Field>
                 <label>Service Type</label>
                 <input
@@ -634,7 +638,6 @@ class UserService extends Component {
                 )}
               </Form.Field>
 
-              {/* {console.log(this.state.user_id)} */}
               <Form.Field>
                 <label>Service Experience</label>
                 <input
@@ -700,7 +703,7 @@ class UserService extends Component {
                   </div>
                 )}
               </Form.Field>
-
+</div>}
               {/*<Form.Field>
                             <label>Currency</label>
                             <input
@@ -749,7 +752,7 @@ class UserService extends Component {
                 </button>
               )}
               {this.state.providerServices?.data[0]?.serviceprovider_services
-                ?.length < this.state.allServiceType?.length && (
+                ?.length < 1 && (
                 <button
                   type="submit"
                   className="ui inverted green button another_service_btn"

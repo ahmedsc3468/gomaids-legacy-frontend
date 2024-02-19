@@ -708,7 +708,7 @@ const formattedDate = `${year}-${month}-${day}`;
                     <Address
                       page="userdetail streetAddress"
                       handleAddress={this.handleAddress}
-                      currentAddress={this.state.street_address}
+                      currentAddress={this.state?.street_address}
                     />
                     {/* <input
                       name="street_address"

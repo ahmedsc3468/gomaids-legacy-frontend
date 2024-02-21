@@ -25,7 +25,10 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
-
+<script
+  async
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM&callback=initMap"
+></script>;
 let circle;
 const AnyReactComponent = ({ img_src }) => (
   <div id="locationicons">
@@ -36,7 +39,8 @@ const AnyReactComponent = ({ img_src }) => (
     />
   </div>
 );
-
+const defaultLng = -79.34;
+const defaultLat =  43.65;
 class Serviceblock extends Component {
   _isMounted = false;
   constructor(props) {
@@ -66,19 +70,19 @@ class Serviceblock extends Component {
       searchlinklength: [],
       linklength: "",
       center: {
-        lat: plat || parseFloat(user?.lat) || 49.34288,
-        lng: plng || parseFloat(user?.lng) || -123.11484,
+        lat: plat || parseFloat(user?.lat) || defaultLat,
+        lng: plng || parseFloat(user?.lng) || defaultLng,
       },
       inputRad: 20000,
       markers: [
         {
-          lat: plat || user?.lat || 49.34288,
-          lng: plng || user?.lng || -123.11484,
+          lat: plat || user?.lat || defaultLat,
+          lng: plng || user?.lng || defaultLng,
           img_src: "../../../assets/img/lcoation.png",
         },
       ],
-      lat: plat || 49.34288,
-      lng: plat || -123.11484,
+      lat: plat || defaultLat,
+      lng: plat || defaultLng,
       loader: false,
       address:''
     };
@@ -89,6 +93,48 @@ class Serviceblock extends Component {
     window.scrollTo(0, 500);
     const { city , radius } = this.props.location.state || {};
     let that = this;
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          that.setState({
+            center: {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            },
+            markers: [
+              {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+                img_src: "../../../assets/img/lcoation.png",
+              },
+            ],
+          });
+          const newCenter =  {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          circle.setCenter(newCenter); // Update circle center
+          that.componentDidMount();
+
+        },
+        function errorCallback(error) {
+          navigator.permissions
+            .query({ name: "geolocation" })
+            .then(function (result) {
+              if (result.state === "granted") {
+              } else if (result.state === "prompt") {
+              } else if (result.state === "denied") {
+              }
+              result.onchange = function () {
+              };
+            });
+        },
+        {
+          timeout: 5000,
+        }
+      );
+    } else {
+    }
     var searchservice = localStorage.getItem("searchservice");
     // console.log(":::::40::::::",searchservice)
     this._isMounted = true;

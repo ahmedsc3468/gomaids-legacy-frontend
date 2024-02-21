@@ -182,7 +182,7 @@ function Search({ page, handleAddress, currentAddress }) {
     >
       <div className="address-order-txt">
         <ComboboxInput
-          value={value}
+          value={value ?? ""}
           onChange={(e) => {
             if (page === "setUpWizard streetAddress") {
               localStorage.setItem("streetAddress", e.target.value);

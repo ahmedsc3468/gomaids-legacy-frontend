@@ -767,6 +767,7 @@ input[type="number"]::-webkit-outer-spin-button {
   border: 2px solid;
   padding: 7px 18px;
   font-size: 15px;
+  border-radius: 5px;
 }
 .head-1-book:hover {
   color: #fff;
@@ -826,15 +827,15 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 .mobile-trigger {
   display: none;
-  border: 2px solid #1e1e2a;
+  border-radius: 8px;
   width: 50px;
   height: 40px;
   position: absolute;
   right: 0;
   top: 32px;
   cursor: pointer;
-  padding: 11px 8px;
-  background-color: #1e1e2a;
+  padding: 12px 10px;
+  background-color: #036905;
 }
 .head-type-1 .mobile-trigger {
   right: 15px;
@@ -1559,6 +1560,7 @@ input[type="number"]::-webkit-outer-spin-button {
   background-color: #fff;
   padding: 40px 20px;
   padding-bottom: 35px;
+  border-radius: 5px;
 }
 .service-icn {
   height: 90px;
@@ -5091,6 +5093,7 @@ button.ui.button.add_feedback {
 .special_link a {
   background: #0b6818;
   color: white !important;
+  border-radius: 5px;
 }
 
 .service_providers_list li {
@@ -5118,7 +5121,7 @@ button.ui.button.add_feedback {
 
 @media only screen and (max-width: 992px) {
   .logo-class {
-    justify-content: center;
+     justify-content: space-between;
   }
 }
 
@@ -5233,4 +5236,17 @@ button.ui.button.add_feedback {
 }
 .no-record  {
   margin: auto;
+}
+.css-1c99szj-MuiRating-icon:hover{
+color:#fff !important;
+}
+.about-image img{
+border-radius: 5px;
+}
+.css-mzb7oa-option{
+  color: #fff !important;
+}
+.buttongroudp{
+  background-color: #036905 !important;
+  border-color: #036905 !important;
 }

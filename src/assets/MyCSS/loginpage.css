@@ -27,13 +27,13 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .custom_login_btn {
-    background-color: #036905;
-    border-color: #036905;
-    border-radius: 0.5rem;
-    }
+    background-color: #0b6818 !important;
+    border-color: #0b6818 !important;
+    border-radius: 5px !important; 
+}
 .custom_login_btn:hover {
-    background-color: #036905;
-    border-color: #036905;
+    background-color: #0b6818 !important;
+    border-color: #0b6818 !important;
     transform: scale(1.04);
-    border-radius: 0.5rem;
-    }
+    border-radius: 5px;
+}

@@ -296,7 +296,7 @@
     }
 
     .head-type-1 {
-        padding: 15px 0px;
+/*        padding: 15px 0px;*/
 
         background-color: #fff;
 
@@ -1137,7 +1137,7 @@
 
     .banner-form-4 .btn.btn-black{
 
-        margin: 0px;
+/*        margin: 0px;*/
 
     }
 
@@ -1208,7 +1208,17 @@
     display: none;
 
 }
-
+.logo-footer {
+display: flex;
+justify-content: center;
+}
+.contact-footer{
+display: flex;
+justify-content: center;   
+}
+.foooterparagraphp{
+text-align: center;
+}
 }
 
 

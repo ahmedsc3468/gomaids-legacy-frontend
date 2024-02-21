@@ -147,12 +147,10 @@ class Footer extends Component {
             </div> */}
             <div className="col-lg-2 col-md-6 text-center">
               <div className="footer-buttons">
-                <div
-                  className="btn shine-btn btn-lg mb-15 btn-blue"
-                  onClick={() => window.scrollTo(0, 0)}
-                >
-                  Order Now
-                </div>
+                
+                  <Link to="/find-a-services" className="btn shine-btn btn-lg mb-15 btn-blue">Order Now</Link>
+                
+              
                 {isLoggedIn === "notsignin" ? (
                   <Link
                     to="/partner-with-us"
@@ -195,7 +193,7 @@ class Footer extends Component {
                   </a>
                 </li>
                 <li>
-                  <a href="https://www.tiktok.com/@go.maidz" target="_blank">
+                  <a href="https://www.tiktok.com/@gomaids" target="_blank">
                     <i className="fab fa-tiktok" />
                   </a>
                 </li>

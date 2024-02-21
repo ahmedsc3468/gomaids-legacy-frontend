@@ -65,18 +65,17 @@ class AuthService {
       console.log("user data", userData);
       let url =
         API_URL + `/role/${role_id}/user/${registered_data.data.data.id}`;
-      console.log("url:", url);
-      console.log("axios: ", axios);
+      
       const roledata = await axios.post(url, {}, config);
 
-      console.log("response: ", roledata);
       const newData = {
         ...userData,
         ...roledata.data.data,
       };
-      console.log("new data", newData);
       localStorage.setItem("user", JSON.stringify(newData));
       return roledata;
+    }else {
+      return registered_data;
     }
     // return roledata;
   }

@@ -17,7 +17,7 @@ class Serviceone extends Component {
                     />
                 </MetaTags>
                 <Header/>
-                <Breadcrumb breadcrumb={{pagename:'Hire the best Service Provider that suit you'}} />
+                <Breadcrumb breadcrumb={{pagename:'Search for and hire a service provider here'}} />
                 <Content/>
                 <Footer/>
             </Fragment>

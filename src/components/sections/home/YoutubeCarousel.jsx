@@ -59,7 +59,7 @@ class YouTubeCarousel extends Component {
 
     return (
       <div className="youtube-carousel-container">
-        <h1 className="my-3">Explainer carousel</h1>
+        <h1 className="my-3">Explainer Videos</h1>
         <Slider {...settings}>
           {videos.map((videoId, index) => (
             <div key={index} className="youtube-video-container">

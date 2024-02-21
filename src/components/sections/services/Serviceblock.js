@@ -62,7 +62,7 @@ class Serviceblock extends Component {
       services_provider: "",
       providername: "",
       price: "",
-      radius: radius,
+      radius: radius || 20,
       searchvalue: localStorage.getItem("searchservice"),
       currentUser: authService.getCurrentUser(),
       links: [],
@@ -82,7 +82,7 @@ class Serviceblock extends Component {
         },
       ],
       lat: plat || defaultLat,
-      lng: plat || defaultLng,
+      lng: plng || defaultLng,
       loader: false,
       address:''
     };
@@ -93,48 +93,50 @@ class Serviceblock extends Component {
     window.scrollTo(0, 500);
     const { city , radius } = this.props.location.state || {};
     let that = this;
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        function (position) {
-          that.setState({
-            center: {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            },
-            markers: [
-              {
+    if(!city){
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          function (position) {
+            that.setState({
+              center: {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude,
-                img_src: "../../../assets/img/lcoation.png",
               },
-            ],
-          });
-          const newCenter =  {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          };
-          circle.setCenter(newCenter); // Update circle center
-          that.componentDidMount();
-
-        },
-        function errorCallback(error) {
-          navigator.permissions
-            .query({ name: "geolocation" })
-            .then(function (result) {
-              if (result.state === "granted") {
-              } else if (result.state === "prompt") {
-              } else if (result.state === "denied") {
-              }
-              result.onchange = function () {
-              };
+              markers: [
+                {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude,
+                  img_src: "../../../assets/img/lcoation.png",
+                },
+              ],
             });
-        },
-        {
-          timeout: 5000,
-        }
-      );
-    } else {
+            const newCenter =  {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            circle.setCenter(newCenter); // Update circle center
+            that.componentDidMount();
+  
+          },
+          function errorCallback(error) {
+            navigator.permissions
+              .query({ name: "geolocation" })
+              .then(function (result) {
+                if (result.state === "granted") {
+                } else if (result.state === "prompt") {
+                } else if (result.state === "denied") {
+                }
+                result.onchange = function () {
+                };
+              });
+          },
+          {
+            timeout: 5000,
+          }
+        );
+      } 
     }
+   
     var searchservice = localStorage.getItem("searchservice");
     // console.log(":::::40::::::",searchservice)
     this._isMounted = true;

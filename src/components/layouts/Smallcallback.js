@@ -22,6 +22,7 @@ class Smallcallback extends Component {
 
     this.state = {
       phone_no: "",
+      full_name: "",
       status: 0,
       errors: "",
       loader: false,
@@ -72,7 +73,7 @@ class Smallcallback extends Component {
     });
   }
   resetForm() {
-    this.setState({ phone_no: "" });
+    this.setState({ phone_no: "",full_name:"" });
   }
 
   async submit(e) {
@@ -92,6 +93,7 @@ class Smallcallback extends Component {
 
     const tempData = {
       phone_no: this.state.phone_no,
+      full_name: this.state.full_name,
       status: this.state.status,
     };
 
@@ -165,6 +167,14 @@ class Smallcallback extends Component {
             <div className="col-lg-7  text-center text-lg-right mt-md-15">
               <Form>
                 <div className="callback-footer-2 d-flex flex-column flex-sm-row">
+                <input
+                    type="text"
+                    className="form-control input-white shadow-2"
+                    placeholder="Your Full Name"
+                    name="full_name"
+                    value={this.state.full_name}
+                    onChange={this.handleInputChange}
+                  />
                   <input
                     type="tel"
                     pattern="[0-9]{11}"

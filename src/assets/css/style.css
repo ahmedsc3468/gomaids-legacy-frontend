@@ -1767,10 +1767,13 @@ input[type="number"]::-webkit-outer-spin-button {
   min-width: 340px;
 }
 .callback-footer-2 {
-  max-width: 545px;
+
   width: 100%;
   text-align: right;
   margin-left: auto;
+}
+.callback-footer-2 input{
+  margin: 0 10px;
 }
 .cta-footer .cta-cl-bg {
   right: 39vw;

@@ -10,6 +10,7 @@ import swal from "sweetalert";
 import PaymentMethod from "../wallet/paymentMehtod";
 const CARD_OPTIONS = {
 	iconStyle: "solid",
+    placeholder: 'Postal Code',
 	style: {
 		base: {
 			iconColor: "#F2F2F2",
@@ -43,7 +44,6 @@ export default function UpdateCard({ onResponse, paymentConfigurationId }) {
             card: elements.getElement(CardElement)
         })
 
-        console.log('paymentMethod',paymentMethod)
 
         const user = authService.getCurrentUser();
         const card = elements.getElement(CardElement);
@@ -52,7 +52,6 @@ export default function UpdateCard({ onResponse, paymentConfigurationId }) {
 
         const result = await stripe.createToken(card);
 
-        console.log("::::::::::::: LINE 56 :::::::::::", result)
 
         if (!error) {
             try {

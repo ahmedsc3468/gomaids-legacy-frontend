@@ -126,7 +126,7 @@ class Banner extends Component {
     handleGeocode = (city) => {
 
       // Construct the URL for the Google Maps Geocoding API
-      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(city)}&key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM`;
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(city)},Canada&key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM`;
       
       // Make the API request using fetch
       fetch(url)

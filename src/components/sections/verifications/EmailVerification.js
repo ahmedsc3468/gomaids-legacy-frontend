@@ -173,14 +173,15 @@ class EmailVerify extends Component {
                 // onChange={this.onChangeTextFields}
                 disabled
               />
+          <div className="text-info mb-2 mt-2">Please click on the <b>Send OTP</b> button to receive OTP</div>
               {this.state.errors.email && (
                 <span className="text-danger">{this.state.errors.email}</span>
               )}
-            </Form.Field>
-            <Form.Field>
-              <Button type="submit" primary  onClick={this.sendOTP}>
+                <Button type="submit" primary  onClick={this.sendOTP}>
                 Send OTP
               </Button>
+            
+            
             </Form.Field>
             <Form.Field>
               <input

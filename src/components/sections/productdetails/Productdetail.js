@@ -18,6 +18,7 @@ import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateAdapter from '@mui/lab/AdapterDateFns'; // You can also use other date adapters
 import TextField from '@mui/material/TextField';
+import MinHeightTextarea from '../Fields/Textarea';
 import "../../../assets/MyCSS/productdetail.css";
 import Rating from '@mui/material/Rating';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -134,7 +135,8 @@ class Productdetail extends Component {
             serviceprovider: {},
             serviceprovider_services: [],
             serviceprovider_services_type: [],
-            profileCompletion: ""
+            profileCompletion: "",
+            additionalNotes: "",
         };
 
     }
@@ -182,7 +184,8 @@ class Productdetail extends Component {
                 providerServices.push({ id: provider.service_type.id, value: provider.service_type.name })
             )
         )
-        this.setState({ providerServices })
+  
+        this.setState({ providerServices ,service:providerServices[0]?.value})
 
         this.setState({ currentServiceProvider: serviceProviders.data.data })
 
@@ -223,7 +226,10 @@ class Productdetail extends Component {
 
         return Object.keys(errors).length === 0 ? null : errors;
     };
-
+    setAddtionalNotes = (e) => {
+        
+        this.setState({additionalNotes: e.currentTarget.value});
+    };
     validateProperty = ({ value, name }) => {
         let dataProperty = { [name]: value };
         let subSchema = { [name]: this.schema[name] };
@@ -476,7 +482,7 @@ const formattedDate = `${month}/${day}/${year}`;
             if (!service_taker) return;
 
             const temp = this.state.date.split("-");
-            const d = temp[1] + "/" + temp[2] + "/" + temp[0]
+            const d = temp[1] + "/" + temp[2] + "/" + temp[0];
             const serviceDetails = {
                 service_taker_id: service_taker.id || service_taker.user_id,
                 date: this.state.date,
@@ -490,7 +496,6 @@ const formattedDate = `${month}/${day}/${year}`;
                         headers: authHeader(),
                     })
 
-                    console.log("::::::: ProDet 438 ::::::::", resp)
 
                 if (resp.data.success) {
                     const service = this.state.currentServiceProvider.serviceprovider_services.filter(x => x.service_type.name === this.state.service)
@@ -501,10 +506,11 @@ const formattedDate = `${month}/${day}/${year}`;
                         slot_start_time: this.state.timeForm,
                         slot_end_time: this.state.timeTo,
                         serviceAvailed: this.state.service,
-                        servicePrice: servicePrice
+                        servicePrice: servicePrice,
+                        additionalNotes: this.state.additionalNotes
                     })
                 } else {
-                    console.log(resp.data.data.error);
+                    
                     this.setState({ slotUnavailable: resp.data.data.error })
                 }
 
@@ -677,7 +683,7 @@ const formattedDate = `${month}/${day}/${year}`;
         label="Select Date"
         value={this.state.date}
         onChange={this.onChangeDate}
-        maxDate={new Date()} 
+        minDate={new Date()} 
         renderInput={(params) => <TextField {...params} />} // Use TextField for the input
       />
     </LocalizationProvider>
@@ -813,13 +819,16 @@ const formattedDate = `${month}/${day}/${year}`;
                                                 }}
                                                 name="service"
                                                 onChange={this.onChangeTextFields}
-                                                value={this.state.service}
+                                                value={this.state.providerServices[0]?.value}
                                             >
-                                                <option selected>Please select a service</option>
+                                                <option disabled>Please select a service</option>
 
-                                                {this.state.providerServices.map((data, index) => (
-                                                    <option key={index} value={data.value}>{data.value}</option>
-                                                ))}
+                                                {this.state.providerServices.map((data, index) => {
+                                                      
+                                                    return <option key={index} value={data.value}  >{data.value}</option>
+                                                }
+                                                   
+                                                )}
 
 
                                             </select>
@@ -908,7 +917,14 @@ const formattedDate = `${month}/${day}/${year}`;
                                             }
 
                                         </div>
+                                     
                                     </div>
+                                    <div className='row' style={{ marginTop: "2rem" }}>
+                                    <div className='col col-md-12'>
+                                        <textarea rows={3} name="additional_notes" value={this.state.additionalNotes} onChange={this.setAddtionalNotes} placeholder={"Additional Notes"}/>
+                                        </div>
+                                    </div>
+                                
                                 </div>
 
                                 {this.state.slotUnavailable &&

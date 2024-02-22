@@ -56,6 +56,7 @@ class Serviceblock extends Component {
       
       services_type: [],
       services_providers: [],
+      isFilterActive:false,
       filter_service_provider: [],
       service_type_id: 1,
       city_name: city,
@@ -114,7 +115,9 @@ class Serviceblock extends Component {
               lat: position.coords.latitude,
               lng: position.coords.longitude
             };
+            if(circle){
             circle.setCenter(newCenter); // Update circle center
+            }
             that.componentDidMount();
   
           },
@@ -181,6 +184,7 @@ class Serviceblock extends Component {
                   //   links:services_provider.data.data.links,
                   links: [],
                   linklength: "",
+                  isFilterActive: true,
                 });
 
                 localStorage.removeItem("searchservice");
@@ -192,6 +196,7 @@ class Serviceblock extends Component {
                   //   links:services_provider.data.data.links,
                   links: [],
                   linklength: "",
+                   isFilterActive: true,
                 });
               }
               //"dlfjldskjf"
@@ -296,6 +301,7 @@ class Serviceblock extends Component {
               //   linklength:services_provider.data.data.links.length
               links: [],
               linklength: "",
+               isFilterActive: true,
             });
           } else {
             that.setState({
@@ -303,6 +309,7 @@ class Serviceblock extends Component {
               searchlinks: [],
               links: [],
               linklength: "",
+               isFilterActive: true,
             });
           };
         });
@@ -358,7 +365,7 @@ class Serviceblock extends Component {
   handleGeocode = (city) => {
 
     // Construct the URL for the Google Maps Geocoding API
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(city)}&key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM`;
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(city)},Canada&key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM`;
     
     // Make the API request using fetch
     fetch(url)
@@ -378,7 +385,10 @@ class Serviceblock extends Component {
             lat: lat,
             lng: lng
           };
-          circle.setCenter(newCenter); // Update circle center
+          if(circle){
+            circle.setCenter(newCenter); // Update circle center
+          }
+        
           this.setState({
             center: {
               lat: lat,
@@ -642,7 +652,8 @@ class Serviceblock extends Component {
             </div>
           )}
           <div className="row">
-            {this.state.filter_service_provider?.length > 0 ? this.state.filter_service_provider?.map((item, i) => (
+           
+            {this.state.filter_service_provider?.length > 0 && this.state.filter_service_provider?.map((item, i) => (
               <div
                 key={i}
                 className="col-lg-4 col-xl-3 col-md-6 wow fadeInUp"
@@ -694,7 +705,8 @@ class Serviceblock extends Component {
                   </Link>
                 </div>
               </div>
-            )):<div className="no-record">
+            ))}
+             {(this.state.filter_service_provider?.length < 1 && this.state.isFilterActive) && <div className="no-record">
               <h2 className="p-2 ">No Result Found</h2>
               </div>}
           </div>
@@ -737,7 +749,7 @@ class Serviceblock extends Component {
             </div>
           </div>
 
-          {this.state.filter_service_provider?.length < 1 &&
+          {(this.state.filter_service_provider?.length < 1 && !this.state.isFilterActive) &&
             this.state.services_providers?.length > 0 && (
               <>
                 <h3> All Service Providers </h3>

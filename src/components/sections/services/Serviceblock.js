@@ -19,12 +19,12 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 import Select from "react-select";
-import AsyncSelect from "react-select/async";
-import { withRouter } from "react-router-dom";
+import AsyncSelect from 'react-select/async';
+import { withRouter } from 'react-router-dom';
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
-} from "react-places-autocomplete";
+} from 'react-places-autocomplete';
 <script
   async
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM&callback=initMap"
@@ -40,19 +40,20 @@ const AnyReactComponent = ({ img_src }) => (
   </div>
 );
 const defaultLng = -79.34;
-const defaultLat = 43.65;
+const defaultLat =  43.65;
 class Serviceblock extends Component {
   _isMounted = false;
   constructor(props) {
+
     let user = authService.getCurrentUser();
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleRadiusChange = this.handleRadiusChange.bind(this);
-    const { city, radius, plat, plng } = this.props.location.state || {};
-
+    const { city , radius,plat,plng } = this.props.location.state || {};
+    
     this.state = {
       cities: [],
-
+      
       services_type: [],
       services_providers: [],
       isFilterActive:false,
@@ -84,13 +85,14 @@ class Serviceblock extends Component {
       lat: plat || defaultLat,
       lng: plng || defaultLng,
       loader: false,
-      address: "",
+      address:''
     };
   }
 
   async componentDidMount() {
+
     window.scrollTo(0, 500);
-    const { city, radius } = this.props.location.state || {};
+    const { city , radius } = this.props.location.state || {};
     let that = this;
     if(!city){
       if ("geolocation" in navigator) {
@@ -149,11 +151,11 @@ class Serviceblock extends Component {
       }
       popup();
       let finalRadius = "20";
-      if (radius) {
+      if(radius){
         finalRadius = radius;
       }
       let finalCity = "";
-      if (city) {
+      if(city){
         finalCity = city;
       }
       const apiCalldata = {
@@ -166,11 +168,8 @@ class Serviceblock extends Component {
         lat: this.state.lat,
       };
 
-      if (
-        this.state.searchvalue > 0 ||
-        apiCalldata.city?.length > 0 ||
-        apiCalldata.radius?.length > 0
-      ) {
+
+      if (this.state.searchvalue > 0 || apiCalldata.city?.length > 0 ||apiCalldata.radius?.length > 0  ) {
         try {
           const services_provider = await axios
             .post(config.SERVER_URL + `/api/searchforprovider`, apiCalldata, {
@@ -201,6 +200,7 @@ class Serviceblock extends Component {
                 });
               }
               //"dlfjldskjf"
+              
             });
         } catch (err) {
           console.log(err);
@@ -233,7 +233,7 @@ class Serviceblock extends Component {
 
     let tempcit = [];
     cities.data.data.map(function (currentValue, index) {
-      tempcit.push({ value: currentValue.city, label: currentValue.city });
+      tempcit.push({ value:currentValue.city, label: currentValue.city });
     });
     this.setState({ cities: tempcit });
     // this.setState({ cities: cities.data.data });
@@ -287,7 +287,7 @@ class Serviceblock extends Component {
     };
 
     try {
-      await axios
+       await axios
         .post(config.SERVER_URL + `/api/searchforprovider`, apidata, {
           headers: authHeader(),
         })
@@ -311,7 +311,7 @@ class Serviceblock extends Component {
               linklength: "",
                isFilterActive: true,
             });
-          }
+          };
         });
     } catch (err) {
       console.log(err);
@@ -346,44 +346,44 @@ class Serviceblock extends Component {
   handleChange = (selectedOption) => {
     this.setState({ city_name: selectedOption.label });
   };
-
-  handleSelect = (address) => {
+ 
+  handleSelect = address => {
     geocodeByAddress(address)
-      .then((results) => getLatLng(results[0]))
-      .then((latLng) => console.log("Success", latLng))
-      .catch((error) => console.error("Error", error));
+      .then(results => getLatLng(results[0]))
+      .then(latLng => console.log('Success', latLng))
+      .catch(error => console.error('Error', error));
   };
   handleCityInputChange = (newValue) => {
-    const inputValue = newValue.replace(/\W/g, "");
+    const inputValue = newValue.replace(/\W/g, '');
     return inputValue;
   };
 
   handleCityChange = (selectedOption) => {
     this.setState({ city_name: selectedOption?.value });
-    this.handleGeocode(selectedOption?.value);
+    this.handleGeocode( selectedOption?.value);
   };
   handleGeocode = (city) => {
+
     // Construct the URL for the Google Maps Geocoding API
     const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(city)},Canada&key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM`;
+    
     // Make the API request using fetch
     fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         if (data.results && data.results.length > 0) {
           const { lat, lng } = data.results[0].geometry.location;
-          console.log("lat", lat);
-          console.log("lng", lng);
+          console.log("lat",lat);
+          console.log("lng",lng);
           this.setState({
-            markers: [
-              { lat, lng, img_src: "../../../assets/img/lcoation.png" },
-            ],
-
+            markers:[{ lat, lng, img_src: "../../../assets/img/lcoation.png"}],
+           
             lat: lat,
             lng: lng,
           });
-          const newCenter = {
+          const newCenter =  {
             lat: lat,
-            lng: lng,
+            lng: lng
           };
           if(circle){
             circle.setCenter(newCenter); // Update circle center
@@ -399,47 +399,45 @@ class Serviceblock extends Component {
           });
         }
       })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
+      .catch(error => {
+        console.error('Error fetching data:', error);
       });
   };
   loadOptions = async (inputValue, callback) => {
     try {
-      const cities = await axios.get(
-        config.SERVER_URL + `/api/cities?search=${inputValue}`,
-        {
-          headers: authHeader(),
-        }
-      );
-
-      let options = cities.data.data.map((option) => {
-        return {
-          value: option.city,
-          label: option.city,
-        };
+      const cities = await axios.get(config.SERVER_URL + `/api/cities?search=${inputValue}`, {
+        headers: authHeader(),
       });
-
+  
+      let options = cities.data.data.map(option => {
+        return {
+        value: option.city,
+        label: option.city
+      }});
+      
       this.setState({ cities: options });
       callback(options);
     } catch (error) {
-      console.error("Error loading options:", error);
+      console.error('Error loading options:', error);
       callback([]);
     }
   };
-  // Check if the entered value is valid for creation
-  isValidNewOption = (inputValue, selectValue, selectOptions) => {
-    if (inputValue.trim() === "") {
-      return false;
-    }
-    return !selectOptions.find((option) => option.label === inputValue);
-  };
-
-  // Create a new option based on the entered value
-  createOption = (inputValue) => ({
-    label: inputValue,
-    value: inputValue.toLowerCase().replace(/\W/g, ""),
-  });
+    // Check if the entered value is valid for creation
+    isValidNewOption = (inputValue, selectValue, selectOptions) => {
+      if (inputValue.trim() === '') {
+        return false;
+      }
+      return !selectOptions.find(option => option.label === inputValue);
+    };
+  
+    // Create a new option based on the entered value
+    createOption = (inputValue) => ({
+      label: inputValue,
+      value: inputValue.toLowerCase().replace(/\W/g, ''),
+    });
   render() {
+    
+    
     const apiIsLoaded = (map, maps) => {
       circle = new maps.Circle({
         strokeColor: "#FF0000",
@@ -458,7 +456,7 @@ class Serviceblock extends Component {
       <section className="service pt-95 pb-90 bg-light-white">
         <div className="container">
           <form action="#">
-            <div className="row align-items-center mb-90 justify-content-lg-between justify-content-md-center justify-content-sm-center">
+            <div className="row align-items-center mb-90">
               {/* <div className="col-lg-6 col-md-6">
                 <div className="form-group">
                   <label htmlFor="proivdername">
@@ -492,34 +490,34 @@ class Serviceblock extends Component {
                   />
                 </div>
               </div> */}
-              <div className="col-lg-6 col-md-12">
+              <div className="col-lg-6 col-md-6">
                 <div className="form-group">
                   <label htmlFor="city">
                     <h5>Search by City</h5>
                   </label>
                   <div className="find_service_cities">
-                    <AsyncSelect
-                      cacheOptions
-                      defaultOptions={this.state.cities}
-                      id="city"
-                      className="find_service_cities"
-                      classNamePrefix="find_service_cities"
-                      loadOptions={this.loadOptions}
-                      onInputChange={this.handleCityInputChange}
-                      onChange={this.handleCityChange}
-                      defaultInputValue={this.state.city_name}
-                      placeholder="Select City...."
-                      theme={(theme) => ({
-                        ...theme,
-                        borderRadius: 5,
-                        colors: {
-                          ...theme.colors,
-                          primary25: "#036905",
-                          primary: "transparent",
-                        },
-                      })}
-                    />
-                  </div>
+                  <AsyncSelect
+          cacheOptions
+          defaultOptions={this.state.cities} 
+          id="city"
+          className="find_service_cities"
+          classNamePrefix="find_service_cities"
+          loadOptions={this.loadOptions}
+          onInputChange={this.handleCityInputChange}
+          onChange={this.handleCityChange}
+          defaultInputValue={this.state.city_name}
+          placeholder="Select City...."
+          theme={(theme) => ({
+            ...theme,
+            borderRadius: 5,
+            colors: {
+              ...theme.colors,
+              primary25: "#036905",
+              primary: "transparent",
+            },
+          })}
+        />
+        </div>
                   {/* <Select
                     id="city"
                     options={this.state.cities}
@@ -541,7 +539,7 @@ class Serviceblock extends Component {
                   /> */}
                 </div>
               </div>
-              <div className="col-lg-6 col-md-12">
+              <div className="col-lg-6 col-md-6">
                 <div className="form-group">
                   <label htmlFor="service_type_id">
                     <h5>Category</h5>
@@ -566,7 +564,7 @@ class Serviceblock extends Component {
                   </select>
                 </div>
               </div>
-              <div className="col-lg-6 col-md-12">
+              <div className="col-lg-6 col-md-6">
                 <div className="form-group">
                   <label htmlFor="price">
                     <h5>Search by Radius Near You:</h5>
@@ -583,7 +581,7 @@ class Serviceblock extends Component {
                   />
                 </div>
               </div>
-              <div className="col-lg-6 col-md-12"></div>
+              <div className="col-lg-6 col-md-6"></div>
               <div id="cust-find-service-btn">
                 <button
                   type="submit"
@@ -613,7 +611,7 @@ class Serviceblock extends Component {
               {this.state.markers.map((marker, i) => {
                 return (
                   <AnyReactComponent
-                    key={i}
+                  key={i}
                     lat={marker.lat}
                     lng={marker.lng}
                     img_src={marker.img_src}
@@ -623,7 +621,7 @@ class Serviceblock extends Component {
             </GoogleMapReact>
           </div>
           {this.state.filter_service_provider.length > 0 && (
-            <h3 className="my-3"> Search Result </h3>
+            <h3> Search Result </h3>
           )}
           {this.state.loader && (
             <div className="position-relative h-100">
@@ -654,7 +652,7 @@ class Serviceblock extends Component {
             </div>
           )}
           <div className="row">
-          
+           
             {this.state.filter_service_provider?.length > 0 && this.state.filter_service_provider?.map((item, i) => (
               <div
                 key={i}
@@ -695,39 +693,17 @@ class Serviceblock extends Component {
                           <span className="sub">/ per hour</span>
                         </h3>
                       </div>
-                      <div className="service-text">
-                        <h3 className="fs-20 f-700 mb-10">{item.username}</h3>
-                        <ul className="service_providers_list">
-                          <li>
-                            {item.city},{item.state}
-                          </li>
-                          <li>
-                            <span className="f-700">{item.country}</span>
-                          </li>
-                        </ul>
-                        <div>
-                          <h3 className="main-price mt-15 mb-15">
-                            <span className="sup">$</span>
-                            {item.price_per_hour}
-                            <span className="sub">/ per hour</span>
-                          </h3>
-                        </div>
-                        <Rating
-                          value={parseInt(item.rating)}
-                          size="large"
-                          precision={0.5}
-                          readOnly
-                        />
-                        <p className="mb-0 pt-30"> {item.desc}</p>
-                        <span className="line-servcie transition-4 bg-blue mt-5" />
-                      </div>
-                    </Link>
-                  </div>
+                      <Rating
+                        value={parseInt(item.rating)}
+                        size="large"
+                        precision={0.5}
+                        readOnly
+                      />
+                      <p className="mb-0 pt-30"> {item.desc}</p>
+                      <span className="line-servcie transition-4 bg-blue mt-5" />
+                    </div>
+                  </Link>
                 </div>
-              ))
-            ) : (
-              <div className="no-record">
-                <h2 className="p-2 ">No Result Found</h2>
               </div>
             ))}
              {(this.state.filter_service_provider?.length < 1 && this.state.isFilterActive) && <div className="no-record">

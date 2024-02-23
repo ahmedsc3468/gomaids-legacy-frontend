@@ -5354,6 +5354,7 @@ https://github.com/ApexViewers/maid-service-frontend/pull/23/conflict?name=src%2
   border-color: #036905 !important;
 }
 
+
 /* Asif mobile responsiveness 21 feb */
 @media (max-width: 768px) {
   .each-hw-works .hw-steps {
@@ -5388,3 +5389,4 @@ textarea:focus {
 textarea:focus-visible {
   outline: 0;
 }
+

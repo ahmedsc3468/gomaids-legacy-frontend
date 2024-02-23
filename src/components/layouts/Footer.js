@@ -84,7 +84,7 @@ class Footer extends Component {
                 </ul>
               </div>
             </div>
-            <div className="col-lg-3 col-md-6 mb-md-60 mb-sm-40 footer-link-wrap">
+            <div className="col-lg-3 col-md-3 mb-md-60 mb-sm-40 footer-link-wrap">
               <h3 className="fs-20 f-700 ">Quick Links</h3>
               <span className="footer-lines" />
               <ul className="footer-links white">

@@ -5021,7 +5021,7 @@ ul.theme-ul li img {
 }
 
 .notification-width {
-  max-width: 33ch;
+  /* max-width: 33ch; */
 }
 
 button.ui.inverted.green.button.another_service_btn:hover {

@@ -39,7 +39,7 @@ const useStyles = makeStyles({
   },
   chatSection: {
     width: '100%',
-    height: '410px',
+    minHeight: '410px',
     borderTop: '2px solid #e0e0e0',
     borderBottom: '1px solid #e0e0e0',
     padding: '10px',
@@ -50,11 +50,12 @@ const useStyles = makeStyles({
   },
   borderRight500: {
     borderRight: '1px solid #e0e0e0',
-    height: '60vh',
-    overflowY: 'scroll'
+    // height: '60vh',
+    overflowY: 'auto'
   },
   messageArea: {
     height: '46vh',
+    padding: '8px',
     overflowY: 'auto',
     '&::-webkit-scrollbar-track': {
       borderRadius: '10px',
@@ -79,7 +80,6 @@ const useStyles = makeStyles({
 
 export default function Messanger() {
 
-const dummy = useRef();
   const classes = useStyles();
   const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
   const [sideBarMessages, setSideBarMessages] = useState([]);
@@ -94,7 +94,10 @@ const dummy = useRef();
   const [orderStatus, setOrderStatus] = useState(null)
   const [conversationId, setConversationId] = useState(null)
   const [newMessageConversationId, setNewMessageConversationId] = useState(null)
+    const [scrollCheck, setScrollCheck] = useState(0)
   
+  const messageRef = useRef(null);
+
   useEffect(() => {
     getConversations()    
     window.Echo.private(`message_${user?.id}`).listen("MessageSent", (
@@ -111,6 +114,7 @@ const dummy = useRef();
       newMessageConversationId == singleChatMessages[0]?.conversation_id) {
       getSingleChatMessages(newMessageConversationId)
       seeMessages(newMessageConversationId)
+       setScrollCheck(scrollCheck + 1 )
     }
     setNewMessageConversationId(null)    
   }, [newMessageConversationId])
@@ -120,10 +124,10 @@ const dummy = useRef();
     setSideBarMessages(lastMessageObj.data)
      console.log(" ::::: LINE 104 ::::: ", lastMessageObj.data)
     if(lastMessageObj.data.length === 0){
-      setUserChat({userChat:lastMessageObj.data})
+      setUserChat({ userChat: lastMessageObj.data })
+              setScrollCheck(scrollCheck + 1)
       //  console.log(" ::::: LINE 107 ::::: ", setUserChat({userChat:lastMessageObj.data}))
     }
-    // dummy.current.scrollIntoView({ behavior: 'smooth' });
   }
   const getSingleChatMessages = async (conversation_id) => {
 
@@ -150,6 +154,8 @@ const dummy = useRef();
         getSingleChatMessages(conversationId)
         getConversations()
         setSelectedIndex(conversationId)
+        console.log("send message scrolled")
+        setScrollCheck(scrollCheck + 1)
       }
     }
     
@@ -177,23 +183,34 @@ const dummy = useRef();
   const seeMessages = async (id) => {
     try {
        await axios.put(config.SERVER_URL + `/api/v2/chat/see-messages/${id}`, {}, { headers: AuthHeader() })
-       getConversations()
+      getConversations()
+      setScrollCheck(scrollCheck + 1 )
     } catch (error) {
       console.log(error.message)
     }
   }
 
+  // useEffect(() => {
+  //   if (messageRef.current) {
+  //     messageRef.current.scrollIntoView(
+  //       {
+  //         behavior: 'smooth',
+  //         block: 'end',
+  //         inline: 'nearest'
+  //       })
+  //   }
+  // })
+
   useEffect(() => {
+      console.log("useeffectcalled")
+    // Scroll to the bottom of the list when the component mounts
     if (messageRef.current) {
-      messageRef.current.scrollIntoView(
-        {
-          behavior: 'smooth',
-          block: 'end',
-          inline: 'nearest'
-        })
+         setTimeout(() => {
+      messageRef.current.scrollTop = messageRef.current.scrollHeight;
+           console.log("use effect scrolled")
+               }, 100);
     }
-  })
-  const messageRef = useRef();
+  }, [scrollCheck,singleChatMessages]);
 // console.log('single chat',sideBarMessages);
 // console.log("userChat",userChat);
 // console.log('single chat messages', singleChatMessages);
@@ -202,7 +219,7 @@ return (
       {sideBarMessages.length == null ? <div className="text-center"> <CircularProgress color="success" /></div> :
     
         <Grid container component={Paper} className={classes.chatSection}>
-          <Grid item xs={3} className={`${classes.borderRight500} h-100 `}>
+          <Grid item xs={3} className={`${classes.borderRight500} `}>
             <List key={user.id}>
               <ListItem button  >
                 <ListItemIcon>
@@ -293,8 +310,8 @@ return (
             </List>
             }
           </Grid>
-          {!chatIsPending ? <Grid item xs={9} ref={messageRef}>
-          <List key='chatMessages' id="chatgrid"className={classes.messageArea}>
+          {!chatIsPending ? <Grid item xs={9} >
+          <List key='chatMessages' id="chatgrid"className={classes.messageArea} ref={messageRef}>
               {singleChatMessages.map((message, index) => {
                 const align = message.sender_user.id === user.id ? 'right' : 'left ';
               //  setOrderStatus(message.conversation.order.status);
@@ -318,11 +335,10 @@ return (
                   </ListItem>
                 )
               })}
-              <span ref={dummy}></span>
             </List>
             
             <Divider />
-         
+
              <Grid container style={{ padding: '20px' }} hidden={orderStatus != 1} >
               <Grid item xs={11}>
                 <TextField id="outlined-basic-email" onKeyPress={handleKeyPress} value={message} onChange={(e) => { setMessage(e.target.value) }} label="Type Something" fullWidth />

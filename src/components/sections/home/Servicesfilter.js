@@ -12,8 +12,7 @@ import GoogleMapReact from "google-map-react";
 import AuthService from "../../../services/auth.service";
 import img_src from "../../../assets/img/lcoation.png";
 import swal from "sweetalert";
-import { withRouter } from 'react-router-dom';
-
+import { withRouter } from "react-router-dom";
 
 let circle;
 
@@ -31,16 +30,18 @@ class Service extends Component {
   constructor(props) {
     let user = AuthService.getCurrentUser();
     super(props);
-   
+
     if (user != null && (user.lat != null || user.lng != null)) {
       this.state = {
         serviceblock: this.props.serviceblock,
         serviceProviders: [],
         nearserviceProviders: [],
-        center: { lat: parseFloat(user.lat) || 49.34288, lng: parseFloat(user.lng) || -123.11484 },
+        center: {
+          lat: parseFloat(user.lat) || 49.34288,
+          lng: parseFloat(user.lng) || -123.11484,
+        },
         inputRad: 20000,
         currentUser: authService.getCurrentUser(),
-       
       };
     } else {
       this.state = {
@@ -55,7 +56,6 @@ class Service extends Component {
   }
 
   async componentDidMount() {
-  
     // this.setState({
     //   markers: [
     //     {
@@ -157,7 +157,9 @@ class Service extends Component {
   changeRadius = async () => {
     let that = this;
     circle.setRadius(Number(this.state.inputRad));
-    this.props.history.push('/find-a-services',{ radius: this.state.inputRad / 1000 });
+    this.props.history.push("/find-a-services", {
+      radius: this.state.inputRad / 1000,
+    });
     const apiCaldata = {
       lat: that.props.center.lat,
       lng: that.props.center.lng,
@@ -200,13 +202,11 @@ class Service extends Component {
   componentDidUpdate(prevProps) {
     // Check if markers prop has changed
 
-   
-    if (this.props.lat !== prevProps.lat || this.props.lng !== prevProps.lng ) {
+    if (this.props.lat !== prevProps.lat || this.props.lng !== prevProps.lng) {
       circle.setCenter(this.props.center); // Update circle cente
     }
   }
   render() {
-
     var pDoc = document.getElementById("locationicons");
     var pagrent = pDoc?.parentNode;
     let owlLength1000 = 3;
@@ -270,7 +270,7 @@ class Service extends Component {
             <section className="service pt-30 pb-10 bg-light-white">
               <div className="container" style={{ height: "1000px" }}>
                 <div className="row mb-40 align-items-end justify-content-center">
-                  <div className="col-lg-9 col-md-12 text-center text-lg-center">
+                  <div className="col-lg-9 col-md-12 text-center text-lg-center custom-service-provider">
                     <h1>Service Providers Near You</h1>
                   </div>
 
@@ -285,7 +285,7 @@ class Service extends Component {
                                             </div>
                                         </div> */}
                 </div>
-                <div class=" row justify-content-center">
+                <div class="col-lg-9 col-md-12 justify-content-center row text-center text-lg-center custom-service-provider">
                   <h5>
                     Enter the Searchable Area Radius in the Box and Press Change
                     Distance
@@ -341,7 +341,7 @@ class Service extends Component {
                       defaultCenter={this.props.center}
                       yesIWantToUseGoogleMapApiInternals
                       onGoogleApiLoaded={({ map, maps }) =>
-                        apiIsLoaded(map, maps)  
+                        apiIsLoaded(map, maps)
                       }
                     >
                       {this.props.markers.map((marker, i) => {
@@ -640,4 +640,4 @@ class Service extends Component {
   }
 }
 
-export default  withRouter(Service);
+export default withRouter(Service);

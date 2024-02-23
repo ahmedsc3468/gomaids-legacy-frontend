@@ -97,7 +97,7 @@ export default function Counter() {
                   Average Orders Per Day
                 </li>
               </ul>
-              <div className="row">
+              <div className="row mb-10">
                 <div className="col-sm-4"></div>
                 <div
                   className="col-sm-4"

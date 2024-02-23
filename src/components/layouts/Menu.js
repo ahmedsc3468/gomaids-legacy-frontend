@@ -406,15 +406,21 @@ class Menu extends Component {
             </Link>
           </span>
         </li>
-
         <li>
-          <span className="mobileonly"  hidden={userObj != null}>
-            <Link to="/login">Login</Link>
+          <span className="mobileonly  custom-login" hidden={userObj != null}>
+            <Link to="/login" className="text-light">
+              Login
+            </Link>
           </span>
         </li>
         <li>
-          <span  className="mobileonly" hidden={userObj != null}>
-            <Link to="/signup">Register</Link>
+          <span
+            className="mobileonly  custom-register"
+            hidden={userObj != null}
+          >
+            <Link to="/signup" className="text-light">
+              Register
+            </Link>
           </span>
         </li>
       </ul>

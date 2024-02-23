@@ -131,11 +131,10 @@ export default function PopoverPopupState(props) {
               <div className="heading-notification-container">
                 <strong>
                   <h4 className="heading-notification">Notifications</h4>
-                  <hr />+
                 </strong>
               </div>
 
-              <div className="notification-width">
+              <div className="notification-width notification-wrapper">
                 {notification.length > 0 &&
                   notification.map((takerNotification) => (
                     <Segment key={takerNotification.id}>

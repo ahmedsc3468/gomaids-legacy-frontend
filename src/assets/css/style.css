@@ -659,7 +659,7 @@ input[type="number"]::-webkit-outer-spin-button {
 .main-menu-1 ul li a {
   font-size: 1.18rem;
   font-weight: 400;
-  padding: 5px 30px;
+  padding: 7px 18px;
 }
 .main-menu-1 ul li a.active {
   border-radius: 50px;
@@ -909,7 +909,7 @@ input[type="number"]::-webkit-outer-spin-button {
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid;
-    color: #111111 !important;
+    color: #111111;
   }
   .main-menu-1 ul > li > .submenu {
     opacity: 1;
@@ -1081,11 +1081,88 @@ input[type="number"]::-webkit-outer-spin-button {
   flex-direction: row-reverse;
   width: 100%;
 }
-@media only screen and (min-width: 600px) {
-  .main-menu-1 > div > ul > li > .mobileonly {
-    display: none;
+/* Asif changes 21 feb */
+@media only screen and (min-width: 992px) {
+  .main-menu-1 > div > ul > li > .mobileonly,
+  .login-register {
+    display: none !important;
   }
 }
+@media only screen and (max-width: 991px) {
+  .special_link a {
+    /* width: fit-content !important; */
+    width: 80% !important;
+    margin: 10px auto !important;
+    padding: 0px !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
+
+  .main-menu-1 ul > li {
+    display: flex !important;
+    width: 100%;
+    padding: 0 !important;
+    color: #fff !important;
+  }
+  .main-menu-1 .custom-login {
+    background-color: #3498db;
+    color: #ffffff !important;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    width: 80%;
+    text-align: center;
+    margin: 10px auto;
+    display: inline-block;
+  }
+  .main-menu-1 .custom-login:hover {
+    background-color: #2980b9;
+  }
+  .main-menu-1 .custom-register {
+    background-color: #2ecc71;
+    color: #ffffff !important;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    display: inline-block;
+    width: 80%;
+    text-align: center;
+    margin: 10px auto;
+  }
+  .main-menu-1 .custom-register:hover {
+    background-color: #27ae60;
+  }
+  .custom-contact {
+    max-width: 440px;
+    margin: 0 auto;
+  }
+}
+.custom-service-provider {
+  max-width: 800px;
+  margin: 0 auto;
+}
+@media only screen and (max-width: 600px) {
+  /* .custom-register,
+  .custom-login {
+    width: 100%;
+  } */
+}
+@media only screen and (max-width: 768px) {
+  .footer-link-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+.custom-email-location {
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+/* Asif changes ends here */
 .buttongroudp {
   margin: 5px;
 }
@@ -1570,7 +1647,7 @@ input[type="number"]::-webkit-outer-spin-button {
   margin-bottom: 20px;
   object-fit: cover;
 }
-.service-icn img{
+.service-icn img {
   object-fit: cover;
 }
 .line-servcie {
@@ -4944,7 +5021,7 @@ ul.theme-ul li img {
 }
 
 .notification-width {
-  max-width: 33ch;
+  /* max-width: 33ch; */
 }
 
 button.ui.inverted.green.button.another_service_btn:hover {
@@ -5106,8 +5183,8 @@ button.ui.button.add_feedback {
 
 /* Asif Header Changes for responsiveness */
 @media (max-width: 1288px) {
-  .main-menu-1 ul li a {
-    padding: 5px 15px;
+  .main-menu-1 ul li:last-child a {
+    padding: 7px 18px;
   }
   .head-1-book {
     margin: 0px;
@@ -5118,35 +5195,58 @@ button.ui.button.add_feedback {
 }
 @media (max-width: 1024px) {
   .main-menu-1.menu-2 ul li a {
-    padding: 5px 5px;
+    padding: 5px;
   }
 }
 
 @media only screen and (max-width: 992px) {
   .logo-class {
-     justify-content: space-between;
+    justify-content: space-between;
   }
 }
 
 /* Home page responsiveness */
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 480px) {
   h1 {
-    font-size: 2rem !important;
+    font-size: 1.5rem !important;
   }
   h2 {
-    font-size: 1.6rem !important;
+    font-size: 1.3rem !important;
   }
   h3 {
-    font-size: 1.4rem !important;
+    font-size: 1.1rem !important;
   }
   h4 {
-    font-size: 1.2rem !important;
+    font-size: 0.9rem !important;
   }
   h5 {
-    font-size: 1rem !important;
+    font-size: 0.8rem !important;
   }
   h6 {
+    font-size: 0.6rem !important;
+  }
+  .container {
+    padding: 0px 30px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  h1 {
+    font-size: 1.7rem !important;
+  }
+  h2 {
+    font-size: 1.5rem !important;
+  }
+  h3 {
+    font-size: 1.3rem !important;
+  }
+  h4 {
+    font-size: 1.1rem !important;
+  }
+  h5 {
     font-size: 0.8rem !important;
+  }
+  h6 {
+    font-size: 0.6rem !important;
   }
   .container {
     padding: 0px 30px;
@@ -5155,22 +5255,22 @@ button.ui.button.add_feedback {
 
 @media only screen and (max-width: 1200px) {
   h1 {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
   }
   h2 {
-    font-size: 2.1rem;
-  }
-  h3 {
     font-size: 1.9rem;
   }
-  h4 {
+  h3 {
     font-size: 1.7rem;
   }
-  h5 {
+  h4 {
     font-size: 1.5rem;
   }
-  h6 {
+  h5 {
     font-size: 1.3rem;
+  }
+  h6 {
+    font-size: 1rem;
   }
   /* How gomaidz works */
   .each-hw-works {
@@ -5237,21 +5337,28 @@ button.ui.button.add_feedback {
   align-items: center;
   z-index: 99;
 }
-.no-record  {
+.no-record {
   margin: auto;
 }
-.css-1c99szj-MuiRating-icon:hover{
-color:#fff !important;
+
+.about-image img {
+  border-radius: 5px;
 }
-.about-image img{
-border-radius: 5px;
-}
-.css-mzb7oa-option{
+.css-mzb7oa-option {
   color: #fff !important;
 }
-.buttongroudp{
+.buttongroudp {
   background-color: #036905 !important;
   border-color: #036905 !important;
+}
+
+
+/* Asif mobile responsiveness 21 feb */
+@media (max-width: 768px) {
+  .each-hw-works .hw-steps {
+    right: unset;
+    top: 0;
+  }
 }
 textarea {
   box-sizing: border-box;
@@ -5280,3 +5387,4 @@ textarea:focus {
 textarea:focus-visible {
   outline: 0;
 }
+

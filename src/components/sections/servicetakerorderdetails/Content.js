@@ -71,8 +71,8 @@ class ServiceTakerOrderDetails extends Component {
             
            
         this.setState({ order: order.data.data,
-             convoTargeted: order.data.data?.conversation,
-             convochat:order.data.data?.conversation?.chat,
+            //  convoTargeted: order.data.data?.conversation,
+            //  convochat:order.data.data?.conversation?.chat,
              order_status:order.data.data.status,
              currentTab: 'userprofile',
              rating: parseInt(order.data.data.rating) ,
@@ -162,8 +162,8 @@ class ServiceTakerOrderDetails extends Component {
                         
                             that.setState({ 
                                 order: order.data.data,
-                                convoTargeted: order.data.data.conversation,
-                                convochat: order.data.data.conversation.chat,
+                                // convoTargeted: order.data.data.conversation,
+                                // convochat: order.data.data.conversation.chat,
                                 order_status : order.data.data.status,
                                 rating: parseInt(order.data.data.rating),
                                 rateshow: true
@@ -171,6 +171,7 @@ class ServiceTakerOrderDetails extends Component {
 
                             swal("Order Updated!", "Action successfully completed.", "success")
                         } catch(e) {
+                            console.log("error",e);
                             swal("Something went wrong", "Please try again later.", "warning")
                         }
 
@@ -181,12 +182,16 @@ class ServiceTakerOrderDetails extends Component {
             })            
         } else {
             const order_id = this.props.match.params.order_id
-
-            const { data } = await axios.put(config.SERVER_URL + `/api//${order_id}`, { status: a, st_status:a },
+            this.setState({
+                loader: true
+            })
+            const { data } = await axios.put(config.SERVER_URL + `/api/changeorderstatus/${order_id}`, { status: a, st_status:a },
             {
                 headers: authHeader(),
             });
-
+            this.setState({
+                loader: false
+            })
             swal("Updated!", "Your Status Has Been Change!", "success")
 
             const order = await axios.get(config.SERVER_URL + `/api/order/${order_id}`,
@@ -196,8 +201,8 @@ class ServiceTakerOrderDetails extends Component {
 
             this.setState({ 
                 order: order.data.data,
-                convoTargeted: order.data.data.conversation,
-                convochat:order.data.data.conversation.chat,
+                // convoTargeted: order.data.data.conversation,
+                // convochat:order.data.data.conversation.chat,
                 order_status:order.data.data.status,
                 rating: parseInt(order.data.data.rating) 
             })
@@ -227,7 +232,14 @@ class ServiceTakerOrderDetails extends Component {
 
         this.setState({ dropDownOpen: !this.state.dropDownOpen })
     }
-
+    getTimeDifference = (orderDate) => {
+        const orderCreatedAt = new Date(orderDate); 
+        const currentTime = new Date();
+    const differenceInMilliseconds = currentTime - orderCreatedAt;
+    const differenceInHours = differenceInMilliseconds / (1000 * 60 * 60);
+    console.log('differenceInHours',differenceInHours);
+    return differenceInHours;
+    }
     feedbackSentTo = async (event, errors, values) => {
         event.preventDefault()
         console.log("FeedBack Call")
@@ -446,6 +458,18 @@ class ServiceTakerOrderDetails extends Component {
                                                     </Row>
                                                 </Col>
                                             </Row>
+                                            <Row>
+                                                <Col className="align-self-center mb-1" sm='12'>
+                                                    <Row>
+                                                        <Col sm='12' md='4'>
+                                                            <div className=""><b>Additional Notes</b></div>
+                                                            <div className="font-weight-light" style={{ maxWidth: '10rem' }}>{this.state.order.additional_notes}</div>
+                                                        </Col>
+                                                       
+                                                     
+                                                    </Row>
+                                                </Col>
+                                            </Row>
                                             <Row className="mt-5">
                                                 <Col className="align-self-center mb-1" sm='12'>
                                                     <Row>
@@ -520,6 +544,10 @@ class ServiceTakerOrderDetails extends Component {
                                     </>)}  */}
                                     {user.role.name === 'service_provider' && ( <>
                                      <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(2)} hidden={this.state.order.sp_status == "2" || this.state.order.status != "1"  || this.state.order.status == "5" }> Complete</Button>
+                                     <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(3)} hidden={this.state.order.status =="2" ||this.state.order.sp_status =="2" || this.state.order.status =="3" || this.state.order.status =="5"}> Cancel</Button>
+                                    </>)} 
+                                    {user.role.name === 'service_taker' && this.getTimeDifference(this.state.order.created_at) < 1 && ( <>
+                                  
                                      <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(3)} hidden={this.state.order.status =="2" ||this.state.order.sp_status =="2" || this.state.order.status =="3" || this.state.order.status =="5"}> Cancel</Button>
                                     </>)} 
                                     {/* <Dropdown onSelect={(e) => this.statusChange(e, order.id)}>

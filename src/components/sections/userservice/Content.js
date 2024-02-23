@@ -13,6 +13,7 @@ import swal from "sweetalert";
 import CircularProgress from "@mui/material/CircularProgress";
 import "../../../assets/MyCSS/userdashboard.css";
 import { Modal } from "react-bootstrap";
+import Loader from "../Loader/Loader";
 
 class UserService extends Component {
   schema = {
@@ -29,6 +30,7 @@ class UserService extends Component {
 
     this.state = {
       user_id: user && user.id,
+      isLoading: false,
       servicesArr: [],
       generalServices: [],
       providerServices: [],
@@ -345,6 +347,8 @@ class UserService extends Component {
   //   }
   async componentDidMount() {
     try {
+      
+      this.setState({isLoading:true});
       const lang = await axios.get(
         config.SERVER_URL + `/api/language?column=1&length=100`,
         {
@@ -461,6 +465,7 @@ class UserService extends Component {
       this.setState({ selectedService: this.state.servicesArr[0].label });
       this.setState({ auto_accept: parseInt(data?.data[0]?.auto_accept) });
       this.setState({ isPending: false });
+      this.setState({isLoading:false});
     } catch (e) {
       console.log(e.message);
     }
@@ -557,6 +562,7 @@ class UserService extends Component {
     const label = { inputProps: { "aria-label": "Switch demo" } };
     return (
       <>
+       {this.state.isLoading && <Loader />}
         {this.state.isPending ? (
           <div className="text-center">
             {" "}

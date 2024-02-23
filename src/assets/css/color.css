@@ -5,7 +5,6 @@
   Version: 1.0
 ========================================================================================== */
 
-
 /*-------------------------------------------------------
 
     CSS INDEX
@@ -23,11 +22,9 @@
 
 -------------------------------------------------------*/
 
-
 /* ....................................
 1. Color black 
 .......................................*/
-
 
 .black,
 body,
@@ -45,25 +42,23 @@ a,
 .pagination-type1 ul li a,
 .tags-small a,
 .blog-social li a,
-.main-slider.owl-carousel .owl-nav>div i,
+.main-slider.owl-carousel .owl-nav > div i,
 .blog-auther-social li a,
 .servvice-link-list li a {
-    color: #111111;
+  color: #111111;
 }
 
-a:hover{
-    color:#036905 ;
+a:hover {
+  color: #036905;
 }
-
 
 /* ....................................
 2. Color light white
 .......................................*/
 
 .light-white {
-    color: #f9fafc;
+  color: #f9fafc;
 }
-
 
 /* ....................................
 3. Color blue
@@ -87,34 +82,32 @@ a,
 .footer-links li a i,
 .social-icons.footer a:hover,
 .mean-container a.meanmenu-reveal,
-.banner-quote-form .input-white:focus+i,
-.testimonial-2-slide.owl-carousel .owl-nav > div ,
+.banner-quote-form .input-white:focus + i,
+.testimonial-2-slide.owl-carousel .owl-nav > div,
 .head-type-2.head-type-3 .head-1-book-call,
 .faq-boxes .card-header:hover,
 .faq-boxes .card-header h5 i,
 .social-icons.black li a:hover i,
 .testimonial-3-slide.owl-carousel .owl-nav > div,
-.head-type-2.head-type-3 .main-menu-1>div>ul>li>a:hover,
+.head-type-2.head-type-3 .main-menu-1 > div > ul > li > a:hover,
 .head-type-2.head-type-3 .main-menu-1 li .submenu a:hover,
 .social-head ul li a:hover,
-.input-search+i,
+.input-search + i,
 .categories li a:hover,
-.filter-gallery>button.active,
-.filter-gallery>button:hover,
+.filter-gallery > button.active,
+.filter-gallery > button:hover,
 .check-list.type-2-c li i,
 .blue-dot-list li:before,
 .loader {
-    color: #036905;
+  color: #036905;
 }
-
 
 /*shadow blue*/
 
 .shadow-blue,
 .testimonial-quote .quote-blue {
-    text-shadow: 0 0px 13px 2px rgb(12 34 120 / 57%);
+  text-shadow: 0 0px 13px 2px rgb(12 34 120 / 57%);
 }
-
 
 /* ....................................
 4. Bg black
@@ -135,52 +128,50 @@ a,
 .shop-prdt-img:before,
 .prdt-tab .nav-link.active,
 .each-work {
-    /* background: #eaf1f0; */
+  /* background: #eaf1f0; */
 }
-
 
 /*black bg opacity classes*/
 
 .bg-black-op-9 {
-    background: rgba(19, 27, 35, 0.9);
+  background: rgba(19, 27, 35, 0.9);
 }
 
 .bg-black-op-8 {
-    background: rgba(19, 27, 35, 0.8);
+  background: rgba(19, 27, 35, 0.8);
 }
 
 .bg-black-op-7 {
-    background: rgba(19, 27, 35, 0.7);
+  background: rgba(19, 27, 35, 0.7);
 }
 
 .bg-black-op-6 {
-    background: rgba(19, 27, 35, 0.6);
+  background: rgba(19, 27, 35, 0.6);
 }
 
 .bg-black-op-5 {
-    background: rgba(19, 27, 35, 0.5);
+  background: rgba(19, 27, 35, 0.5);
 }
 
 .bg-black-op-4 {
-    background: rgba(19, 27, 35, 0.4);
+  background: rgba(19, 27, 35, 0.4);
 }
 
 .bg-black-op-3 {
-    background: rgba(19, 27, 35, 0.3);
+  background: rgba(19, 27, 35, 0.3);
 }
 
 .bg-black-op-2 {
-    background: rgba(19, 27, 35, 0.2);
+  background: rgba(19, 27, 35, 0.2);
 }
 
 .bg-black-op-1 {
-    background: rgba(19, 27, 35, 0.1);
+  background: rgba(19, 27, 35, 0.1);
 }
 
 .bg-black-op-0 {
-    background: rgba(19, 27, 35, 0);
+  background: rgba(19, 27, 35, 0);
 }
-
 
 /* ....................................
 5. Bg blue
@@ -240,89 +231,84 @@ a,
 .shop-prdt-img span,
 .experience li:after,
 .experience li:before {
-    background: #102043;
+  background: #102043;
 }
 .head-type-2.head-type-3 .head-1-book-call:hover {
-    background: #036905;
+  background: #036905;
 }
 
 /*blue bg opacity classes*/
 
 .bg-blue-op-9 {
-    background: rgba(40, 127, 249, 0.9);
+  background: rgba(40, 127, 249, 0.9);
 }
 
 .bg-blue-op-8 {
-    background: rgba(40, 127, 249, 0.8);
+  background: rgba(40, 127, 249, 0.8);
 }
 
 .bg-blue-op-7 {
-    background: rgba(40, 127, 249, 0.7);
+  background: rgba(40, 127, 249, 0.7);
 }
 
 .bg-blue-op-6 {
-    background: rgba(40, 127, 249, 0.6);
+  background: rgba(40, 127, 249, 0.6);
 }
 
 .bg-blue-op-5 {
-    background: rgba(40, 127, 249, 0.5);
+  background: rgba(40, 127, 249, 0.5);
 }
 
 .bg-blue-op-4 {
-    background: rgba(40, 127, 249, 0.4);
+  background: rgba(40, 127, 249, 0.4);
 }
 
 .bg-blue-op-3 {
-    background: rgba(40, 127, 249, 0.3);
+  background: rgba(40, 127, 249, 0.3);
 }
 
 .bg-blue-op-2 {
-    background: rgba(40, 127, 249, 0.2);
+  background: rgba(40, 127, 249, 0.2);
 }
 
 .bg-blue-op-1 {
-    background: rgba(40, 127, 249, 0.1);
+  background: rgba(40, 127, 249, 0.1);
 }
-
 
 /*shadow blue*/
 
-
-
 .shadow-blue {
-    box-shadow: 0 0px 13px 2px rgb(40, 127, 249, 0.5);
+  box-shadow: 0 0px 13px 2px rgb(40, 127, 249, 0.5);
 }
 
-
 .blob {
-    box-shadow: 0 0 0 0 rgb(40, 127, 249);
-    animation: pulse-blue 2s infinite;
+  box-shadow: 0 0 0 0 rgb(40, 127, 249);
+  animation: pulse-blue 2s infinite;
 }
 
 @keyframes pulse-blue {
-    0% {
-        box-shadow: 0 0 0 0 rgba(40, 127, 249, 0.7);
-    }
-    70% {
-        box-shadow: 0 0 0 30px rgba(40, 127, 249, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(40, 127, 249, 0);
-    }
+  0% {
+    box-shadow: 0 0 0 0 rgba(40, 127, 249, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 30px rgba(40, 127, 249, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(40, 127, 249, 0);
+  }
 }
 
 @keyframes pulse-blue-small {
-    0% {
-        box-shadow: 0 0 0 0 rgba(40, 127, 249, 0.7);
-    }
-    70% {
-        box-shadow: 0 0 0 15px rgba(40, 127, 249, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(40, 127, 249, 0);
-    }
+  0% {
+    box-shadow: 0 0 0 0 rgba(40, 127, 249, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(40, 127, 249, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(40, 127, 249, 0);
+  }
 }
-
 
 /* ....................................
 6. Bg  light white
@@ -343,9 +329,8 @@ section.error:after,
 .prdt-detail-tab,
 .prdt-tab,
 .calculation .form-group {
-    background: #f9fafc;
+  background: #f9fafc;
 }
-
 
 /* ....................................
 7. Border Blue
@@ -369,21 +354,19 @@ section.error:after,
 .calculation .input-white,
 .book-service .input-white,
 .each-work:before {
-    border-color: #0C2278;
+  border-color: #0c2278;
 }
-.head-type-2.head-type-3 .head-1-book-call{
-    border-color: #242323;
+.head-type-2.head-type-3 .head-1-book-call {
+  border-color: #242323;
 }
-
 
 /*border bottom*/
 
 .link-line,
 .cart-table thead tr th,
 .login-section .card {
-    border-bottom-color: #0C2278;
+  border-bottom-color: #0c2278;
 }
-
 
 /*border left*/
 
@@ -391,25 +374,22 @@ section.error:after,
 .how-work-img:before,
 .servvice-link-list li a:hover:after,
 .servvice-link-list li.active a:after {
-    border-left-color: #0C2278;
+  border-left-color: #0c2278;
 }
-
 
 /*border top*/
 
 .partner:hover .partner-logo:after {
-    border-top-color: #0C2278;
+  border-top-color: #0c2278;
 }
-
 
 /* ....................................
 8. Border black
 .......................................*/
 
 .border-black {
-    border-color: #111111;
+  border-color: #111111;
 }
-
 
 /* ....................................
 9. Border light white
@@ -421,22 +401,22 @@ section.error:after,
 .blog-standared-content,
 .light-border,
 .partner-logo {
-    border-color: #f9fafc;
+  border-color: #f9fafc;
 }
 
 .partner-logo:after {
-    border-top-color: #f9fafc;
+  border-top-color: #f9fafc;
 }
 
 /* ....................................
 10. yellow color
 .......................................*/
 .btn-blue {
-    box-shadow: 0px 6px 10px -4px #036905;
+  box-shadow: 0px 6px 10px -4px #036905;
 }
 .btn-blue:hover {
-    box-shadow: 0px 11px 20px -4px #036905;
-    /* color: #111111; */
+  box-shadow: 0px 11px 20px -4px #036905;
+  /* color: #111111; */
 }
 .btn-blue,
 .btn-white-border:hover,
@@ -446,25 +426,37 @@ section.error:after,
 .btn-black,
 .btn-black:hover,
 .main-slider.owl-carousel .owl-nav > div:hover,
-.btn-blue-border:hover{
-    background: #036905;
-    color: #ffffff    ;
-    text-shadow: none;
+.btn-blue-border:hover {
+  background: #036905;
+  color: #ffffff;
+  text-shadow: none;
 }
-.head-1-book-2.blob-small{
-    animation: none;
+.head-1-book-2.blob-small {
+  animation: none;
 }
 .btn-white-border,
 .head-1-book,
 .main-slider.owl-carousel .owl-nav > div,
-.btn-blue-border{
-    border-color: #036905;
-    color: #111111;
+.btn-blue-border {
+  border-color: #036905;
+  color: #111111;
 }
 .inner-banner .blue,
-h1,h2,h2,h3,h4,h5,h6,
-h1 a,h2 a,h2 a,h3 a,h4 a,h5 a,h6 a{
-    color: #102043;
+h1,
+h2,
+h2,
+h3,
+h4,
+h5,
+h6,
+h1 a,
+h2 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a,
+h6 a {
+  color: #102043;
 }
 .each-price-2.active h1,
 .each-price-2.active h4,
@@ -478,8 +470,8 @@ h1 a,h2 a,h2 a,h3 a,h4 a,h5 a,h6 a{
 .each-portfolio .portfolio-text h4,
 .each-feature.white h3,
 .about-count.white h3,
-.portfolio-item-detail h5>a,
+.portfolio-item-detail h5 > a,
 .clock h1,
-.service-each:hover .service-text h3{
-    color: #fff;
+.service-each:hover .service-text h3 {
+  color: #fff;
 }

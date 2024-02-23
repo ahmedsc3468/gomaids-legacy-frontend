@@ -170,7 +170,7 @@ class Contactdetail extends Contacthelper {
       <section className="contact pt-90 pb-90">
         <div className="container">
           <div className="row">
-            <div className="col-lg-4">
+            <div className="col-lg-4 custom-contact">
               <h3 className="fs-26 f-700 mb-5 cust-right-container-h">
                 We are Here for You
               </h3>
@@ -183,7 +183,7 @@ class Contactdetail extends Contacthelper {
                     <i className="fas fa-envelope" />
                   </span>
                   <span>Email</span>
-                  <div>info@gomaidz.com</div>
+                  <div className="custom-email-location">info@gomaidz.com</div>
                 </li>
               </ul>
               <div className="hr-1 bg-black opacity-1 mt-25 mb-25" />
@@ -194,7 +194,7 @@ class Contactdetail extends Contacthelper {
                     <i className="fas fa-map-marker-alt" />
                   </span>
                   <span>Location</span>
-                  <div>
+                  <div className="custom-email-location">
                     127 Westmore Dr, Unit 119, Etobicoke, ON M9V 3Y6, Canada
                   </div>
                 </li>

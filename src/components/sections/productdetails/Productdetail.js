@@ -282,8 +282,9 @@ class Productdetail extends Component {
 
     }
     onChangeDate = async (date) => {
+if(date){
 
-          // You can create a Date object by passing the date string
+            // You can create a Date object by passing the date string
 const newDate = new Date(date);
 
 
@@ -314,6 +315,8 @@ const formattedDate = `${month}/${day}/${year}`;
         this.setState({
             slot_by_date: avaiable_slots
         })
+}
+  
     };
     handleDateClick = async (e) => {
         let user = AuthService.getCurrentUser();

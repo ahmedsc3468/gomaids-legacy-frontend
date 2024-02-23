@@ -91,7 +91,7 @@ class Serviceblock extends Component {
 
   async componentDidMount() {
 
-    window.scrollTo(0, 500);
+    window.scrollTo(0, 200);
     const { city , radius } = this.props.location.state || {};
     let that = this;
     if(!city){

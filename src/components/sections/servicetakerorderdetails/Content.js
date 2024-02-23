@@ -147,7 +147,7 @@ class ServiceTakerOrderDetails extends Component {
                             loader: true
                         })
 
-                        const { data } = await axios.put(config.SERVER_URL + `/api/changeorderstatus/${order_id}`, { status: a, sp_status:a },
+                        const { data } = await axios.put(config.SERVER_URL + `/api/changeorderstatus/${order_id}`, { status: a, sp_status:a,role:'service_provider' },
                         {
                             headers: authHeader(),
                         });
@@ -181,31 +181,50 @@ class ServiceTakerOrderDetails extends Component {
                     }
             })            
         } else {
-            const order_id = this.props.match.params.order_id
-            this.setState({
-                loader: true
-            })
-            const { data } = await axios.put(config.SERVER_URL + `/api/changeorderstatus/${order_id}`, { status: a, st_status:a },
-            {
-                headers: authHeader(),
-            });
-            this.setState({
-                loader: false
-            })
-            swal("Updated!", "Your Status Has Been Change!", "success")
+            const order_id = this.props.match.params.order_id;
+            const status = (a == "2")? "complete" : "cancel";
+            const that = this
+            swal({
+                title: "Are you sure?",
+                text: `Do you want to ${status} the order? You will not be able to revert this action.`,
+                icon: "warning",
+                buttons: [
+                  'No, cancel it!',
+                  'Yes, I am sure!'
+                ],
+                dangerMode: true,
+              }).then(async function(isConfirm) {
+                if (isConfirm) {
 
-            const order = await axios.get(config.SERVER_URL + `/api/order/${order_id}`,
-            {
-                headers: authHeader(),
-            });
 
-            this.setState({ 
-                order: order.data.data,
-                // convoTargeted: order.data.data.conversation,
-                // convochat:order.data.data.conversation.chat,
-                order_status:order.data.data.status,
-                rating: parseInt(order.data.data.rating) 
-            })
+                    this.setState({
+                        loader: true
+                    })
+                    
+                    const { data } = await axios.put(config.SERVER_URL + `/api/changeorderstatus/${order_id}`, { status: a, st_status:a,role:'service_taker' },
+                    {
+                        headers: authHeader(),
+                    });
+                    this.setState({
+                        loader: false
+                    })
+                    swal("Updated!", "Your Status Has Been Change!", "success")
+        
+                    const order = await axios.get(config.SERVER_URL + `/api/order/${order_id}`,
+                    {
+                        headers: authHeader(),
+                    });
+        
+                    this.setState({ 
+                        order: order.data.data,
+                        // convoTargeted: order.data.data.conversation,
+                        // convochat:order.data.data.conversation.chat,
+                        order_status:order.data.data.status,
+                        rating: parseInt(order.data.data.rating) 
+                    });
+                }
+            });
+           
         }
     }
 
@@ -239,6 +258,19 @@ class ServiceTakerOrderDetails extends Component {
     const differenceInHours = differenceInMilliseconds / (1000 * 60 * 60);
     console.log('differenceInHours',differenceInHours);
     return differenceInHours;
+    }
+    getOrderDifference = (orderDate) => {
+        var orderDate = new Date(orderDate); // Sample order date
+
+        // Get the current date
+        var currentDate = new Date();
+
+        // Check if the order date is greater than the current date
+        if (orderDate > currentDate) {
+        return false;
+        } else {
+        return true;
+        }
     }
     feedbackSentTo = async (event, errors, values) => {
         event.preventDefault()
@@ -350,6 +382,8 @@ class ServiceTakerOrderDetails extends Component {
         }
        
     }
+
+
     render() {
         const user = AuthService.getCurrentUser()
        
@@ -542,10 +576,13 @@ class ServiceTakerOrderDetails extends Component {
                                      <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(2)} disabled={this.state.order.st_status =="2" || this.state.order.status =="3"  }> Complete</Button>
                                     <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(3)} disabled={this.state.order.status =="3" || this.state.order.st_status =="2" || this.state.order.status =="1"}> Cancel</Button>
                                     </>)}  */}
+                                    {(user.role.name === 'service_provider' && this.getOrderDifference(this.state.order.order_date)) && ( <>   
+                                     <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(2)} hidden={this.state.order.sp_status == "2" || this.state.order.status != "1"  || this.state.order.status == "5" }> Complete</Button></>
+                                        )} 
                                     {user.role.name === 'service_provider' && ( <>
-                                     <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(2)} hidden={this.state.order.sp_status == "2" || this.state.order.status != "1"  || this.state.order.status == "5" }> Complete</Button>
                                      <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(3)} hidden={this.state.order.status =="2" ||this.state.order.sp_status =="2" || this.state.order.status =="3" || this.state.order.status =="5"}> Cancel</Button>
                                     </>)} 
+                                    
                                     {user.role.name === 'service_taker' && this.getTimeDifference(this.state.order.created_at) < 1 && ( <>
                                   
                                      <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(3)} hidden={this.state.order.status =="2" ||this.state.order.sp_status =="2" || this.state.order.status =="3" || this.state.order.status =="5"}> Cancel</Button>

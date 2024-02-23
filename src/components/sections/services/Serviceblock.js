@@ -55,13 +55,14 @@ class Serviceblock extends Component {
 
       services_type: [],
       services_providers: [],
+      isFilterActive:false,
       filter_service_provider: [],
       service_type_id: 1,
       city_name: city,
       services_provider: "",
       providername: "",
       price: "",
-      radius: radius,
+      radius: radius || 20,
       searchvalue: localStorage.getItem("searchservice"),
       currentUser: authService.getCurrentUser(),
       links: [],
@@ -81,7 +82,7 @@ class Serviceblock extends Component {
         },
       ],
       lat: plat || defaultLat,
-      lng: plat || defaultLng,
+      lng: plng || defaultLng,
       loader: false,
       address: "",
     };
@@ -91,46 +92,52 @@ class Serviceblock extends Component {
     window.scrollTo(0, 500);
     const { city, radius } = this.props.location.state || {};
     let that = this;
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        function (position) {
-          that.setState({
-            center: {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            },
-            markers: [
-              {
+    if(!city){
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          function (position) {
+            that.setState({
+              center: {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude,
-                img_src: "../../../assets/img/lcoation.png",
               },
-            ],
-          });
-          const newCenter = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
-          circle.setCenter(newCenter); // Update circle center
-          that.componentDidMount();
-        },
-        function errorCallback(error) {
-          navigator.permissions
-            .query({ name: "geolocation" })
-            .then(function (result) {
-              if (result.state === "granted") {
-              } else if (result.state === "prompt") {
-              } else if (result.state === "denied") {
-              }
-              result.onchange = function () {};
+              markers: [
+                {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude,
+                  img_src: "../../../assets/img/lcoation.png",
+                },
+              ],
             });
-        },
-        {
-          timeout: 5000,
-        }
-      );
-    } else {
+            const newCenter =  {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            if(circle){
+            circle.setCenter(newCenter); // Update circle center
+            }
+            that.componentDidMount();
+  
+          },
+          function errorCallback(error) {
+            navigator.permissions
+              .query({ name: "geolocation" })
+              .then(function (result) {
+                if (result.state === "granted") {
+                } else if (result.state === "prompt") {
+                } else if (result.state === "denied") {
+                }
+                result.onchange = function () {
+                };
+              });
+          },
+          {
+            timeout: 5000,
+          }
+        );
+      } 
     }
+   
     var searchservice = localStorage.getItem("searchservice");
     // console.log(":::::40::::::",searchservice)
     this._isMounted = true;
@@ -178,6 +185,7 @@ class Serviceblock extends Component {
                   //   links:services_provider.data.data.links,
                   links: [],
                   linklength: "",
+                  isFilterActive: true,
                 });
 
                 localStorage.removeItem("searchservice");
@@ -189,6 +197,7 @@ class Serviceblock extends Component {
                   //   links:services_provider.data.data.links,
                   links: [],
                   linklength: "",
+                   isFilterActive: true,
                 });
               }
               //"dlfjldskjf"
@@ -292,6 +301,7 @@ class Serviceblock extends Component {
               //   linklength:services_provider.data.data.links.length
               links: [],
               linklength: "",
+               isFilterActive: true,
             });
           } else {
             that.setState({
@@ -299,6 +309,7 @@ class Serviceblock extends Component {
               searchlinks: [],
               links: [],
               linklength: "",
+               isFilterActive: true,
             });
           }
         });
@@ -353,10 +364,7 @@ class Serviceblock extends Component {
   };
   handleGeocode = (city) => {
     // Construct the URL for the Google Maps Geocoding API
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-      city
-    )}&key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM`;
-
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(city)},Canada&key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM`;
     // Make the API request using fetch
     fetch(url)
       .then((response) => response.json())
@@ -377,7 +385,10 @@ class Serviceblock extends Component {
             lat: lat,
             lng: lng,
           };
-          circle.setCenter(newCenter); // Update circle center
+          if(circle){
+            circle.setCenter(newCenter); // Update circle center
+          }
+        
           this.setState({
             center: {
               lat: lat,
@@ -643,29 +654,46 @@ class Serviceblock extends Component {
             </div>
           )}
           <div className="row">
-            {this.state.filter_service_provider?.length > 0 ? (
-              this.state.filter_service_provider?.map((item, i) => (
-                <div
-                  key={i}
-                  className="col-lg-4 col-xl-3 col-md-6 wow fadeInUp"
-                  data-wow-delay=".{item.animation}s"
-                >
-                  <div className="service-each shadow-2 mb-30 transition-4 text-center">
-                    <Link
-                      to={`/service-details/${item.service_provider_id}`}
-                      className="black"
-                    >
-                      <div className="service-icn bg-light-white flex-center">
-                        <img
-                          style={{
-                            borderRadius: "50px",
-                            height: "6.5rem",
-                            width: "15rem",
-                            objectFit: "cover",
-                          }}
-                          src={`${config.SERVER_URL}/${item.image}`}
-                          alt="service_provider_image"
-                        />
+          
+            {this.state.filter_service_provider?.length > 0 && this.state.filter_service_provider?.map((item, i) => (
+              <div
+                key={i}
+                className="col-lg-4 col-xl-3 col-md-6 wow fadeInUp"
+                data-wow-delay=".{item.animation}s"
+              >
+                <div className="service-each shadow-2 mb-30 transition-4 text-center">
+                  <Link
+                    to={`/service-details/${item.service_provider_id}`}
+                    className="black"
+                  >
+                    <div className="service-icn bg-light-white flex-center">
+                      <img
+                        style={{
+                          borderRadius: "50px",
+                          height: "6.5rem",
+                          width: "15rem",
+                          objectFit: "cover",
+                        }}
+                        src={`${config.SERVER_URL}/${item.image}`}
+                        alt="service_provider_image"
+                      />
+                    </div>
+                    <div className="service-text">
+                      <h3 className="fs-20 f-700 mb-10">{item.username}</h3>
+                      <ul className="service_providers_list">
+                        <li>
+                          {item.city},{item.state}
+                        </li>
+                        <li>
+                          <span className="f-700">{item.country}</span>
+                        </li>
+                      </ul>
+                      <div>
+                        <h3 className="main-price mt-15 mb-15">
+                          <span className="sup">$</span>
+                          {item.price_per_hour}
+                          <span className="sub">/ per hour</span>
+                        </h3>
                       </div>
                       <div className="service-text">
                         <h3 className="fs-20 f-700 mb-10">{item.username}</h3>
@@ -701,7 +729,10 @@ class Serviceblock extends Component {
               <div className="no-record">
                 <h2 className="p-2 ">No Result Found</h2>
               </div>
-            )}
+            ))}
+             {(this.state.filter_service_provider?.length < 1 && this.state.isFilterActive) && <div className="no-record">
+              <h2 className="p-2 ">No Result Found</h2>
+              </div>}
           </div>
           <div className="container">
             <div className="row">
@@ -742,7 +773,7 @@ class Serviceblock extends Component {
             </div>
           </div>
 
-          {this.state.filter_service_provider?.length < 1 &&
+          {(this.state.filter_service_provider?.length < 1 && !this.state.isFilterActive) &&
             this.state.services_providers?.length > 0 && (
               <>
                 <h3> All Service Providers </h3>

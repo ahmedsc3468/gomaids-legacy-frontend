@@ -1,4 +1,4 @@
-import { GoogleMap, Marker, LoadScript } from "@react-google-maps/api";
+import { GoogleMap, Marker, LoadScript,useJsApiLoader } from "@react-google-maps/api";
 
 import React, { useEffect, useState, useRef, useCallback } from "react";
 
@@ -23,23 +23,45 @@ import path from "path";
 
 const libraries = ["places"];
 
-const Address = ({ page, handleAddress, currentAddress }) => {
+const Address = ({ page, handleAddress, currentAddress, updateCity, updateState, updateCountry,updatePostalCode,updateServiceAddress }) => {
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: 'AIzaSyDxLxPEKkM9vuuAJpTQuWJBCcfLmZKlDmI',
+    libraries: libraries,
+  });
   return (
-    <LoadScript
-      googleMapsApiKey="AIzaSyDxLxPEKkM9vuuAJpTQuWJBCcfLmZKlDmI"
-      libraries={libraries}
-    >
-      <Search
+  
+      // (typeof window.google === 'undefined' && typeof window.google?.maps === 'undefined') ? (
+    //      <LoadScript
+    //   googleMapsApiKey="AIzaSyDxLxPEKkM9vuuAJpTQuWJBCcfLmZKlDmI"
+    //   libraries={libraries}
+    // >
+    isLoaded && (<Search
         page={page}
         handleAddress={handleAddress}
         currentAddress={currentAddress}
-      />
-    </LoadScript>
+        updateCity={updateCity} 
+        updateState={updateState} 
+        updateCountry={updateCountry}
+        updatePostalCode={updatePostalCode}
+        updateServiceAddress={updateServiceAddress}
+      />)
+    // </LoadScript>
+    // ):(<Search
+    //     page={page}
+    //     handleAddress={handleAddress}
+    //     currentAddress={currentAddress}
+    //     updateCity={updateCity} 
+    //     updateState={updateState} 
+    //     updateCountry={updateCountry}
+    //     updatePostalCode={updatePostalCode}
+    //     updateServiceAddress={updateServiceAddress}
+    //   />)
   );
 };
 export default Address;
 
-function Search({ page, handleAddress, currentAddress }) {
+function Search({ page, handleAddress, currentAddress,updateCity, updateState, updateCountry,updatePostalCode,updateServiceAddress }) {
   const {
     ready,
     value,
@@ -54,16 +76,27 @@ function Search({ page, handleAddress, currentAddress }) {
   const showSuggestions = React.useRef(false);
   useEffect(() => {
     const address = localStorage.getItem("address");
-    if (address) setValue(address);
-
+    if (address) {
+      setValue(address);
+      // if(updateServiceAddress){
+      //   updateServiceAddress(address);
+      // }
+     
+    }
+   
     if (currentAddress != "") {
+      // if(updateServiceAddress){
+      //   updateServiceAddress(address);
+      // }
       setValue(currentAddress);
     }
   }, []);
   const handleSelect = async (address) => {
     if (!page) {
       setValue(address, false);
-
+      if(updateServiceAddress){
+        updateServiceAddress(address);
+      }
       localStorage.setItem("address", address);
     }
     clearSuggestions();
@@ -74,6 +107,7 @@ function Search({ page, handleAddress, currentAddress }) {
       const city = results[0].address_components.filter(
         (x) => x.types[0] === "locality"
       );
+    
       const state = results[0].address_components.filter(
         (x) => x.types[0] === "administrative_area_level_1"
       );
@@ -83,7 +117,14 @@ function Search({ page, handleAddress, currentAddress }) {
       const postal_code = results[0].address_components.filter(
         (x) => x.types[0] === "postal_code"
       );
-
+      updateCity(city[0]?.long_name);
+      updateState(state[0]?.long_name);
+      updateCountry(country[0]?.long_name);
+      if(updatePostalCode ){
+        updatePostalCode(postal_code[0]?.long_name);
+      }
+      
+    
       localStorage.setItem("city", city[0]?.long_name);
       localStorage.setItem("state", state[0]?.long_name);
       localStorage.setItem("country", country[0]?.long_name);

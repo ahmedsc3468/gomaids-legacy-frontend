@@ -316,7 +316,7 @@ function App() {
           <AuthRoute exact path="/hire/details" component={HireDetails} />
           <AuthRoute exact path="/maps/location" component={ZMap} />
           <AuthRoute exact path="/signup/login/hire" component={SignUpLogin} />
-          <AuthRoute exact path="/forgot_password" component={Forgot} />
+          <Route exact path="/forgot_password" component={Forgot} />
           <AuthRoute exact path="/order/thankyou" component={ThankYou} />
           {/* <AuthRoute exact path="/myChat" component={MyChat} /> */}
           <AuthRoute exact path="/payment" component={Payment} />

@@ -97,6 +97,7 @@ class HireDetails extends React.Component {
       slot_start_time: this.props.location.state.slot_start_time,
       slot_end_time: this.props.location.state.slot_end_time,
       service_availed: this.props.location.state.serviceAvailed,
+      additionalNotes: this.props.location.state.additionalNotes,
       costPerHour:
         this.props.location.state.currentServiceProvider.user.service_price
           .price_per_hour,
@@ -155,6 +156,7 @@ const parsedDate=`${year}/${month}/${date}`;
       city: this.state.city,
       service: this.state.service_availed,
       per_hour_rate: this.props.location.state.servicePrice,
+      additionalNotes: this.state.additionalNotes
     };
 
     try {
@@ -180,39 +182,26 @@ const parsedDate=`${year}/${month}/${date}`;
     } catch (ex) {}
   };
 
-  myInterval = setInterval(() => {
-    if (localStorage.getItem("address")) {
-      if (localStorage.getItem("city")) {
-        this.setState({ city: localStorage.getItem("city") });
-      }
-      if (localStorage.getItem("state")) {
-        this.setState({ state: localStorage.getItem("state") });
-      }
-      if (localStorage.getItem("country")) {
-        this.setState({ country: localStorage.getItem("country") });
-      }
-      this.setState({ service_address: localStorage.getItem("address") });
-    } else {
-      this.setState({ service_address: "" });
-      this.setState({ city: "" });
-      this.setState({ state: "" });
-      this.setState({ country: "" });
-    }
+  // myInterval = setInterval(() => {
+  //   if (localStorage.getItem("address")) {
+  //     if (localStorage.getItem("city")) {
+  //       this.setState({ city: localStorage.getItem("city") });
+  //     }
+  //     if (localStorage.getItem("state")) {
+  //       this.setState({ state: localStorage.getItem("state") });
+  //     }
+  //     if (localStorage.getItem("country")) {
+  //       this.setState({ country: localStorage.getItem("country") });
+  //     }
+  //     this.setState({ service_address: localStorage.getItem("address") });
+  //   } else {
+  //     this.setState({ service_address: "" });
+  //     this.setState({ city: "" });
+  //     this.setState({ state: "" });
+  //     this.setState({ country: "" });
+  //   }
 
-    //   Geocode.setApiKey("AIzaSyDxLxPEKkM9vuuAJpTQuWJBCcfLmZKlDmI")
-    //   const lat=localStorage.getItem("lat");
-    //   const lng=localStorage.getItem("lng");
-    //   if(!lat && !lng){return;}
-    //  Geocode.fromLatLng(lat, lng).then(
-    //    (response) => {
-    //      const address = response.results[0].formatted_address;
-    //     this.setState({address})
-    //    },
-    //    (error) => {
-    //      console.error(error);
-    //    }
-    //  );
-  }, 1000);
+  // }, 1000);
 
   checkOutBtnEnable = () => {
     this.setState({ CheckOut: false, isPaymentCompleted: true });
@@ -288,9 +277,22 @@ const parsedDate=`${year}/${month}/${date}`;
 
   onChangeTextFields = (e) => {
     const name = e.currentTarget.name;
+
     this.setState({ [name]: e.currentTarget.value });
   };
 
+  updateCity = (value) => {
+    this.setState({ city: value });
+  }
+  updateState = (value) => {
+    this.setState({ state: value });
+  }
+  updateCountry = (value) => {
+    this.setState({ country: value });
+  }
+  updateServiceAddress = (value) => {
+    this.setState({ service_address: value });
+  }
   payWithPayNow = async (e) => {
     e.preventDefault();
 
@@ -507,6 +509,10 @@ const parsedDate=`${year}/${month}/${date}`;
                     <Address
                       name="service_address"
                       value={this.state.service_address}
+                      updateCity={this.updateCity}
+                      updateState={this.updateState}
+                      updateCountry={this.updateCountry}
+                      updateServiceAddress={this.updateServiceAddress}
                     />
                     {/* <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label  className="label-order"
@@ -668,7 +674,7 @@ const parsedDate=`${year}/${month}/${date}`;
                                 fontWeight: "550",
                               }}
                             >
-                              Credit Card
+                              Another Credit Card
                             </button>
                           </div>
                         </p>

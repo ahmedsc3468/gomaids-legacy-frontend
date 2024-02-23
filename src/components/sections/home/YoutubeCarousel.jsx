@@ -10,9 +10,12 @@ class YouTubeCarousel extends Component {
 
     this.state = {
       videos: [
-        "pmEvicdERg4?si=SnoRkyOvQoBEttay",
-        "MBaWhV-_zeg?si=2TKCO4aosnpoK7Ys",
-        "RGKi6LSPDLU?si=ooQ9Ex5lwJ8z3Llj",
+        "NGPeaE6mtuU",
+        "VfcrvrUwB6w",
+        "BQ36Jjq31U8",
+        "sNhfS-IxZ7o",
+        "3MTAK2tqOzA",
+        "ZjPhb8Nbv2A",
         // Add more YouTube video IDs as needed
       ],
     };
@@ -59,7 +62,7 @@ class YouTubeCarousel extends Component {
 
     return (
       <div className="youtube-carousel-container">
-        <h1 className="my-3">Explainer carousel</h1>
+        <h1 className="my-3">Explainer Videos</h1>
         <Slider {...settings}>
           {videos.map((videoId, index) => (
             <div key={index} className="youtube-video-container">

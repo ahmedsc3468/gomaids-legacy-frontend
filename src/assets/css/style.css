@@ -1846,10 +1846,13 @@ input[type="number"]::-webkit-outer-spin-button {
   min-width: 340px;
 }
 .callback-footer-2 {
-  max-width: 545px;
+
   width: 100%;
   text-align: right;
   margin-left: auto;
+}
+.callback-footer-2 input{
+  margin: 0 10px;
 }
 .cta-footer .cta-cl-bg {
   right: 39vw;
@@ -5338,7 +5341,7 @@ button.ui.button.add_feedback {
   margin: auto;
 }
 .css-1c99szj-MuiRating-icon:hover {
-  color: #fff !important;
+https://github.com/ApexViewers/maid-service-frontend/pull/23/conflict?name=src%252Fcomponents%252Fsections%252Fservices%252FServiceblock.js&ancestor_oid=02f8f68bfddea05ef06f046a59c416eef9dca2ca&base_oid=99ef5ed0f52b8c1f607f1364600a5b66f8e2bf7e&head_oid=c459006719c670b26ed3706a59efd2825a5f1b33  color: #fff !important;
 }
 .about-image img {
   border-radius: 5px;
@@ -5357,4 +5360,31 @@ button.ui.button.add_feedback {
     right: unset;
     top: 0;
   }
+}
+textarea {
+  box-sizing: border-box;
+  width: 320px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: rgb(28, 32, 37);
+  background: rgb(255, 255, 255);
+  border: 1px solid rgb(218, 226, 237);
+  box-shadow: rgb(243, 246, 249) 0px 2px 2px;
+  width: 100%;
+
+}
+textarea:hover {
+  border-color: rgb(51, 153, 255);
+}
+
+textarea:focus {
+  border-color: rgb(51, 153, 255);
+  box-shadow: rgb(182, 218, 255) 0px 0px 0px 3px;
+}
+textarea:focus-visible {
+  outline: 0;
 }

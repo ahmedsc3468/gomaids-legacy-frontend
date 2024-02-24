@@ -48,7 +48,7 @@ class ServiceTakerOrderDetails extends Component {
             service_taker_feedback:"",
             service_provider_feedback:"",
             total:null,
-            loader: false
+            loader: false,
         };
 
         this.toggleDropDown = this.toggleDropDown.bind(this)
@@ -197,15 +197,13 @@ class ServiceTakerOrderDetails extends Component {
                 if (isConfirm) {
 
 
-                    this.setState({
-                        loader: true
-                    })
+                    that.setState({ loader: true });
                     
                     const { data } = await axios.put(config.SERVER_URL + `/api/changeorderstatus/${order_id}`, { status: a, st_status:a,role:'service_taker' },
                     {
                         headers: authHeader(),
                     });
-                    this.setState({
+                    that.setState({
                         loader: false
                     })
                     swal("Updated!", "Your Status Has Been Change!", "success")
@@ -215,7 +213,7 @@ class ServiceTakerOrderDetails extends Component {
                         headers: authHeader(),
                     });
         
-                    this.setState({ 
+                    that.setState({ 
                         order: order.data.data,
                         // convoTargeted: order.data.data.conversation,
                         // convochat:order.data.data.conversation.chat,

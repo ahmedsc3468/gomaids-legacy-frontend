@@ -89,7 +89,6 @@ export default function Messanger() {
   const user = AuthService.getCurrentUser()
   const [selectedIndex, setSelectedIndex] = useState(null)
   const [chatIsPending, setChatIsPending] = useState(true)
-  const [convoIsPending, setConvoIsPending] = useState(true)
   const [userChat, setUserChat] = useState(null)
   const [orderStatus, setOrderStatus] = useState(null)
   const [conversationId, setConversationId] = useState(null)
@@ -122,12 +121,14 @@ export default function Messanger() {
   const getConversations = async () => {
     const { data: lastMessageObj } = await axios.get(config.SERVER_URL + `/api/allchats`, { headers: AuthHeader() })
     setSideBarMessages(lastMessageObj.data)
+    console.log(lastMessageObj.data);
      console.log(" ::::: LINE 104 ::::: ", lastMessageObj.data)
     if(lastMessageObj.data.length === 0){
       setUserChat({ userChat: lastMessageObj.data })
               setScrollCheck(scrollCheck + 1)
       //  console.log(" ::::: LINE 107 ::::: ", setUserChat({userChat:lastMessageObj.data}))
     }
+
   }
   const getSingleChatMessages = async (conversation_id) => {
 
@@ -210,7 +211,8 @@ export default function Messanger() {
            console.log("use effect scrolled")
                }, 100);
     }
-  }, [scrollCheck,singleChatMessages]);
+  }, [scrollCheck, singleChatMessages]);
+
 // console.log('single chat',sideBarMessages);
 // console.log("userChat",userChat);
 // console.log('single chat messages', singleChatMessages);
@@ -253,11 +255,12 @@ return (
               }).map((conversation, index) => {
                   var chatlen=conversation.chats.length;
                 // get data of conversation recepient
-                const recepient = user.id === conversation.user_one.id ? conversation.user_two : conversation.user_one
+                const recepient = user.id === conversation.user_one.id ? conversation.user_two : conversation.user_one;
+         
+
                 return (
                   <React.Fragment key={conversation.id}>
                   <ListItem alignItems="flex-start" button className={selectedIndex === conversation.id ? classes.selected : ''} onClick={e => {
-                    setConvoIsPending(true);
                     setSelectedIndex(conversation.id);
                     getSingleChatMessages(conversation.id);
                     setOrderStatus(conversation.order.status);

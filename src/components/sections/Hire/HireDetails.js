@@ -108,6 +108,7 @@ class HireDetails extends React.Component {
       user: user ? user.username : "",
       sameAsBillingAddress: false,
       billingAddress: "",
+      billingAddressError: "",
       service_address: "",
       city: "",
       state: "",
@@ -118,6 +119,10 @@ class HireDetails extends React.Component {
       payWithStripe: false,
       getConfigr: false,
       isPaymentCompleted: false,
+      cityError: "",
+      stateError: "",
+      service_addressError: "",
+      countryError: "",
     };
   }
 
@@ -270,8 +275,10 @@ const parsedDate=`${year}/${month}/${date}`;
   checkBoxCheck = (e) => {
     if (e.currentTarget.checked) {
       this.setState({ sameAsBillingAddress: true });
+      this.setState({billingAddress: this.state.service_address});
     } else {
       this.setState({ sameAsBillingAddress: false });
+      this.setState({billingAddress: ""});
     }
   };
 
@@ -293,8 +300,48 @@ const parsedDate=`${year}/${month}/${date}`;
   updateServiceAddress = (value) => {
     this.setState({ service_address: value });
   }
+
+  validateFields = () => {
+    if (this.state.city == "") {
+    
+      this.setState({ cityError: "This field is required" });
+    } else {
+      this.setState({ cityError: "" });
+    }
+     if (this.state.state == "") {
+      
+       this.setState({ stateError: "This field is required" });
+     } else {
+             this.setState({ stateError: "" });
+    }
+    if (this.state.country == "") {
+    
+      this.setState({ countryError: "This field is required" });
+    }else {
+             this.setState({ countryError: "" });
+    }
+    if (this.state.service_address == "") {
+    
+      this.setState({ service_addressError: "This field is required" });
+    }else {
+             this.setState({ service_addressError: "" });
+    }
+    if (this.state.billingAddress == "") {
+          
+      this.setState({ billingAddressError: "This field is required" });
+    } else {
+      this.setState({ billingAddressError: "" });
+    }
+  }
   payWithPayNow = async (e) => {
     e.preventDefault();
+    this.validateFields();
+    
+  if (this.state.cityError != "" || this.state.countryError != "" || this.state.stateError != "" || this.state.service_addressError != "" || this.state.billingAddressError != "")
+  {  
+
+    return;
+    }
 
     // this.setState({ isPending: true })
     console.log("::::LINE 286", this.state.costAccumulation);
@@ -360,8 +407,8 @@ const parsedDate=`${year}/${month}/${date}`;
       );
       console.log(errors);
     }
-    // this.setState({ payWithPayNow: true })
-    // console.log("::::::: 288 ::::::: ", this.setState({ payWithPayNow: true }))
+    this.setState({ payWithPayNow: true })
+    console.log("::::::: 288 ::::::: ", this.setState({ payWithPayNow: true }))
   };
 
   payWithPayPal = (e) => {
@@ -513,7 +560,12 @@ const parsedDate=`${year}/${month}/${date}`;
                       updateState={this.updateState}
                       updateCountry={this.updateCountry}
                       updateServiceAddress={this.updateServiceAddress}
-                    />
+                      />
+                   {this.state.service_addressError && (
+                  <span className="text-danger">
+                    {this.state.service_addressError}
+                  </span>
+                )}
                     {/* <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label  className="label-order"
 
@@ -549,7 +601,12 @@ const parsedDate=`${year}/${month}/${date}`;
                         onChange={this.onChangeTextFields}
                         name="billingAddress"
                         className="textFields-Order"
-                      />
+                        />
+                                                                   {this.state.billingAddressError && (
+                  <span className="text-danger">
+                    {this.state.billingAddressError}
+                  </span>
+                )}
                       <Form.Check
                         onChange={this.checkBoxCheck}
                         type="checkbox"
@@ -571,7 +628,12 @@ const parsedDate=`${year}/${month}/${date}`;
                         className="textFields-Order"
                         name="country"
                         onChange={this.onChangeTextFields}
-                      />
+                        />
+                                           {this.state.countryError && (
+                  <span className="text-danger">
+                    {this.state.countryError}
+                  </span>
+                )}
                     </Form.Group>
                   </Col>
                 </Row>
@@ -588,7 +650,12 @@ const parsedDate=`${year}/${month}/${date}`;
                         name="state"
                         className="textFields-Order"
                         value={this.state.state}
-                      />
+                        />
+                                                                  {this.state.stateError && (
+                  <span className="text-danger">
+                    {this.state.stateError}
+                  </span>
+                )}
                     </Form.Group>
                   </Col>
                   <Col xs={6} md={3} style={{ paddingLeft: "0" }}>
@@ -601,7 +668,12 @@ const parsedDate=`${year}/${month}/${date}`;
                         name="city"
                         className="textFields-Order"
                         value={this.state.city}
-                      />
+                        />
+                                                                                          {this.state.cityError && (
+                  <span className="text-danger">
+                    {this.state.cityError}
+                  </span>
+                )}
                     </Form.Group>
                   </Col>
                 </Row>

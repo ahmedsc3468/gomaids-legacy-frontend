@@ -94,7 +94,8 @@ function Search({ page, handleAddress, currentAddress,updateCity, updateState, u
   const handleSelect = async (address) => {
     if (!page) {
       setValue(address, false);
-      if(updateServiceAddress){
+      if (updateServiceAddress) {
+        console.log(address);
         updateServiceAddress(address);
       }
       localStorage.setItem("address", address);
@@ -250,6 +251,12 @@ function Search({ page, handleAddress, currentAddress,updateCity, updateState, u
               }
               localStorage.setItem("address", e.target.value);
             }
+
+
+                  if (updateServiceAddress) {
+        console.log(e.target.value);
+        updateServiceAddress(e.target.value);
+      }
           }}
           disabled={!ready}
           placeholder="Enter your service address"

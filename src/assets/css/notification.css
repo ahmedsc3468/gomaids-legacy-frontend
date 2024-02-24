@@ -72,6 +72,9 @@ border: unset;
 border-bottom: 2px solid #0b6818;
 
 }
+.notification-wrapper .ui.segment:hover{
+  cursor: pointer;
+}
 .heading-notification-container{
 padding: 10px 0px 25px 15px;
 }

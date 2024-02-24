@@ -12,10 +12,12 @@ import * as React from "react";
 import { data } from "jquery";
 import { useEffect } from "react";
 import { SpaceBarOutlined } from "@material-ui/icons";
+import { useHistory } from 'react-router-dom';
 
 export default function PopoverPopupState(props) {
   const [notification, setNotification] = React.useState([]);
   const [notificationstatus, setNotificationstatus] = React.useState(null);
+    const history = useHistory();
 
   const user = authService.getCurrentUser();
 
@@ -81,6 +83,27 @@ export default function PopoverPopupState(props) {
       console.log("notifications", getNotifications());
     } catch (ex) {}
   };
+
+
+  const redirection_tab = async (conversation_id, orderid,not_title) => { 
+    console.log(conversation_id);
+    console.log(orderid);
+    console.log(not_title);
+    if (conversation_id != undefined && not_title == "New Message") {
+      console.log(conversation_id);
+    localStorage.setItem("order_id",conversation_id);
+      localStorage.setItem("currenttab", "chatbox");
+      window.location.href = '/Userdashboard';
+    }
+    if (not_title == "order Update" && orderid != undefined) {
+      localStorage.setItem("currenttab", "AllOrder");
+      window.location.href = `/order_details_${orderid}`;
+    }
+    if (not_title == "Order Recieved") {
+      localStorage.setItem("currenttab", "AllOrder");
+       window.location.href = '/Userdashboard';
+    }
+  }
   var mydata = localStorage.getItem("mydata");
   // localStorage.removeItem("mydata")
   //var datata=notification[0]?.data;
@@ -137,12 +160,16 @@ export default function PopoverPopupState(props) {
               <div className="notification-width notification-wrapper">
                 {notification.length > 0 &&
                   notification.map((takerNotification) => (
+                    // console.log(JSON.parse(takerNotification.data)?.conversation_id) 
                     <Segment key={takerNotification.id}>
-                      <a href="/Userdashboard">
+                      {/* <a href="/Userdashboard"> */}
+                      <div onClick={() => redirection_tab(JSON.parse(takerNotification.data)?.conversation_id,JSON.parse(takerNotification.data)?.order_id,takerNotification.title)}>
                         <p style={{ color: "#102043", fontWeight: "400" }}>
                           {takerNotification.description}
+                          
                         </p>
-                      </a>
+                        </div>
+                      {/* </a> */}
                     </Segment>
                   ))}
               </div>

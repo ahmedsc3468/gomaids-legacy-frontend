@@ -93,7 +93,8 @@ export default function Messanger() {
   const [orderStatus, setOrderStatus] = useState(null)
   const [conversationId, setConversationId] = useState(null)
   const [newMessageConversationId, setNewMessageConversationId] = useState(null)
-    const [scrollCheck, setScrollCheck] = useState(0)
+  const [scrollCheck, setScrollCheck] = useState(0)
+  const [firstMessageid, setFirstMessageid] = useState(null);
   
   const messageRef = useRef(null);
 
@@ -118,11 +119,37 @@ export default function Messanger() {
     setNewMessageConversationId(null)    
   }, [newMessageConversationId])
 
+  useEffect(async () => {
+    console.log(localStorage);
+    const { data: lastMessageObj } = await axios.get(config.SERVER_URL + `/api/allchats`, { headers: AuthHeader() })
+    console.log(lastMessageObj);
+    if (localStorage.getItem("order_id")) {
+            lastMessageObj.data.map((obj) => {
+        console.log(obj.id);
+        if (obj.id == localStorage.getItem("order_id")) {
+          setSelectedIndex(obj?.id);
+          getSingleChatMessages(obj?.id);
+          setConvoRecepient(user.id === obj?.user_one.id ? obj?.user_two : obj?.user_one);
+          setOrderStatus(obj?.status);
+          setConversationId(obj?.id);
+        }
+      });
+    } else {
+          setSelectedIndex(lastMessageObj.data[0]?.id);
+          getSingleChatMessages(lastMessageObj.data[0]?.id);
+          setConvoRecepient(user.id === lastMessageObj.data[0]?.user_one.id ? lastMessageObj.data[0]?.user_two : lastMessageObj.data[0]?.user_one);
+          setOrderStatus(lastMessageObj.data[0]?.status);
+          setConversationId(lastMessageObj.data[0]?.id);
+    }
+      // seeMessages(lastMessageObj.data[0]?.id);
+  }, [])
+
   const getConversations = async () => {
     const { data: lastMessageObj } = await axios.get(config.SERVER_URL + `/api/allchats`, { headers: AuthHeader() })
-    setSideBarMessages(lastMessageObj.data)
-    console.log(lastMessageObj.data);
-     console.log(" ::::: LINE 104 ::::: ", lastMessageObj.data)
+    setSideBarMessages(lastMessageObj.data);
+
+    // console.log(lastMessageObj.data);
+    //  console.log(" ::::: LINE 104 ::::: ", lastMessageObj.data)
     if(lastMessageObj.data.length === 0){
       setUserChat({ userChat: lastMessageObj.data })
               setScrollCheck(scrollCheck + 1)
@@ -136,7 +163,7 @@ export default function Messanger() {
     // if (messagesObj?.data?.length > 0){
       setChatIsPending(false)
     // }
-    console.log('single chat messages ', messagesObj.data)
+    // console.log('single chat messages ', messagesObj.data)
     setSingleChatMessages(messagesObj.data);
   }
 
@@ -147,15 +174,15 @@ export default function Messanger() {
         conversation_id: conversationId,
         message
       }
-      console.log('chat recipient id', data.reciever_id);
-      console.log('convoId ', conversationId);
+      // console.log('chat recipient id', data.reciever_id);
+      // console.log('convoId ', conversationId);
       setMessage('');
       const response = await axios.post(`${config.SERVER_URL}/api/chat`, data, { headers: AuthHeader() })
       if (response.status === 200) {
         getSingleChatMessages(conversationId)
         getConversations()
         setSelectedIndex(conversationId)
-        console.log("send message scrolled")
+        // console.log("send message scrolled")
         setScrollCheck(scrollCheck + 1)
       }
     }
@@ -164,7 +191,7 @@ export default function Messanger() {
   }
   const handleKeyPress = (event) => {
       if(event.key === 'Enter'){
-        console.log('enter press here! ')
+        // console.log('enter press here! ')
       }
   }
 
@@ -203,12 +230,12 @@ export default function Messanger() {
   // })
 
   useEffect(() => {
-      console.log("useeffectcalled")
+      // console.log("useeffectcalled")
     // Scroll to the bottom of the list when the component mounts
     if (messageRef.current) {
          setTimeout(() => {
       messageRef.current.scrollTop = messageRef.current.scrollHeight;
-           console.log("use effect scrolled")
+          //  console.log("use effect scrolled")
                }, 100);
     }
   }, [scrollCheck, singleChatMessages]);
@@ -266,7 +293,7 @@ return (
                     setOrderStatus(conversation.order.status);
                     setConversationId(conversation.id);
                     seeMessages(conversation.id);
-                    console.log('order status 2', orderStatus);
+                    // console.log('order status 2', orderStatus);
                     setConvoRecepient(user.id === conversation.user_one.id ? conversation.user_two : conversation.user_one);
                   }}>
                     <ListItemAvatar className="d-none d-lg-block">
@@ -319,7 +346,7 @@ return (
                 const align = message.sender_user.id === user.id ? 'right' : 'left ';
               //  setOrderStatus(message.conversation.order.status);
                
-                console.log("orderStatus ::217",orderStatus);
+                // console.log("orderStatus ::217",orderStatus);
                 const _date = new Date(message.created_at)
                 return (
                   // window.scrollTo(0, 0);

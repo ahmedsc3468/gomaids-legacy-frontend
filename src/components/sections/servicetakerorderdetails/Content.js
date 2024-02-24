@@ -647,8 +647,13 @@ class ServiceTakerOrderDetails extends Component {
                         <Modal.Body className='text-right py-2'>
                             {this.state.messageStatus && <Alert className='d-inline py-75 px-2 mr-1' color={this.state.messageStatus.color} >{this.state.messageStatus.body}</Alert>}
                             <Button className="ui button order_SendMessage_button" onClick={e => {
-                                
-                                localStorage.setItem("currenttab", "chatbox"); this.props.history.push('/userdashboard')}}>
+                                    console.log(this.state.order);
+                                    localStorage.setItem("currenttab", "chatbox");
+                                    localStorage.setItem("order_id", this.state.order.conversation.id);
+                                    
+                                    this.props.history.push('/userdashboard')
+                                }}
+                                >
                                 Click Here
                             </Button>
                             <Button className="btn-secondary" onClick={this.handleClose}>

@@ -77,7 +77,8 @@ class ServiceTakerOrderDetails extends Component {
              currentTab: 'userprofile',
              rating: parseInt(order.data.data.rating) ,
             total: parseInt(order.data.data.cost) + parseInt(order.data.data.tipamount || 0)
-            })
+        })
+        console.log(order.data.data.status)
             
     }
     async handleFeedBackClose() {
@@ -125,10 +126,26 @@ class ServiceTakerOrderDetails extends Component {
 
     statusChange = async (a) =>  {
         const user = AuthService.getCurrentUser()
-        
+                const order_id = this.props.match.params.order_id
+                const order = await axios.get(config.SERVER_URL + `/api/order/${order_id}`,
+        {
+            headers: authHeader(),
+                    });
+        console.log(order.data.data.status)
+        console.log(a)
+        if (order.data.data.status == 3 && a == 1) {
+                if(user.role.name === 'service_provider'){
+                swal("Something went wrong", "Order is already cancelled by the Customer!", "warning")
+                    this.componentDidMount();
+                } else {
+                    swal("Something went wrong", "Order is already cancelled by the Service Provider!", "warning")
+                    this.componentDidMount();
+                    }
+        } else {
         if(user.role.name === 'service_provider')
         {
-            const status = (a == "2")? "complete" : "cancel"
+            const status = (a === "2") ? "complete" : (a === "1") ? "accept" : "cancel"
+
             const order_id = this.props.match.params.order_id
             const that = this
 
@@ -223,7 +240,8 @@ class ServiceTakerOrderDetails extends Component {
                 }
             });
            
-        }
+            }
+            }
     }
 
     refreshPage () { 
@@ -576,10 +594,15 @@ class ServiceTakerOrderDetails extends Component {
                                     </>)}  */}
                                     {(user.role.name === 'service_provider' && this.getOrderDifference(this.state.order.order_date)) && ( <>   
                                      <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(2)} hidden={this.state.order.sp_status == "2" || this.state.order.status != "1"  || this.state.order.status == "5" }> Complete</Button></>
-                                        )} 
+                                    )} 
+
                                     {user.role.name === 'service_provider' && ( <>
                                      <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(3)} hidden={this.state.order.status =="2" ||this.state.order.sp_status =="2" || this.state.order.status =="3" || this.state.order.status =="5"}> Cancel</Button>
+                                    </>)}
+                                    {user.role.name === 'service_provider' && (<>
+                                     <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(1)} hidden={this.state.order.status =="2"   || this.state.order.status =="1"   || this.state.order.sp_status =="2" ||  this.state.order.status =="3" || this.state.order.status =="5"}> Accept</Button>
                                     </>)} 
+  
                                     
                                     {user.role.name === 'service_taker' && this.getTimeDifference(this.state.order.created_at) < 1 && ( <>
                                   

@@ -56,10 +56,10 @@ const PrivacyPolicy = () => {
           </li>
           <li>
             <p>
-              <strong>Application</strong> refers to GoMaidz, the software
+              <strong>Application</strong> refers to GoMaids, the software
               program provided by the Company. Company (referred to as either
               "the Company", "We", "Us" or "Our" in this Agreement) refers to
-              GoMaidz, Ontario Canada.
+              GoMaids, Ontario Canada.
             </p>
           </li>
           <li>
@@ -113,7 +113,7 @@ const PrivacyPolicy = () => {
           </li>
           <li>
             <p>
-              <strong>Website</strong> refers to GoMaidz, accessible from
+              <strong>Website</strong> refers to GoMaids, accessible from
               https://gomaidz.com
             </p>
           </li>

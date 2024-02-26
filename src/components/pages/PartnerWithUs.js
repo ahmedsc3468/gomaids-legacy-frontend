@@ -10,7 +10,7 @@ class PartnerWithUs extends Component {
     return (
       <Fragment>
         <MetaTags>
-          <title> GoMaidz | Partner-With-Us</title>
+          <title> GoMaids | Partner-With-Us</title>
           <meta name="description" content="#" />
         </MetaTags>
         <Header />

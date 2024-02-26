@@ -10,7 +10,7 @@ class Servicetwo extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title> GoMaidz | Services</title>
+                    <title> GoMaids | Services</title>
                     <meta
                         name="description"
                         content="#"

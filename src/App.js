@@ -86,6 +86,7 @@ const Signup = React.lazy(() => import("./components/pages/Signup"));
 const Cart = React.lazy(() => import("./components/pages/Cart"));
 const Checkout = React.lazy(() => import("./components/pages/Checkout"));
 const Serviceone = React.lazy(() => import("./components/pages/Serviceone"));
+const Videos = React.lazy(() => import("./components/pages/videos"));
 const ServicesPage = React.lazy(() =>
   import("./components/sections/services/ServicesPage")
 );
@@ -253,6 +254,7 @@ function App() {
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/find-a-services" component={Serviceone} />
+          <Route exact path="/videos" component={Videos} />
           <Route exact path="/near-by-providers" component={NearByContent} />
           <Route exact path="/partner-with-us" component={PartnerWithUs} />
           <Route

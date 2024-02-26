@@ -333,24 +333,114 @@ const parsedDate=`${year}/${month}/${date}`;
       this.setState({ billingAddressError: "" });
     }
   }
-  payWithPayNow = async (e) => {
-    e.preventDefault();
-    this.validateFields();
+  // payWithPayNow = async (e) => {
+  //   e.preventDefault();
+  //   await this.validateFields();
     
-  if (this.state.cityError != "" || this.state.countryError != "" || this.state.stateError != "" || this.state.service_addressError != "" || this.state.billingAddressError != "")
-  {  
+  //   if (this.state.cityError !== "" && this.state.countryError !== "" && this.state.stateError !== "" && this.state.service_addressError !== "" && this.state.billingAddressError == "") { 
+  //     console.log("all are empties");
+  //     return;
+  //   }
 
+
+  //   // this.setState({ isPending: true })
+  //   console.log("::::LINE 286", this.state.costAccumulation);
+  //   const currentuser = authService.getCurrentUser();
+  //   const obj1 = {
+  //     amount: this.state.costAccumulation,
+  //     user_id: currentuser.id,
+  //   };
+  //   console.log("obj1 ", obj1);
+  //   try {
+  //     const payment = await axios.post(config.SERVER_URL + "/api/pay", obj1, {
+  //       headers: authHeader(),
+  //     });
+
+  //     console.log(" :::::: 295 ::::: ", payment.data.success);
+
+  //     if (payment.data.success === true) {
+  //       swal({
+  //         icon: "success",
+  //         title: "Payment Successful!",
+  //         text: "Your order will be automatically placed in 5 seconds. If not, please click 'Place Order'",
+  //         timer: 4000,
+  //       });
+  //       this.checkOutBtnEnable();
+  //       console.log(" :::::: 302 ::::: ", payment);
+  //     } else {
+  //       swal(
+  //         "Payment Unsuccessful",
+  //         "Please use the credit card section for payment as no saved card details were found.",
+  //         "warning"
+  //       );
+  //     }
+
+  //     // const user = authService.getCurrentUser()
+  //     // const date_ = this.state.date.split("-");
+  //     // const order_date = date_[2] + "-" + date_[1] + "-" + date_[0];
+  //     // const obj = {
+  //     //   service_taker_id: user.id,
+  //     //   service_provider_id: this.props.location.state.currentServiceProvider.id,
+  //     //   order_date: order_date,
+  //     //   slot_start_time: this.state.slot_start_time,
+  //     //   slot_end_time: this.state.slot_end_time,
+  //     //   cost: this.state.costAccumulation,
+  //     //   status: "1",
+  //     //   service_address: this.state.service_address,
+  //     //   billing_address: this.state.sameAsBillingAddress === true ? this.state.service_address : this.state.billingAddress,
+  //     //   state: this.state.state,
+  //     //   country: this.state.country,
+  //     //   city: this.state.city,
+  //     //   service: this.state.service_availed
+
+  //     // }
+  //     //   console.log( " :::::: 324 ::::: ",obj)
+  //     //   const { data } = await axios.post(config.SERVER_URL + "/api/order", obj, {
+  //     //         headers: authHeader(),
+  //     //       })
+  //     //       console.log( " :::::: 328 ::::: ",data)
+  //   } catch (errors) {
+  //     swal(
+  //       "Sorry Payment Failed",
+  //       "Your payment couldn't be processed please try again.",
+  //       "danger"
+  //     );
+  //     console.log(errors);
+  //   }
+  //   this.setState({ payWithPayNow: true })
+  //   console.log("::::::: 288 ::::::: ", this.setState({ payWithPayNow: true }))
+    
+
+  // };
+  
+  
+  payWithPayNow = async (e) => {
+  e.preventDefault();
+  await this.validateFields();
+  
+  // Check if any field has errors
+  if (
+    this.state.cityError !== "" ||
+    this.state.countryError !== "" ||
+    this.state.stateError !== "" ||
+    this.state.service_addressError !== "" ||
+    this.state.billingAddressError !== ""
+  ) { 
+    console.log("All fields are not filled.");
     return;
-    }
+  }
 
-    // this.setState({ isPending: true })
-    console.log("::::LINE 286", this.state.costAccumulation);
-    const currentuser = authService.getCurrentUser();
-    const obj1 = {
-      amount: this.state.costAccumulation,
-      user_id: currentuser.id,
-    };
-    console.log("obj1 ", obj1);
+  // this.setState({ isPending: true })
+  console.log("::::LINE 286", this.state.costAccumulation);
+  const currentuser = authService.getCurrentUser();
+  const obj1 = {
+    amount: this.state.costAccumulation,
+    user_id: currentuser.id,
+  };
+  console.log("obj1 ", obj1);
+
+  // Function to handle API call
+  const handlePayment = async () => {
     try {
       const payment = await axios.post(config.SERVER_URL + "/api/pay", obj1, {
         headers: authHeader(),
@@ -392,13 +482,13 @@ const parsedDate=`${year}/${month}/${date}`;
       //   country: this.state.country,
       //   city: this.state.city,
       //   service: this.state.service_availed
+      // };
 
-      // }
-      //   console.log( " :::::: 324 ::::: ",obj)
-      //   const { data } = await axios.post(config.SERVER_URL + "/api/order", obj, {
-      //         headers: authHeader(),
-      //       })
-      //       console.log( " :::::: 328 ::::: ",data)
+      // console.log( " :::::: 324 ::::: ",obj)
+      // const { data } = await axios.post(config.SERVER_URL + "/api/order", obj, {
+      //   headers: authHeader(),
+      // })
+      // console.log( " :::::: 328 ::::: ",data)
     } catch (errors) {
       swal(
         "Sorry Payment Failed",
@@ -407,9 +497,29 @@ const parsedDate=`${year}/${month}/${date}`;
       );
       console.log(errors);
     }
-    this.setState({ payWithPayNow: true })
-    console.log("::::::: 288 ::::::: ", this.setState({ payWithPayNow: true }))
   };
+
+  // Function to handle subsequent checks and API call
+  const handleSubsequentChecks = () => {
+    if (
+      this.state.cityError !== "" ||
+      this.state.countryError !== "" ||
+      this.state.stateError !== "" ||
+      this.state.service_addressError !== "" ||
+      this.state.billingAddressError !== ""
+    ) { 
+      console.log("All fields are not filled.");
+      return;
+    }
+    
+    // Call the function to handle payment
+    handlePayment();
+  };
+
+  // Check again for errors after a small delay
+  setTimeout(handleSubsequentChecks, 100);
+};
+
 
   payWithPayPal = (e) => {
     e.preventDefault();
@@ -435,7 +545,7 @@ const parsedDate=`${year}/${month}/${date}`;
         ) : (
           <>
             <MetaTags>
-              <title> GoMaidz | CheckOut</title>
+              <title> GoMaids | CheckOut</title>
               <meta name="description" content="#" />
             </MetaTags>
             <Header />

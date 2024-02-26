@@ -14,7 +14,7 @@ class ThankYou extends React.Component {
         return (
             <>
                 <MetaTags>
-                    <title> GoMaidz | Thankyou</title>
+                    <title> GoMaids | Thankyou</title>
                     <meta
                         name="description"
                         content="#"

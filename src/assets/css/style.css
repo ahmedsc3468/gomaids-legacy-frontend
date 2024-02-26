@@ -5020,9 +5020,9 @@ ul.theme-ul li img {
   border: 1px solid lightgray;
 }
 
-.notification-width {
-  /* max-width: 33ch; */
-}
+/* .notification-width {
+  max-width: 33ch;
+} */
 
 button.ui.inverted.green.button.another_service_btn:hover {
   background: #036905 !important;
@@ -5272,7 +5272,7 @@ button.ui.button.add_feedback {
   h6 {
     font-size: 1rem;
   }
-  /* How gomaidz works */
+  /* How gomaids works */
   .each-hw-works {
     padding: 0px 30px;
   }
@@ -5388,3 +5388,33 @@ textarea:focus-visible {
   outline: 0;
 }
 
+
+
+.Youtube-carousel-heading{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+ 
+
+}
+
+.Youtube-carousel-heading h5{
+ color: #0b6818;
+ 
+
+}
+.Youtube-carousel-heading h5:hover{
+ cursor: pointer;
+ color: rgb(0, 0, 0);
+}
+
+.slider_images_videos{          
+background-repeat: no-repeat;
+background-position: center;
+background-size: contain;
+    min-height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+      cursor: pointer;
+        }

@@ -60,16 +60,16 @@ class Footer extends Component {
                 </Link>
               </div>
               {/* <h6 className="mb-25 ">
-                            When it comes to GoMaidz, the object of the word 'Go' reflects our motive to add value to our customers' lives by providing all the essential services in their day-to-day lives.
+                            When it comes to GoMaids, the object of the word 'Go' reflects our motive to add value to our customers' lives by providing all the essential services in their day-to-day lives.
                             On the other hand, the word 'Maidz' highlights our motive to reduce the unemployment by hiring in-house staff whom we train in any given skills.
                             </h6> */}
               <h6 className="mb-15 foooterparagraphp">
-                Discover the epitome of cleanliness with GoMaidz, your trusted
-                maids provider. At GoMaidz, we believe in the power of
+                Discover the epitome of cleanliness with GoMaids, your trusted
+                maids provider. At GoMaids, we believe in the power of
                 'Go'—signifying action, efficiency, and a leap towards
                 immaculate spaces. Our dedicated team ensures your home is
                 pristine, allowing you to 'Go' about your life worry-free.
-                Embrace cleanliness, choose GoMaidz.
+                Embrace cleanliness, choose GoMaids.
               </h6>
               <div className="contact-footer">
                 <ul>
@@ -205,7 +205,7 @@ class Footer extends Component {
               <div className="hr-2 bg-light-white  mb-10 opacity-1" />
             </div>
             <div className="col-lg-12">
-              <p className="mb-0">© GoMaidz 2024 Allright Reserved</p>
+              <p className="mb-0">© GoMaids 2024 Allright Reserved</p>
             </div>
             <div className="col-lg-4 text-center">
               <Link

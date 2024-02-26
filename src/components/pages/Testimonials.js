@@ -10,7 +10,7 @@ class Testimonials extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>GoMaidz | Testimonials</title>
+                    <title>GoMaids | Testimonials</title>
                     <meta
                         name="description"
                         content="#"

@@ -184,13 +184,13 @@ class Contactdetail extends Contacthelper {
             <div className="col-lg-12">
               <p className="fs-20 mb-4 ">
                 Are you a skilled and hardworking maid or cleaner looking to
-                expand your opportunities? Look no further – GoMaidz is
+                expand your opportunities? Look no further – GoMaids is
                 revolutionizing the way you find work! Our platform aggregates
                 maids and cleaners, connecting them with clients seeking
                 reliable and efficient cleaning services.
               </p>
               <p className="fs-20 mb-4 ">
-                By joining GoMaidz as a freelancer, you gain access to a vast
+                By joining GoMaids as a freelancer, you gain access to a vast
                 pool of potential clients, boosting your chances of securing
                 more work. Our user-friendly website simplifies the process for
                 both clients and freelancers, allowing you to receive orders
@@ -199,14 +199,14 @@ class Contactdetail extends Contacthelper {
                 your skills.
               </p>
               <p className="fs-20 mb-4 ">
-                GoMaidz prioritizes transparency, ensuring fair compensation for
+                GoMaids prioritizes transparency, ensuring fair compensation for
                 your hard work. Plus, our platform provides a valuable
                 opportunity to build a reputation and receive reviews,
                 establishing trust with potential clients. Don't miss out on the
                 chance to elevate your career as a freelance maid or cleaner.
-                Join GoMaidz today, where more work means more opportunities for
+                Join GoMaids today, where more work means more opportunities for
                 success. Embrace the future of cleaning services and take
-                control of your career with GoMaidz!
+                control of your career with GoMaids!
               </p>
               <p className="fs-20 mb-4 ">
                 So, fill the form now, and one of our representatives will be in

@@ -10,7 +10,7 @@ class About extends Component {
     return (
       <Fragment>
         <MetaTags>
-          <title> GoMaidz | About Us</title>
+          <title> GoMaids | About Us</title>
           <meta name="description" content="#" />
         </MetaTags>
         <Header />

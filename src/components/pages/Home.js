@@ -9,7 +9,7 @@ class Home extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>GoMaidz | Homepage</title>
+                    <title>GoMaids | Homepage</title>
                     <meta
                         name="description"
                         content="#"

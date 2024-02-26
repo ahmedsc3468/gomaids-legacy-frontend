@@ -10,7 +10,7 @@ class Login extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>GoMaidz | Login</title>
+                    <title>GoMaids | Login</title>
                     <meta
                         name="description"
                         content="#"

@@ -11,7 +11,7 @@ class Contact extends Component {
     return (
       <Fragment>
         <MetaTags>
-          <title> GoMaidz | Contact Us</title>
+          <title> GoMaids | Contact Us</title>
           <meta name="description" content="#" />
         </MetaTags>
         <Header />

@@ -10,7 +10,7 @@ class EmailVerification extends Component {
     return (
       <Fragment>
         <MetaTags>
-          <title> GoMaidz | Verify-Email</title>
+          <title> GoMaids | Verify-Email</title>
           <meta name="description" content="#" />
         </MetaTags>
         <Header />

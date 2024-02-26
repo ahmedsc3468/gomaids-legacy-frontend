@@ -10,7 +10,7 @@ class Forgot extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>GoMaidz | Forgot-Password</title>
+                    <title>GoMaids | Forgot-Password</title>
                     <meta
                         name="description"
                         content="#"

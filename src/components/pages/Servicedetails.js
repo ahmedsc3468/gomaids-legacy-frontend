@@ -10,7 +10,7 @@ class Productdetails extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title> GoMaidz | Service Detail</title>
+                    <title> GoMaids | Service Detail</title>
                     <meta
                         name="description"
                         content="#"

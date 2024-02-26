@@ -35,10 +35,10 @@ class Howitwork extends Component {
         <div className="row">
           <div className="col-lg-12 text-center">
             <p className="sub-head blue f-700 mb-2">
-              <span>............</span>How GoMaidz Works.
+              <span>............</span>How GoMaids Works.
               <span>............</span>
             </p>
-            <h1 className="mb-45">How ‘GoMaidz’ Works</h1>
+            <h1 className="mb-45">How ‘GoMaids’ Works</h1>
           </div>
         </div>
         <div className="row">

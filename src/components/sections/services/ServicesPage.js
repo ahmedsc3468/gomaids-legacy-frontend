@@ -14,7 +14,7 @@ class Serviceone extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title> GoMaidz | Services</title>
+                    <title> GoMaids | Services</title>
                     <meta name="description" content="#" />
                 </MetaTags>
                 <Header />

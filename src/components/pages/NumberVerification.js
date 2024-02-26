@@ -10,7 +10,7 @@ class NumberVerification extends Component {
     return (
       <Fragment>
         <MetaTags>
-          <title> GoMaidz | Verify-Number</title>
+          <title> GoMaids | Verify-Number</title>
           <meta name="description" content="#" />
         </MetaTags>
         <Header />

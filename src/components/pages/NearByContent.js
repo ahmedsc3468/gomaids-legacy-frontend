@@ -10,7 +10,7 @@ class NearByContent extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title> GoMaidz | Near-By-Providers</title>
+                    <title> GoMaids | Near-By-Providers</title>
                     <meta
                         name="description"
                         content="#"

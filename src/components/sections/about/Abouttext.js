@@ -121,13 +121,13 @@ export default function Counter() {
             <div className="about-div mt-md-45 mt-sm-10">
               <h1 className="mb-10">Our Mission and Vision</h1>
               <p>
-                GoMaidz is dedicated to providing exceptional cleaning services,
+                Gomaids is dedicated to providing exceptional cleaning services,
                 ensuring a spotless and organized environment for our clients.
                 We strive to simplify their lives by delivering reliable and
                 efficient maid services tailored to their unique needs.
               </p>
               <p>
-                At GoMaidz, we envision becoming the leading maids service
+                At Gomaids, we envision becoming the leading maids service
                 provider, setting the standard for excellence in cleanliness and
                 customer satisfaction. Our goal is to enhance the well-being of
                 our clients by consistently exceeding expectations and fostering

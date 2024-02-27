@@ -63,1009 +63,1029 @@ class Productdetail extends Component {
         timeTo: Joi.string().required().label("Ending Time"),
         date: Joi.string().required().label("Date"),
         service: Joi.string().required().label("Service"),
-
+        
     };
     constructor(props) {
-
-
+        
+        
         super(props);
-
+        
         let user = AuthService.getCurrentUser();
         let dateSplit = '';
         if (this.props.location.state !== undefined &&
             this.props.location.state.date) {
-            let temp = this.props.location.state.date.split('-');
-
-            dateSplit = temp[0] + "-" + temp[1] + "-" + temp[2]
-            // console.log("ds:", dateSplit)
-
-
-        }
-
-        this.state = {
-            user_id: user ? user.id : "",
-            user_role: user ? user.role.name : "notsignin",
-            time: [
-                { label: "1:00AM", value: "1:00AM" },
-                { label: "2:00AM", value: "2:00AM" },
-                { label: "3:00AM", value: "3:00AM" },
-                { label: "4:00AM", value: "4:00AM" },
-                { label: "5:00AM", value: "5:00AM" },
-                { label: "6:00AM", value: "6:00AM" },
-                { label: "7:00AM", value: "7:00AM" },
-                { label: "8:00AM", value: "8:00AM" },
-                { label: "9:00AM", value: "9:00AM" },
-                { label: "10:00AM", value: "10:00AM" },
-                { label: "11:00AM", value: "11:00AM" },
-                { label: "12:00PM", value: "12:00PM" },
-                { label: "1:00PM", value: "1:00PM" },
-                { label: "2:00PM", value: "2:00PM" },
-                { label: "3:00PM", value: "3:00PM" },
-                { label: "4:00PM", value: "4:00PM" },
-                { label: "5:00PM", value: "5:00PM" },
-                { label: "6:00PM", value: "6:00PM" },
-                { label: "7:00PM", value: "7:00PM" },
-                { label: "8:00PM", value: "8:00PM" },
-                { label: "9:00PM", value: "9:00PM" },
-                { label: "10:00PM", value: "10:00PM" },
-                { label: "11:00PM", value: "11:00PM" },
-                { label: "12:00AM", value: "12:00AM" },
-
-
-            ],
-            timeForm: (this.props.location.state !== undefined &&
-                this.props.location.state.slot_start_time) || "",
-            timeTo: (
-                this.props.location.state !== undefined &&
-                this.props.location.state.slot_end_time) || "",
-            date: (dateSplit !== "" &&
-                dateSplit) || "",
-            slotUnavailable: "",
-            service: (this.props.location.state !== undefined &&
-                this.props.location.state.serviceName) || "",
-            events: [],
-            slot_by_date: [],
-            errors: {},
-            currentServiceProvider: {},
-            feedbackCurrentServiceProvider: {},
-            providerServices: [],
-            servicePrice: "",
-            rating: "",
-            isPending: true,
-            serviceprovider: {},
-            serviceprovider_services: [],
-            serviceprovider_services_type: [],
-            profileCompletion: "",
-            additionalNotes: "",
-        };
-
-    }
-
-    async componentDidMount() {
-        window.scrollTo(0, 0);
-
-        try {
-            let user = AuthService.getCurrentUser();
-            const { data: { data } } = await axios.get(
-                config.SERVER_URL + `/api/user/${user.id}`,
-                {
-                    headers: authHeader()
-                }
-            );
-           this.setState({
-                profileCompletion: data.profile_completion
-            })
-        } catch(e) {
-            console.log(e)
-        }
-        
-        const userID = this.props.match.params.serviceProviderID;
-        // console.log("PD 133", userID)
-
-        const serviceProviders = await axios.get(config.SERVER_URL + `/api/serviceprovider/${userID}`, {
-            headers: authHeader(),
-        });
-        // console.log("PD 147", serviceProviders)
-        let providerServices = [];
-
-
-        const servicePrice = serviceProviders.data.data.serviceprovider_services[0].service_type.service_price.price_per_hour;
-
-        this.setState({
-            servicePrice,
-            serviceprovider: serviceProviders.data.data.user,
-
-            serviceprovider_services: serviceProviders.data.data.serviceprovider_services[0],
-            serviceprovider_services_type: serviceProviders.data.data.serviceprovider_services,
-        })
-        // console.log("PD 158", serviceProviders.data.data.serviceprovider_services[0])
-        serviceProviders.data.data.serviceprovider_services.map(
-            (provider) => (
-                providerServices.push({ id: provider.service_type.id, value: provider.service_type.name })
-            )
-        )
-  
-        this.setState({ providerServices ,service:providerServices[0]?.value})
-
-        this.setState({ currentServiceProvider: serviceProviders.data.data })
-
-        const feedbackserviceProviders = await axios.get(config.SERVER_URL + `/api/providerfeedbacks/${userID}`, {
-            headers: authHeader(),
-        });
-
-        // console.log("PD 162 ", feedbackserviceProviders)
-
-        let list = feedbackserviceProviders.data.data.data;
-
-        // console.log("list ", list)
-
-        this.setState({ feedbackCurrentServiceProvider: [...list] })
-        this.setState({ isPending: false })
-
-        // console.log("feedbackCurrentServiceProvider", this.state.feedbackCurrentServiceProvider)
-    }
-
-    validate = () => {
-        const { error } = Joi.validate(
-            {
-                timeForm: this.state.timeForm, timeTo: this.state.timeTo, date: this.state.date,
-                service: this.state.service
-            },
-            this.schema,
-            {
-                abortEarly: false,
+                let temp = this.props.location.state.date.split('-');
+                
+                dateSplit = temp[0] + "-" + temp[1] + "-" + temp[2]
+                // console.log("ds:", dateSplit)
+                
+                
             }
-        );
-        if (!error) return null;
-        let errors = {};
-        if (error) {
-            for (let item of error.details) {
-                errors[item.path] = item.message;
-            }
-        }
-
-        return Object.keys(errors).length === 0 ? null : errors;
-    };
-    setAddtionalNotes = (e) => {
-        
-        this.setState({additionalNotes: e.currentTarget.value});
-    };
-    validateProperty = ({ value, name }) => {
-        let dataProperty = { [name]: value };
-        let subSchema = { [name]: this.schema[name] };
-
-
-        const { error } = Joi.validate(dataProperty, subSchema);
-
-        return error ? error.details[0].message : null;
-    };
-
-    onChangeTextFields = async (e) => {
-
-
-        if (this.state.slotUnavailable)
-            this.setState({ slotUnavailable: false })
-
-        const errorMessage = this.validateProperty(e.currentTarget);
-
-        const errors = { ...this.state.errors };
-        if (errorMessage) errors[e.currentTarget.name] = errorMessage;
-        else {
-            delete errors[e.currentTarget.name];
-            this.setState({ errors });
-        }
-        let Name = e.currentTarget.name;
-        if (e.currentTarget.name === "date") {
-            const temp = e.currentTarget.value.split("-");
-
-            const date = temp[1] + "/" + temp[2] + "/" + temp[0];
-            const dated = temp[1] + "/" + temp[2] + "/" + temp[0];
-            const seleted_data = { date: dated }
-            this.setState({ [Name]: date })
-            this.setState({ [Name]: e.currentTarget.value })
-            const user_ID = this.props.match.params.serviceProviderID;
-            // console.log(user_ID);
-            var slots = await axios.post(config.SERVER_URL + `/api/slotbydate/${user_ID}`, seleted_data, {
-                headers: authHeader(),
-            });
-            const avaiable_slots = slots.data.data
-            // console.log("slot_bydate", avaiable_slots)
-            this.setState({
-                slot_by_date: avaiable_slots
-            })
-        }
-        else {
-            this.setState({ [Name]: e.currentTarget.value })
-        }
-     
-
-
-    }
-    onChangeDate = async (date) => {
-if(date){
-
-            // You can create a Date object by passing the date string
-const newDate = new Date(date);
-
-
-// Extract year, month, and day
-const year = newDate.getFullYear();
-const month = String(newDate.getMonth() + 1).padStart(2, '0'); // Month is zero-based, so we add 1
-const day = String(newDate.getDate()).padStart(2, '0');
-
-// Create the required format: yyyy-MM-dd
-const formattedDate = `${month}/${day}/${year}`;
-  this.setState({
-    ["date"]: formattedDate,
-  });
-        // const temp = e.currentTarget.value.split("-");
-
-        // const date = temp[1] + "/" + temp[2] + "/" + temp[0];
-        // const dated = temp[1] + "/" + temp[2] + "/" + temp[0];
-        const seleted_data = { date: formattedDate }
-        // this.setState({ [Name]: date })
-        // this.setState({ [Name]: e.currentTarget.value })
-        const user_ID = this.props.match.params.serviceProviderID;
-        // console.log(user_ID);
-        var slots = await axios.post(config.SERVER_URL + `/api/slotbydate/${user_ID}`, seleted_data, {
-            headers: authHeader(),
-        });
-        const avaiable_slots = slots.data.data
-        // console.log("slot_bydate", avaiable_slots)
-        this.setState({
-            slot_by_date: avaiable_slots
-        })
-}
-  
-    };
-    handleDateClick = async (e) => {
-        let user = AuthService.getCurrentUser();
-
-        try {
-            this.setState({ events: [] })
-
-            const data = { date: (e.date.getMonth() + 1) + '/' + e.date.getDate() + '/' + e.date.getFullYear() }
-            // console.log(e.date, data)
-
-            const date = await axios.post(config.SERVER_URL + `/api/slotbydate/${this.state.user_id}`, data, { headers: authHeader() })
-            const response = date.data.data
-
-
-            const selectedYear = e.date.getFullYear()
-            const selectedMonth = (e.date.getMonth() + 1 > 9) ? e.date.getMonth() + 1 : '0' + (e.date.getMonth() + 1)
-            const selectedDate = (e.date.getDate() > 9) ? e.date.getDate() : '0' + (e.date.getDate())
-            const y_m_d_selected = `${selectedYear}-${selectedMonth}-${selectedDate}`
-            // console.log(y_m_d_selected)
-            const slotEvents = response.map(row => {
-                return ({
-                    title: `${row.hourly_slots.slot_start_time} - ${row.hourly_slots.slot_end_time}`, date: y_m_d_selected
-                })
-            })
-
-            this.setState({ events: slotEvents })
-        } catch (error) {
-            console.log(error)
-        }
-
-    }
-
-    onFromTimeChange = (e) => {
-
-        if (this.state.slotUnavailable)
-            this.setState({ slotUnavailable: false })
-        this.setState({ timeForm: e.target.value });
-    };
-
-    onToTimeChange = (e) => {
-
-
-        this.setState({ timeTo: e.target.value });
-    };
-
-    submit = (e) => {
-
-        const errors = this.validate();
-
-        if (errors) this.setState({ errors });
-
-    }
-
-    hireNow = async () => {
-
-    //     swal({
-    //         title: "Are you sure?",
-    //         text: "You will not be able to recover this imaginary file!",
-    //         icon: "warning",
-    //         buttons: [
-    //           'No, cancel it!',
-    //           'Yes, I am sure!'
-    //         ],
-    //         dangerMode: true,
-    //       }).then( function(isConfirm) {
-    //         localStorage.setItem('hire',1)
-    //     });
-    //    var confirmation= localStorage.getItem('hire');
-    //     if(confirmation==1){
-    //         const serviceProviderID = this.props.match.params.serviceProviderID;
-    //         const errors = this.validate();
-    //         if (errors) {
-    //             this.setState({ errors })
-    //             return;
-    //         }
-    //         const service_taker = JSON.parse(localStorage.getItem("user"));
-
-    //         if (!service_taker) {
-
-    //             const obj =
-    //             {
-    //                 currentServiceProvider: this.state.currentServiceProvider,
-    //                 date: this.state.date,
-    //                 slot_start_time: this.state.timeForm,
-    //                 slot_end_time: this.state.timeTo,
-    //                 serviceProviderID: this.props.match.params.serviceProviderID,
-    //                 serviceName: this.state.service,
-    //                 serviceAvailed: this.state.service
-    //             }
-    //             this.props.history.push("/signup/login/hire", obj)
-    //         }
-
-    //         if (!service_taker) return;
-
-    //         const temp = this.state.date.split("-");
-    //         const d = temp[1] + "/" + temp[2] + "/" + temp[0]
-    //         const serviceDetails = {
-    //             service_taker_id: service_taker.id || service_taker.user_id,
-    //             date: d,
-    //             slot_start_time: this.state.timeForm,
-    //             slot_end_time: this.state.timeTo
-    //         }
-
-    //         try {
-    //             const resp = await axios
-    //                 .post(config.SERVER_URL + `/api/slots/${serviceProviderID}`, serviceDetails, {
-    //                     headers: authHeader(),
-    //                 })
-
-    //             if (resp.data.success) {
-
-    //                 this.props.history.push("/hire/details", {
-    //                     currentServiceProvider: this.state.currentServiceProvider,
-    //                     date: this.state.date,
-    //                     slot_start_time: this.state.timeForm,
-    //                     slot_end_time: this.state.timeTo,
-    //                     serviceAvailed: this.state.service
-    //                 })
-    //             } else {
-    //                 console.log(resp.data.data.error);
-    //                 this.setState({ slotUnavailable: resp.data.data.error })
-    //             }
-
-    //         }
-    //         catch (ex) {
-
-    //             this.setState({ slotUnavailable: ex.response.data.data.error })
-    //         }
-    //         localStorage.removeItem('hire')
-    //     }
-
-
-
-
-        // const proceed = window.confirm("Are you sure you want to Hire")
-        // if (proceed) {
-            if (this.state.profileCompletion != "100") {
-                swal("Incomplete User Profile", "Please complete your user profile details for hiring service providers.", "warning")
-
-                return
-            }
-
-            const serviceProviderID = this.props.match.params.serviceProviderID;
-            const errors = this.validate();
-            if (errors) {
-                this.setState({ errors })
-                return;
-            }
-            const service_taker = JSON.parse(localStorage.getItem("user"));
-
-            if (!service_taker) {
-
-                const obj =
-                {
-                    currentServiceProvider: this.state.currentServiceProvider,
-                    date: this.state.date,
-                    slot_start_time: this.state.timeForm,
-                    slot_end_time: this.state.timeTo,
-                    serviceProviderID: this.props.match.params.serviceProviderID,
-                    serviceName: this.state.service,
-                    serviceAvailed: this.state.service
-                }
-                this.props.history.push("/signup/login/hire", obj)
-            }
-
-            if (!service_taker) return;
-
-            const temp = this.state.date.split("-");
-            const d = temp[1] + "/" + temp[2] + "/" + temp[0];
-            const serviceDetails = {
-                service_taker_id: service_taker.id || service_taker.user_id,
-                date: this.state.date,
-                slot_start_time: this.state.timeForm,
-                slot_end_time: this.state.timeTo
-            }
-
-            try {
-                const resp = await axios
-                    .post(config.SERVER_URL + `/api/slots/${serviceProviderID}`, serviceDetails, {
-                        headers: authHeader(),
-                    })
-
-
-                if (resp.data.success) {
-                    const service = this.state.currentServiceProvider.serviceprovider_services.filter(x => x.service_type.name === this.state.service)
-                    const servicePrice = service[0].service_type.service_price.price_per_hour
-                    this.props.history.push("/hire/details", {
-                        currentServiceProvider: this.state.currentServiceProvider,
-                        date: this.state.date,
-                        slot_start_time: this.state.timeForm,
-                        slot_end_time: this.state.timeTo,
-                        serviceAvailed: this.state.service,
-                        servicePrice: servicePrice,
-                        additionalNotes: this.state.additionalNotes
-                    })
-                } else {
+            
+            this.state = {
+                user_id: user ? user.id : "",
+                user_role: user ? user.role.name : "notsignin",
+                time: [
+                    { label: "1:00AM", value: "1:00AM" },
+                    { label: "2:00AM", value: "2:00AM" },
+                    { label: "3:00AM", value: "3:00AM" },
+                    { label: "4:00AM", value: "4:00AM" },
+                    { label: "5:00AM", value: "5:00AM" },
+                    { label: "6:00AM", value: "6:00AM" },
+                    { label: "7:00AM", value: "7:00AM" },
+                    { label: "8:00AM", value: "8:00AM" },
+                    { label: "9:00AM", value: "9:00AM" },
+                    { label: "10:00AM", value: "10:00AM" },
+                    { label: "11:00AM", value: "11:00AM" },
+                    { label: "12:00PM", value: "12:00PM" },
+                    { label: "1:00PM", value: "1:00PM" },
+                    { label: "2:00PM", value: "2:00PM" },
+                    { label: "3:00PM", value: "3:00PM" },
+                    { label: "4:00PM", value: "4:00PM" },
+                    { label: "5:00PM", value: "5:00PM" },
+                    { label: "6:00PM", value: "6:00PM" },
+                    { label: "7:00PM", value: "7:00PM" },
+                    { label: "8:00PM", value: "8:00PM" },
+                    { label: "9:00PM", value: "9:00PM" },
+                    { label: "10:00PM", value: "10:00PM" },
+                    { label: "11:00PM", value: "11:00PM" },
+                    { label: "12:00AM", value: "12:00AM" },
                     
-                    this.setState({ slotUnavailable: resp.data.data.error })
-                }
-
-            }
-            catch (ex) {
-
-                this.setState({ slotUnavailable: ex.response.data.data.error })
-            }
-
-        // }
-    }
-
-    renderPrice = (e) => {
-
-        const service = this.state.currentServiceProvider.serviceprovider_services.filter(x => x.service_type.name === e);
-
-        this.setState({ servicePrice: service[0].service_type.service_price.price_per_hour })
-    }
-
-    render() {
-        // console.log("serveces", this.state.serviceprovider_services_type);
-
-        const slot_by_provider=this.state.slot_by_date;
-        const options = {
-            items: 1,
-            loop: true,
-            autoplay: true,
-            autoplayTimeout: 6000,
-            autoplayHoverPause: true,
-            smartSpeed: 450,
-            margin: 0,
-            nav: true,
-            navText: ["<i class='fas fa-chevron-left'></i>", "<i class='fas fa-chevron-right'></i>"],
-            dots: false
-        }
-        return (
-            <>
-                {/* <Dimmer active inverted><Loader size='large' indeterminate>Loading</Loader></Dimmer> */}
-                <section className="prdt-detail pt-90">
-
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-md-6 col-lg-6 service-provider-img-container">
-                                <div>
-
-                                    {this.state.currentServiceProvider.user !== undefined &&
-
-                                        <img src={
-
-                                            config.SERVER_URL + "/" + this.state.currentServiceProvider.user.image}
-                                            alt="service-provider-img" className="service-provider-img" />
-                                    }
-                                    {/* <OwlCarousel options={options} id="image-gallery" className="owl-carousel gallery list-unstyled cS-hidden">
-                                   {this.state.currentServiceProvider.user!==undefined &&
-                                    shopmain.map((item, i) => (
-                                        // <img key={i} src={item.img} alt="" />
-                                         <img src={
-
-                                     config.SERVER_URL+"/"+this.state.currentServiceProvider.user.image}
-                                   alt="service-provider-img"/>
-                                    ))}
-                                         
-                                </OwlCarousel> */}
-                                </div>
-                            </div>
-                            <div className="col-md-6 col-lg-6 service-provider-details-container">
-                                <div className="prdt-info-right pl-20 pl-md-00 mt-md-25">
-                                    <div className="prdt-detail-head">
-                                        <div className="prdt-reviews">
-                                            <div className="rating d-flex align-items-center">
-                                                <Rating value={parseInt(this.state.currentServiceProvider.rating)}
-                                                    size='normal'
-                                                    precision={0.5}
-                                                    readOnly
-                                                />
-
-                                                {/* <ul className="stars-rate" data-starsactive={4}>
-                                                    
-                                                    <li className="text-left lh-10"> <i className="fas fa-star" />
-                                                        <i className="fas fa-star" />
-                                                        <i className="fas fa-star" />
-                                                        <i className="fas fa-star" />
-                                                        <i className="fas fa-star" />
-                                                    </li>
-                                                </ul> */}
-                                                <p className="rates-info mb-0">
-                                                    {/* <Link to="/" className="ml-10">15 reviews</Link> |
-                                                    <Link to="/">Write a review</Link> */}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <h1 className="mt-10 mb-15 fs-35 lh-13">
-
-                                            {this.state.currentServiceProvider.user !== undefined ? this.state.currentServiceProvider.user.username : ""}
-
-                                        </h1>
-                                        <div className="rate-detail">
-
-
-                                            <h3>   {this.state.servicePrice != undefined &&
-                                                "$" + this.state.servicePrice + "/hr"} </h3>
-
-
-                                            {this.state.currentServiceProvider != undefined &&
-                                                this.state.currentServiceProvider.serviceprovider_services != undefined &&
-                                                this.state.currentServiceProvider.serviceprovider_services.length > 0 &&
-                                                <Tabs id="uncontrolled-tab-example" className="mb-3 mt-3"
-                                                    onSelect={this.renderPrice}
-                                                >
-                                                    {
-                                                        this.state.currentServiceProvider.serviceprovider_services.map((service, index) => {
-
-
-                                                            return <Tab eventKey={service.service_type.name} title={service.service_type.name}
-                                                                key={index}
-
-                                                            >
-                                                                <p style={{ color: "#102043" }}>{service.description}</p>
-
-                                                            </Tab>
-
-
-
-                                                        })}
-
-                                                </Tabs>}
-
-
-
-                                            {/* 
-                                            <span className="mb-0">
-                                                         
-                                                         {service.service_type.name}
-                                                          <i className="fa fa-solid fa-tags"
-                                                          style={{marginLeft:"5px",marginRight:"5px",
-                                                         color:"#102043"
-                                                         }}
-                                             ></i> */}
-                                            {/* </span> */}
-                                        </div>
-                                    </div>
-
-                                    <div className="hr-1 bg-black opacity-1 mb-20 mt-20" />
-                                    <div className="profuct-descr">
-                                        <p className="mb-10">
-                                            {/* {
-                                    this.state.currentServiceProvider.user !== undefined &&
-                                    this.state.currentServiceProvider.service_type.description} */}
-
-                                        </p>
-                                        <p>
-                                        </p>
-                                    </div>
-                                    <div className="hr-1 bg-black opacity-1 mt-20 mb-20" />
-
-                                </div>
-                            </div>
-
-
-                            <div className="col-lg-12">
-
-                                <div style={{ marginBottom: "2rem" }}>
-                                    <div className="container">
-                                        <div
-                                            className="hireNow-date-container" >
- <LocalizationProvider dateAdapter={DateAdapter}>
-      <MobileDatePicker
-      mode="legacy" 
-       name="date"
-        label="Select Date"
-        value={this.state.date}
-        onChange={this.onChangeDate}
-        minDate={new Date()} 
-        renderInput={(params) => <TextField {...params} />} // Use TextField for the input
-      />
-    </LocalizationProvider>
-                                            {/* <input type="date"
-                                                name="date"
-                                                min={new Date().toISOString().split('T')[0]}
-                                                max={new Date().toISOString().split('T')[30]}
-                                                id="hiredate"
-                                                className='date-input'
-                                                onChange={
-                                                    this.onChangeTextFields}
-                                                value={this.state.date}
-                                            /> */}
-                                        </div>
-                                    </div>
-                                    {this.state.errors &&
-                                        this.state.errors.date &&
-                                        <span className="text-danger error-date">
-                                            {
-                                                this.state.errors.date
-                                            }
-                                        </span>
-                                    }
-                                </div>
-
-                                {this.state.date && slot_by_provider[0]===undefined ?
-                                       <div className="row">
-                                <div className="col-lg-12">
-                                <div style={{ marginBottom: "2rem" }}>
-                                    <div className="container">
-                                        <div
-                                            className="hireNow-date-container" >
-
-                                            <input type="text"
-                                                name="date"
-                                                id="hiredate"
-                                                className='date-input'
-                                                readOnly
-                                                value={"Provider is not available on the selected date"}
-                                            />
-                                        </div>
-                                    </div>
-                                    {this.state.errors &&
-                                        this.state.errors.date &&
-                                        <span className="text-danger error-date">
-                                            {
-                                                this.state.errors.date
-                                            }
-                                        </span>
-                                    }
-                                </div>
-                                </div>
-                                </div>
-:<></>
-                            }
-                            {slot_by_provider.length>0 ?
- <div className='row'>
- <div className="col-lg-4"></div>
- <div className="col-lg-4" style={{display:"flex", AlignItem:"center",justifyContent:"center"}}><h5> Provider's slots On Selected Date</h5></div>
-</div> :""}
-    
-                                {slot_by_provider.length>0 ?
-                               
-                                   slot_by_provider.map((index) => (
-                                <div className="row">
-                                        {/* <div className="col-lg-4"></div>
-                                           <div className="col-lg-6"><h5>Avaiable Provider slots On this Date</h5></div> */}
-                                <div className="col-lg-6">
-                                <div style={{ marginBottom: "0.1rem" }}>
-                                    <div className="container">
-                                        <div
-                                            className="hireNow-date-container" >
-
-                                            <input type="text"
-                                                name="date"
-                                                id="hiredate"
-                                                className='date-input'
-                                                readOnly
-                                                value={"Start Time: "+index.hourly_slots.slot_start_time}
-                                            />
-                                        </div>
-                                    </div>
-                                    {this.state.errors &&
-                                        this.state.errors.date &&
-                                        <span className="text-danger error-date">
-                                            {
-                                                this.state.errors.date
-                                            }
-                                        </span>
-                                    }
-                                </div>
-                                </div>
-                                <div className="col-lg-6">
-                                <div style={{ marginBottom: "0.3rem" }}>
-                                    <div className="container">
-                                        <div
-                                            className="hireNow-date-container" >
-
-                                            <input type="text"
-                                                name="date"
-                                                id="hiredate"
-                                                className='date-input'
-                                                readOnly
-                                                value={"End Time: "+index.hourly_slots.slot_end_time}
-                                                />
-                                            
-                                        </div>
-                                    </div>
-                                    {this.state.errors &&
-                                        this.state.errors.date &&
-                                        <span className="text-danger error-date">
-                                            {
-                                                this.state.errors.date
-                                            }
-                                        </span>
-                                    }
-                                </div>
-                                </div>
-                                </div>
-)):<></>
-                            }
-
+                    
+                ],
+                timeForm: (this.props.location.state !== undefined &&
+                    this.props.location.state.slot_start_time) || "",
+                    timeTo: (
+                        this.props.location.state !== undefined &&
+                        this.props.location.state.slot_end_time) || "",
+                        date: (dateSplit !== "" &&
+                        dateSplit) || "",
+                        slotUnavailable: "",
+                        service: (this.props.location.state !== undefined &&
+                            this.props.location.state.serviceName) || "",
+                            events: [],
+                            slot_by_date: [],
+                            errors: {},
+                            currentServiceProvider: {},
+                            feedbackCurrentServiceProvider: {},
+                            providerServices: [],
+                            servicePrice: "",
+                            rating: "",
+                            isPending: true,
+                            serviceprovider: {},
+                            serviceprovider_services: [],
+                            serviceprovider_services_type: [],
+                            profileCompletion: "",
+                            additionalNotes: "",
+                        };
                         
-                                <div className="col-lg-12">
-
-                                    <div style={{ marginBottom: "2rem" }}>
-                                        <div
-                                            className="hireNow-date-container" >
-                                            <select class="form-select form-select-lg" aria-label=".form-select-lg example"
-                                                style={{
-                                                    width: "100%",
-                                                    height: "3.2rem"
-                                                }}
-                                                name="service"
-                                                onChange={this.onChangeTextFields}
-                                                value={this.state.providerServices[0]?.value}
-                                            >
-                                                <option disabled>Please select a service</option>
-
-                                                {this.state.providerServices.map((data, index) => {
-                                                      
-                                                    return <option key={index} value={data.value}  >{data.value}</option>
-                                                }
-                                                   
-                                                )}
-
-
-                                            </select>
-
-                                        </div>
-
-
-
-
-                                        {this.state.errors &&
-                                            this.state.errors.service &&
-                                            <span className="text-danger error-date"
-                                            style={{ paddingLeft: "0" }}
-                                            >
-                                                {
-                                                    this.state.errors.service
-                                                }
-                                            </span>
-                                        }
-                                    </div>
-
-                                </div>
-                                <div className="container">
-                                    <div className="row">
-                                        <div className="col"
-                                        >
-                                            <select
-                                                type="select"
-                                                className={`form-control ${this.state.TimeFromclass}`}
-                                                name="timeForm"
-                                                onChange={this.onChangeTextFields}
-                                                value={this.state.timeForm}
-
-                                                // style={{
-                                            //     border: "1.5px solid #DA1212",
-                                            // }}
-                                            // value={this.state.service_type_id}
-                                            // onChange={this.onChangeServiceType}
-                                            >
-                                                <option value="">
-                                                    -- Select Start Time --
-                                                </option>
-                                                {this.state.time.map((data, index) => (
-                                                    <option value={data.value} key={index}>
-                                                        {data.label}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            {this.state.errors &&
-                                                this.state.errors.timeForm &&
-                                                <span className="text-danger">
-                                                    {
-                                                        this.state.errors.timeForm
-                                                    }
-                                                </span>
-                                            }
-
-                                        </div>
-
-                                        <div className="col">
-                                            <select
-                                                type="select"
-                                                className={`form-control ${this.state.TimeToclass}`}
-                                                name="timeTo"
-                                                onChange={this.onChangeTextFields}
-
-                                                value={this.state.timeTo}
-                                            // onChange={this.onChangeServiceType}
-                                            >
-                                                <option value="">
-                                                    -- Select End Time --
-                                                </option>
-                                                {this.state.time.map((data, index) => (
-                                                    <option value={data.value} key={index}>
-                                                        {data.label}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            {this.state.errors &&
-                                                this.state.errors.timeTo &&
-                                                <span className="text-danger">
-                                                    {
-                                                        this.state.errors.timeTo
-                                                    }
-                                                </span>
-                                            }
-
-                                        </div>
-                                     
-                                    </div>
-                                    <div className='row' style={{ marginTop: "2rem" }}>
-                                    <div className='col col-md-12'>
-                                        <textarea rows={3} name="additional_notes" value={this.state.additionalNotes} onChange={this.setAddtionalNotes} placeholder={"Additional Notes"}/>
-                                        </div>
-                                    </div>
+                    }
+                    
+                    async componentDidMount() {
+                        window.scrollTo(0, 0);
+                        
+                        try {
+                            let user = AuthService.getCurrentUser();
+                            const { data: { data } } = await axios.get(
+                                config.SERVER_URL + `/api/user/${user.id}`,
+                                {
+                                    headers: authHeader()
+                                }
+                                );
+                                this.setState({
+                                    profileCompletion: data.profile_completion
+                                })
+                            } catch(e) {
+                                console.log(e)
+                            }
+                            
+                            const userID = this.props.match.params.serviceProviderID;
+                            // console.log("PD 133", userID)
+                            
+                            const serviceProviders = await axios.get(config.SERVER_URL + `/api/serviceprovider/${userID}`, {
+                                headers: authHeader(),
+                            });
+                            // console.log("PD 147", serviceProviders)
+                            let providerServices = [];
+                            
+                            
+                            const servicePrice = serviceProviders.data.data.serviceprovider_services[0].service_type.service_price.price_per_hour;
+                            
+                            this.setState({
+                                servicePrice,
+                                serviceprovider: serviceProviders.data.data.user,
                                 
-                                </div>
-
-                                {this.state.slotUnavailable &&
-                                    <UncontrolledAlert color="danger"
-
-                                    >
-                                        {this.state.slotUnavailable}
-                                    </UncontrolledAlert>}
-
-
-                                <button
-                                    type="submit"
-                                    className="btn btn-black btn-block mt-20" disabled={this.state.user_role == "service_provider"}
-                                    onClick={this.hireNow}
-                                > Hire Now
-                                </button>
-
-
-
-                                <div className="prdt-tabs row pt-40 pt-md-25 mb-5">
-                                    <div className="col-md-12">
-
-                                        <div className="prdt-tab mt-5 service-provider-nav-container">
-                                            <Tab.Container defaultActiveKey="description">
-                                                <Nav variant="tabs" className="nav nav-pills justify-content-center justify-content-sm-start">
-                                                    <Nav.Item>
-                                                        <Nav.Link eventKey="description">Description</Nav.Link>
-                                                    </Nav.Item>
-                                                    <Nav.Item>
-                                                        <Nav.Link eventKey="addinfo">Detail</Nav.Link>
-                                                    </Nav.Item>
-                                                    <Nav.Item>
-                                                        <Nav.Link eventKey="reviews">Reviews</Nav.Link>
-                                                    </Nav.Item>
-                                                </Nav>
-                                                <Tab.Content className="pt-20">
-                                                    <Tab.Pane eventKey="description">
-                                                        <h4 className="mb-10 lh-13"></h4>
-                                                        <p className="text-justify">
-                                                            {this.state.serviceprovider.detail}
-                                                        </p>
-                                                        {this.state.serviceprovider_services_type.map((service) => {
-
-                                                            return (
-                                                                <>
-                                                                    <h4 className="mb-10 lh-13">{service.service_type.name}</h4>
-                                                                    <p className="text-justify">{service.description} </p>
-
-                                                                </>
-                                                            )
-                                                        })
-
+                                serviceprovider_services: serviceProviders.data.data.serviceprovider_services[0],
+                                serviceprovider_services_type: serviceProviders.data.data.serviceprovider_services,
+                            })
+                            // console.log("PD 158", serviceProviders.data.data.serviceprovider_services[0])
+                            serviceProviders.data.data.serviceprovider_services.map(
+                                (provider) => (
+                                    providerServices.push({ id: provider.service_type.id, value: provider.service_type.name })
+                                    )
+                                    )
+                                    
+                                    this.setState({ providerServices ,service:providerServices[0]?.value})
+                                    
+                                    this.setState({ currentServiceProvider: serviceProviders.data.data })
+                                    
+                                    const feedbackserviceProviders = await axios.get(config.SERVER_URL + `/api/providerfeedbacks/${userID}`, {
+                                        headers: authHeader(),
+                                    });
+                                    
+                                    // console.log("PD 162 ", feedbackserviceProviders)
+                                    
+                                    let list = feedbackserviceProviders.data.data.data;
+                                    
+                                    // console.log("list ", list)
+                                    
+                                    this.setState({ feedbackCurrentServiceProvider: [...list] })
+                                    this.setState({ isPending: false })
+                                    
+                                    // console.log("feedbackCurrentServiceProvider", this.state.feedbackCurrentServiceProvider)
+                                }
+                                
+                                validate = () => {
+                                    const { error } = Joi.validate(
+                                        {
+                                            timeForm: this.state.timeForm, timeTo: this.state.timeTo, date: this.state.date,
+                                            service: this.state.service
+                                        },
+                                        this.schema,
+                                        {
+                                            abortEarly: false,
+                                        }
+                                        );
+                                        if (!error) return null;
+                                        let errors = {};
+                                        if (error) {
+                                            for (let item of error.details) {
+                                                errors[item.path] = item.message;
+                                            }
+                                        }
+                                        
+                                        return Object.keys(errors).length === 0 ? null : errors;
+                                    };
+                                    setAddtionalNotes = (e) => {
+                                        
+                                        this.setState({additionalNotes: e.currentTarget.value});
+                                    };
+                                    validateProperty = ({ value, name }) => {
+                                        let dataProperty = { [name]: value };
+                                        let subSchema = { [name]: this.schema[name] };
+                                        
+                                        
+                                        const { error } = Joi.validate(dataProperty, subSchema);
+                                        
+                                        return error ? error.details[0].message : null;
+                                    };
+                                    
+                                    onChangeTextFields = async (e) => {
+                                        
+                                        
+                                        if (this.state.slotUnavailable)
+                                        this.setState({ slotUnavailable: false })
+                                        
+                                        const errorMessage = this.validateProperty(e.currentTarget);
+                                        
+                                        const errors = { ...this.state.errors };
+                                        if (errorMessage) errors[e.currentTarget.name] = errorMessage;
+                                        else {
+                                            delete errors[e.currentTarget.name];
+                                            this.setState({ errors });
+                                        }
+                                        let Name = e.currentTarget.name;
+                                        if (e.currentTarget.name === "date") {
+                                            const temp = e.currentTarget.value.split("-");
+                                            
+                                            const date = temp[1] + "/" + temp[2] + "/" + temp[0];
+                                            const dated = temp[1] + "/" + temp[2] + "/" + temp[0];
+                                            const seleted_data = { date: dated }
+                                            this.setState({ [Name]: date })
+                                            this.setState({ [Name]: e.currentTarget.value })
+                                            const user_ID = this.props.match.params.serviceProviderID;
+                                            // console.log(user_ID);
+                                            var slots = await axios.post(config.SERVER_URL + `/api/slotbydate/${user_ID}`, seleted_data, {
+                                                headers: authHeader(),
+                                            });
+                                            const avaiable_slots = slots.data.data
+                                            // console.log("slot_bydate", avaiable_slots)
+                                            this.setState({
+                                                slot_by_date: avaiable_slots
+                                            })
+                                        }
+                                        else {
+                                            this.setState({ [Name]: e.currentTarget.value })
+                                        }
+                                        
+                                        
+                                        
+                                    }
+                                    onChangeDate = async (date) => {
+                                        if(date){
+                                            
+                                            // You can create a Date object by passing the date string
+                                            const newDate = new Date(date);
+                                            
+                                            
+                                            // Extract year, month, and day
+                                            const year = newDate.getFullYear();
+                                            const month = String(newDate.getMonth() + 1).padStart(2, '0'); // Month is zero-based, so we add 1
+                                            const day = String(newDate.getDate()).padStart(2, '0');
+                                            
+                                            // Create the required format: yyyy-MM-dd
+                                            const formattedDate = `${month}/${day}/${year}`;
+                                            this.setState({
+                                                ["date"]: formattedDate,
+                                            });
+                                            // const temp = e.currentTarget.value.split("-");
+                                            
+                                            // const date = temp[1] + "/" + temp[2] + "/" + temp[0];
+                                            // const dated = temp[1] + "/" + temp[2] + "/" + temp[0];
+                                            const seleted_data = { date: formattedDate }
+                                            // this.setState({ [Name]: date })
+                                            // this.setState({ [Name]: e.currentTarget.value })
+                                            const user_ID = this.props.match.params.serviceProviderID;
+                                            // console.log(user_ID);
+                                            var slots = await axios.post(config.SERVER_URL + `/api/slotbydate/${user_ID}`, seleted_data, {
+                                                headers: authHeader(),
+                                            });
+                                            const avaiable_slots = slots.data.data
+                                            // console.log("slot_bydate", avaiable_slots)
+                                            this.setState({
+                                                slot_by_date: avaiable_slots
+                                            })
+                                        }
+                                        
+                                    };
+                                    handleDateClick = async (e) => {
+                                        let user = AuthService.getCurrentUser();
+                                        
+                                        try {
+                                            this.setState({ events: [] })
+                                            
+                                            const data = { date: (e.date.getMonth() + 1) + '/' + e.date.getDate() + '/' + e.date.getFullYear() }
+                                            // console.log(e.date, data)
+                                            
+                                            const date = await axios.post(config.SERVER_URL + `/api/slotbydate/${this.state.user_id}`, data, { headers: authHeader() })
+                                            const response = date.data.data
+                                            
+                                            
+                                            const selectedYear = e.date.getFullYear()
+                                            const selectedMonth = (e.date.getMonth() + 1 > 9) ? e.date.getMonth() + 1 : '0' + (e.date.getMonth() + 1)
+                                            const selectedDate = (e.date.getDate() > 9) ? e.date.getDate() : '0' + (e.date.getDate())
+                                            const y_m_d_selected = `${selectedYear}-${selectedMonth}-${selectedDate}`
+                                            // console.log(y_m_d_selected)
+                                            const slotEvents = response.map(row => {
+                                                return ({
+                                                    title: `${row.hourly_slots.slot_start_time} - ${row.hourly_slots.slot_end_time}`, date: y_m_d_selected
+                                                })
+                                            })
+                                            
+                                            this.setState({ events: slotEvents })
+                                        } catch (error) {
+                                            console.log(error)
+                                        }
+                                        
+                                    }
+                                    
+                                    onFromTimeChange = (e) => {
+                                        
+                                        if (this.state.slotUnavailable)
+                                        this.setState({ slotUnavailable: false })
+                                        this.setState({ timeForm: e.target.value });
+                                    };
+                                    
+                                    onToTimeChange = (e) => {
+                                        
+                                        
+                                        this.setState({ timeTo: e.target.value });
+                                    };
+                                    
+                                    submit = (e) => {
+                                        
+                                        const errors = this.validate();
+                                        
+                                        if (errors) this.setState({ errors });
+                                        
+                                    }
+                                    
+                                    hireNow = async () => {
+                                        
+                                        //     swal({
+                                        //         title: "Are you sure?",
+                                        //         text: "You will not be able to recover this imaginary file!",
+                                        //         icon: "warning",
+                                        //         buttons: [
+                                        //           'No, cancel it!',
+                                        //           'Yes, I am sure!'
+                                        //         ],
+                                        //         dangerMode: true,
+                                        //       }).then( function(isConfirm) {
+                                        //         localStorage.setItem('hire',1)
+                                        //     });
+                                        //    var confirmation= localStorage.getItem('hire');
+                                        //     if(confirmation==1){
+                                        //         const serviceProviderID = this.props.match.params.serviceProviderID;
+                                        //         const errors = this.validate();
+                                        //         if (errors) {
+                                        //             this.setState({ errors })
+                                        //             return;
+                                        //         }
+                                        //         const service_taker = JSON.parse(localStorage.getItem("user"));
+                                        
+                                        //         if (!service_taker) {
+                                        
+                                        //             const obj =
+                                        //             {
+                                        //                 currentServiceProvider: this.state.currentServiceProvider,
+                                        //                 date: this.state.date,
+                                        //                 slot_start_time: this.state.timeForm,
+                                        //                 slot_end_time: this.state.timeTo,
+                                        //                 serviceProviderID: this.props.match.params.serviceProviderID,
+                                        //                 serviceName: this.state.service,
+                                        //                 serviceAvailed: this.state.service
+                                        //             }
+                                        //             this.props.history.push("/signup/login/hire", obj)
+                                        //         }
+                                        
+                                        //         if (!service_taker) return;
+                                        
+                                        //         const temp = this.state.date.split("-");
+                                        //         const d = temp[1] + "/" + temp[2] + "/" + temp[0]
+                                        //         const serviceDetails = {
+                                        //             service_taker_id: service_taker.id || service_taker.user_id,
+                                        //             date: d,
+                                        //             slot_start_time: this.state.timeForm,
+                                        //             slot_end_time: this.state.timeTo
+                                        //         }
+                                        
+                                        //         try {
+                                        //             const resp = await axios
+                                        //                 .post(config.SERVER_URL + `/api/slots/${serviceProviderID}`, serviceDetails, {
+                                        //                     headers: authHeader(),
+                                        //                 })
+                                        
+                                        //             if (resp.data.success) {
+                                        
+                                        //                 this.props.history.push("/hire/details", {
+                                        //                     currentServiceProvider: this.state.currentServiceProvider,
+                                        //                     date: this.state.date,
+                                        //                     slot_start_time: this.state.timeForm,
+                                        //                     slot_end_time: this.state.timeTo,
+                                        //                     serviceAvailed: this.state.service
+                                        //                 })
+                                        //             } else {
+                                        //                 console.log(resp.data.data.error);
+                                        //                 this.setState({ slotUnavailable: resp.data.data.error })
+                                        //             }
+                                        
+                                        //         }
+                                        //         catch (ex) {
+                                        
+                                        //             this.setState({ slotUnavailable: ex.response.data.data.error })
+                                        //         }
+                                        //         localStorage.removeItem('hire')
+                                        //     }
+                                        
+                                        
+                                        
+                                        
+                                        // const proceed = window.confirm("Are you sure you want to Hire")
+                                        // if (proceed) {
+                                         let user = AuthService.getCurrentUser();
+                                        console.log(user);
+                                        if (typeof user == 'undefined') {
+                                            
+                                            swal({
+                                                title: 'Incomplete User Profile',
+                                                text: 'You must Login/Signup to hire as Service Provider.',
+                                                icon: 'warning',
+                                                buttons: {
+                                                    confirm: 'Login',
+                                                    cancel: 'Close'
+                                                }
+                                            }).then((value) => {
+                                                if (value) {
+                                                    this.props.history.push("/login")
+                                                } 
+                                            });
+                                            return
+                                        }
+                                        if (this.state.profileCompletion != "100") {
+                                            swal("Incomplete User Profile", "Please complete your user profile details for hiring service providers.", "warning")
+                                            
+                                            return
+                                        }
+                                        
+                                        const serviceProviderID = this.props.match.params.serviceProviderID;
+                                        const errors = this.validate();
+                                        if (errors) {
+                                            this.setState({ errors })
+                                            return;
+                                        }
+                                        const service_taker = JSON.parse(localStorage.getItem("user"));
+                                        
+                                        if (!service_taker) {
+                                            
+                                            const obj =
+                                            {
+                                                currentServiceProvider: this.state.currentServiceProvider,
+                                                date: this.state.date,
+                                                slot_start_time: this.state.timeForm,
+                                                slot_end_time: this.state.timeTo,
+                                                serviceProviderID: this.props.match.params.serviceProviderID,
+                                                serviceName: this.state.service,
+                                                serviceAvailed: this.state.service
+                                            }
+                                            this.props.history.push("/signup/login/hire", obj)
+                                        }
+                                        
+                                        if (!service_taker) return;
+                                        
+                                        const temp = this.state.date.split("-");
+                                        const d = temp[1] + "/" + temp[2] + "/" + temp[0];
+                                        const serviceDetails = {
+                                            service_taker_id: service_taker.id || service_taker.user_id,
+                                            date: this.state.date,
+                                            slot_start_time: this.state.timeForm,
+                                            slot_end_time: this.state.timeTo
+                                        }
+                                        
+                                        try {
+                                            const resp = await axios
+                                            .post(config.SERVER_URL + `/api/slots/${serviceProviderID}`, serviceDetails, {
+                                                headers: authHeader(),
+                                            })
+                                            
+                                            
+                                            if (resp.data.success) {
+                                                const service = this.state.currentServiceProvider.serviceprovider_services.filter(x => x.service_type.name === this.state.service)
+                                                const servicePrice = service[0].service_type.service_price.price_per_hour
+                                                this.props.history.push("/hire/details", {
+                                                    currentServiceProvider: this.state.currentServiceProvider,
+                                                    date: this.state.date,
+                                                    slot_start_time: this.state.timeForm,
+                                                    slot_end_time: this.state.timeTo,
+                                                    serviceAvailed: this.state.service,
+                                                    servicePrice: servicePrice,
+                                                    additionalNotes: this.state.additionalNotes
+                                                })
+                                            } else {
+                                                
+                                                this.setState({ slotUnavailable: resp.data.data.error })
+                                            }
+                                            
+                                        }
+                                        catch (ex) {
+                                            
+                                            this.setState({ slotUnavailable: ex.response.data.data.error })
+                                        }
+                                        
+                                        // }
+                                    }
+                                    
+                                    renderPrice = (e) => {
+                                        
+                                        const service = this.state.currentServiceProvider.serviceprovider_services.filter(x => x.service_type.name === e);
+                                        
+                                        this.setState({ servicePrice: service[0].service_type.service_price.price_per_hour })
+                                    }
+                                    
+                                    render() {
+                                        // console.log("serveces", this.state.serviceprovider_services_type);
+                                        
+                                        const slot_by_provider=this.state.slot_by_date;
+                                        const options = {
+                                            items: 1,
+                                            loop: true,
+                                            autoplay: true,
+                                            autoplayTimeout: 6000,
+                                            autoplayHoverPause: true,
+                                            smartSpeed: 450,
+                                            margin: 0,
+                                            nav: true,
+                                            navText: ["<i class='fas fa-chevron-left'></i>", "<i class='fas fa-chevron-right'></i>"],
+                                            dots: false
+                                        }
+                                        return (
+                                            <>
+                                            {/* <Dimmer active inverted><Loader size='large' indeterminate>Loading</Loader></Dimmer> */}
+                                            <section className="prdt-detail pt-90">
+                                            
+                                            <div className="container">
+                                            <div className="row">
+                                            <div className="col-md-6 col-lg-6 service-provider-img-container">
+                                            <div>
+                                            
+                                            {this.state.currentServiceProvider.user !== undefined &&
+                                                
+                                                <img src={
+                                                    
+                                                    config.SERVER_URL + "/" + this.state.currentServiceProvider.user.image}
+                                                    alt="service-provider-img" className="service-provider-img" />
+                                                }
+                                                {/* <OwlCarousel options={options} id="image-gallery" className="owl-carousel gallery list-unstyled cS-hidden">
+                                                {this.state.currentServiceProvider.user!==undefined &&
+                                                    shopmain.map((item, i) => (
+                                                        // <img key={i} src={item.img} alt="" />
+                                                        <img src={
+                                                            
+                                                            config.SERVER_URL+"/"+this.state.currentServiceProvider.user.image}
+                                                            alt="service-provider-img"/>
+                                                            ))}
+                                                            
+                                                        </OwlCarousel> */}
+                                                        </div>
+                                                        </div>
+                                                        <div className="col-md-6 col-lg-6 service-provider-details-container">
+                                                        <div className="prdt-info-right pl-20 pl-md-00 mt-md-25">
+                                                        <div className="prdt-detail-head">
+                                                        <div className="prdt-reviews">
+                                                        <div className="rating d-flex align-items-center">
+                                                        <Rating value={parseInt(this.state.currentServiceProvider.rating)}
+                                                        size='normal'
+                                                        precision={0.5}
+                                                        readOnly
+                                                        />
+                                                        
+                                                        {/* <ul className="stars-rate" data-starsactive={4}>
+                                                        
+                                                        <li className="text-left lh-10"> <i className="fas fa-star" />
+                                                        <i className="fas fa-star" />
+                                                        <i className="fas fa-star" />
+                                                        <i className="fas fa-star" />
+                                                        <i className="fas fa-star" />
+                                                        </li>
+                                                    </ul> */}
+                                                    <p className="rates-info mb-0">
+                                                    {/* <Link to="/" className="ml-10">15 reviews</Link> |
+                                                <Link to="/">Write a review</Link> */}
+                                                </p>
+                                                </div>
+                                                </div>
+                                                <h1 className="mt-10 mb-15 fs-35 lh-13">
+                                                
+                                                {this.state.currentServiceProvider.user !== undefined ? this.state.currentServiceProvider.user.username : ""}
+                                                
+                                                </h1>
+                                                <div className="rate-detail">
+                                                
+                                                
+                                                <h3>   {this.state.servicePrice != undefined &&
+                                                    "$" + this.state.servicePrice + "/hr"} </h3>
+                                                    
+                                                    
+                                                    {this.state.currentServiceProvider != undefined &&
+                                                        this.state.currentServiceProvider.serviceprovider_services != undefined &&
+                                                        this.state.currentServiceProvider.serviceprovider_services.length > 0 &&
+                                                        <Tabs id="uncontrolled-tab-example" className="mb-3 mt-3"
+                                                        onSelect={this.renderPrice}
+                                                        >
+                                                        {
+                                                            this.state.currentServiceProvider.serviceprovider_services.map((service, index) => {
+                                                                
+                                                                
+                                                                return <Tab eventKey={service.service_type.name} title={service.service_type.name}
+                                                                key={index}
+                                                                
+                                                                >
+                                                                <p style={{ color: "#102043" }}>{service.description}</p>
+                                                                
+                                                                </Tab>
+                                                                
+                                                                
+                                                                
+                                                            })}
+                                                            
+                                                            </Tabs>}
+                                                            
+                                                            
+                                                            
+                                                            {/* 
+                                                            <span className="mb-0">
+                                                            
+                                                            {service.service_type.name}
+                                                            <i className="fa fa-solid fa-tags"
+                                                            style={{marginLeft:"5px",marginRight:"5px",
+                                                            color:"#102043"
+                                                        }}
+                                                    ></i> */}
+                                                    {/* </span> */}
+                                                    </div>
+                                                    </div>
+                                                    
+                                                    <div className="hr-1 bg-black opacity-1 mb-20 mt-20" />
+                                                    <div className="profuct-descr">
+                                                    <p className="mb-10">
+                                                    {/* {
+                                                        this.state.currentServiceProvider.user !== undefined &&
+                                                    this.state.currentServiceProvider.service_type.description} */}
+                                                    
+                                                    </p>
+                                                    <p>
+                                                    </p>
+                                                    </div>
+                                                    <div className="hr-1 bg-black opacity-1 mt-20 mb-20" />
+                                                    
+                                                    </div>
+                                                    </div>
+                                                    
+                                                    
+                                                    <div className="col-lg-12">
+                                                    
+                                                    <div style={{ marginBottom: "2rem" }}>
+                                                    <div className="container">
+                                                    <div
+                                                    className="hireNow-date-container" >
+                                                    <LocalizationProvider dateAdapter={DateAdapter}>
+                                                    <MobileDatePicker
+                                                    mode="legacy" 
+                                                    name="date"
+                                                    label="Select Date"
+                                                    value={this.state.date}
+                                                    onChange={this.onChangeDate}
+                                                    minDate={new Date()} 
+                                                    renderInput={(params) => <TextField {...params} />} // Use TextField for the input
+                                                    />
+                                                    </LocalizationProvider>
+                                                    {/* <input type="date"
+                                                    name="date"
+                                                    min={new Date().toISOString().split('T')[0]}
+                                                    max={new Date().toISOString().split('T')[30]}
+                                                    id="hiredate"
+                                                    className='date-input'
+                                                    onChange={
+                                                        this.onChangeTextFields}
+                                                        value={this.state.date}
+                                                    /> */}
+                                                    </div>
+                                                    </div>
+                                                    {this.state.errors &&
+                                                        this.state.errors.date &&
+                                                        <span className="text-danger error-date">
+                                                        {
+                                                            this.state.errors.date
                                                         }
-
-                                                        {/* <h4 className="mb-10 lh-13">{this.state.serviceprovider_services_type.name}</h4>
-                                                        <p className="text-justify">{this.state.serviceprovider_services.description} */}
-                                                        {/* </p> */}
-                                                    </Tab.Pane>
-                                                    <Tab.Pane eventKey="addinfo">
-                                                        <div className="row align-items-center">
-                                                            <div className="col-12">
+                                                        </span>
+                                                    }
+                                                    </div>
+                                                    
+                                                    {this.state.date && slot_by_provider[0]===undefined ?
+                                                        <div className="row">
+                                                        <div className="col-lg-12">
+                                                        <div style={{ marginBottom: "2rem" }}>
+                                                        <div className="container">
+                                                        <div
+                                                        className="hireNow-date-container" >
+                                                        
+                                                        <input type="text"
+                                                        name="date"
+                                                        id="hiredate"
+                                                        className='date-input'
+                                                        readOnly
+                                                        value={"Provider is not available on the selected date"}
+                                                        />
+                                                        </div>
+                                                        </div>
+                                                        {this.state.errors &&
+                                                            this.state.errors.date &&
+                                                            <span className="text-danger error-date">
+                                                            {
+                                                                this.state.errors.date
+                                                            }
+                                                            </span>
+                                                        }
+                                                        </div>
+                                                        </div>
+                                                        </div>
+                                                        :<></>
+                                                    }
+                                                    {slot_by_provider.length>0 ?
+                                                        <div className='row'>
+                                                        <div className="col-lg-4"></div>
+                                                        <div className="col-lg-4" style={{display:"flex", AlignItem:"center",justifyContent:"center"}}><h5> Provider's slots On Selected Date</h5></div>
+                                                        </div> :""}
+                                                        
+                                                        {slot_by_provider.length>0 ?
+                                                            
+                                                            slot_by_provider.map((index) => (
+                                                                <div className="row">
+                                                                {/* <div className="col-lg-4"></div>
+                                                            <div className="col-lg-6"><h5>Avaiable Provider slots On this Date</h5></div> */}
+                                                            <div className="col-lg-6">
+                                                            <div style={{ marginBottom: "0.1rem" }}>
+                                                            <div className="container">
+                                                            <div
+                                                            className="hireNow-date-container" >
+                                                            
+                                                            <input type="text"
+                                                            name="date"
+                                                            id="hiredate"
+                                                            className='date-input'
+                                                            readOnly
+                                                            value={"Start Time: "+index.hourly_slots.slot_start_time}
+                                                            />
+                                                            </div>
+                                                            </div>
+                                                            {this.state.errors &&
+                                                                this.state.errors.date &&
+                                                                <span className="text-danger error-date">
+                                                                {
+                                                                    this.state.errors.date
+                                                                }
+                                                                </span>
+                                                            }
+                                                            </div>
+                                                            </div>
+                                                            <div className="col-lg-6">
+                                                            <div style={{ marginBottom: "0.3rem" }}>
+                                                            <div className="container">
+                                                            <div
+                                                            className="hireNow-date-container" >
+                                                            
+                                                            <input type="text"
+                                                            name="date"
+                                                            id="hiredate"
+                                                            className='date-input'
+                                                            readOnly
+                                                            value={"End Time: "+index.hourly_slots.slot_end_time}
+                                                            />
+                                                            
+                                                            </div>
+                                                            </div>
+                                                            {this.state.errors &&
+                                                                this.state.errors.date &&
+                                                                <span className="text-danger error-date">
+                                                                {
+                                                                    this.state.errors.date
+                                                                }
+                                                                </span>
+                                                            }
+                                                            </div>
+                                                            </div>
+                                                            </div>
+                                                            )):<></>
+                                                        }
+                                                        
+                                                        
+                                                        <div className="col-lg-12">
+                                                        
+                                                        <div style={{ marginBottom: "2rem" }}>
+                                                        <div
+                                                        className="hireNow-date-container" >
+                                                        <select class="form-select form-select-lg" aria-label=".form-select-lg example"
+                                                        style={{
+                                                            width: "100%",
+                                                            height: "3.2rem"
+                                                        }}
+                                                        name="service"
+                                                        onChange={this.onChangeTextFields}
+                                                        value={this.state.providerServices[0]?.value}
+                                                        >
+                                                        <option disabled>Please select a service</option>
+                                                        
+                                                        {this.state.providerServices.map((data, index) => {
+                                                            
+                                                            return <option key={index} value={data.value}  >{data.value}</option>
+                                                        }
+                                                        
+                                                        )}
+                                                        
+                                                        
+                                                        </select>
+                                                        
+                                                        </div>
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        {this.state.errors &&
+                                                            this.state.errors.service &&
+                                                            <span className="text-danger error-date"
+                                                            style={{ paddingLeft: "0" }}
+                                                            >
+                                                            {
+                                                                this.state.errors.service
+                                                            }
+                                                            </span>
+                                                        }
+                                                        </div>
+                                                        
+                                                        </div>
+                                                        <div className="container">
+                                                        <div className="row">
+                                                        <div className="col"
+                                                        >
+                                                        <select
+                                                        type="select"
+                                                        className={`form-control ${this.state.TimeFromclass}`}
+                                                        name="timeForm"
+                                                        onChange={this.onChangeTextFields}
+                                                        value={this.state.timeForm}
+                                                        
+                                                        // style={{
+                                                        //     border: "1.5px solid #DA1212",
+                                                        // }}
+                                                        // value={this.state.service_type_id}
+                                                        // onChange={this.onChangeServiceType}
+                                                        >
+                                                        <option value="">
+                                                        -- Select Start Time --
+                                                        </option>
+                                                        {this.state.time.map((data, index) => (
+                                                            <option value={data.value} key={index}>
+                                                            {data.label}
+                                                            </option>
+                                                            ))}
+                                                            </select>
+                                                            {this.state.errors &&
+                                                                this.state.errors.timeForm &&
+                                                                <span className="text-danger">
+                                                                {
+                                                                    this.state.errors.timeForm
+                                                                }
+                                                                </span>
+                                                            }
+                                                            
+                                                            </div>
+                                                            
+                                                            <div className="col">
+                                                            <select
+                                                            type="select"
+                                                            className={`form-control ${this.state.TimeToclass}`}
+                                                            name="timeTo"
+                                                            onChange={this.onChangeTextFields}
+                                                            
+                                                            value={this.state.timeTo}
+                                                            // onChange={this.onChangeServiceType}
+                                                            >
+                                                            <option value="">
+                                                            -- Select End Time --
+                                                            </option>
+                                                            {this.state.time.map((data, index) => (
+                                                                <option value={data.value} key={index}>
+                                                                {data.label}
+                                                                </option>
+                                                                ))}
+                                                                </select>
+                                                                {this.state.errors &&
+                                                                    this.state.errors.timeTo &&
+                                                                    <span className="text-danger">
+                                                                    {
+                                                                        this.state.errors.timeTo
+                                                                    }
+                                                                    </span>
+                                                                }
+                                                                
+                                                                </div>
+                                                                
+                                                                </div>
+                                                                <div className='row' style={{ marginTop: "2rem" }}>
+                                                                <div className='col col-md-12'>
+                                                                <textarea rows={3} name="additional_notes" value={this.state.additionalNotes} onChange={this.setAddtionalNotes} placeholder={"Additional Notes"}/>
+                                                                </div>
+                                                                </div>
+                                                                
+                                                                </div>
+                                                                
+                                                                {this.state.slotUnavailable &&
+                                                                    <UncontrolledAlert color="danger"
+                                                                    
+                                                                    >
+                                                                    {this.state.slotUnavailable}
+                                                                    </UncontrolledAlert>}
+                                                                    
+                                                                    
+                                                                    <button
+                                                                    type="submit"
+                                                                    className="btn btn-black btn-block mt-20" disabled={this.state.user_role == "service_provider"}
+                                                                    onClick={this.hireNow}
+                                                                    > Hire Now
+                                                                    </button>
+                                                                    
+                                                                    
+                                                                    
+                                                                    <div className="prdt-tabs row pt-40 pt-md-25 mb-5">
+                                                                    <div className="col-md-12">
+                                                                    
+                                                                    <div className="prdt-tab mt-5 service-provider-nav-container">
+                                                                    <Tab.Container defaultActiveKey="description">
+                                                                    <Nav variant="tabs" className="nav nav-pills justify-content-center justify-content-sm-start">
+                                                                    <Nav.Item>
+                                                                    <Nav.Link eventKey="description">Description</Nav.Link>
+                                                                    </Nav.Item>
+                                                                    <Nav.Item>
+                                                                    <Nav.Link eventKey="addinfo">Detail</Nav.Link>
+                                                                    </Nav.Item>
+                                                                    <Nav.Item>
+                                                                    <Nav.Link eventKey="reviews">Reviews</Nav.Link>
+                                                                    </Nav.Item>
+                                                                    </Nav>
+                                                                    <Tab.Content className="pt-20">
+                                                                    <Tab.Pane eventKey="description">
+                                                                    <h4 className="mb-10 lh-13"></h4>
+                                                                    <p className="text-justify">
+                                                                    {this.state.serviceprovider.detail}
+                                                                    </p>
+                                                                    {this.state.serviceprovider_services_type.map((service) => {
+                                                                        
+                                                                        return (
+                                                                            <>
+                                                                            <h4 className="mb-10 lh-13">{service.service_type.name}</h4>
+                                                                            <p className="text-justify">{service.description} </p>
+                                                                            
+                                                                            </>
+                                                                            )
+                                                                        })
+                                                                        
+                                                                    }
+                                                                    
+                                                                    {/* <h4 className="mb-10 lh-13">{this.state.serviceprovider_services_type.name}</h4>
+                                                                <p className="text-justify">{this.state.serviceprovider_services.description} */}
+                                                                {/* </p> */}
+                                                                </Tab.Pane>
+                                                                <Tab.Pane eventKey="addinfo">
+                                                                <div className="row align-items-center">
+                                                                <div className="col-12">
                                                                 <p className="text-justify">{this.state.serviceprovider.detail} </p>
                                                                 <table className="table table-bordered mb-0">
-                                                                    <tbody>
-                                                                        {/* {infotable.map((item, i) => ( */}
-                                                                        <tr>
-                                                                            <th scope="row">Name</th>
-                                                                            <td>{this.state.currentServiceProvider.user !== undefined ? this.state.currentServiceProvider.user.fname + " " + this.state.currentServiceProvider.user.lname : ""}</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th scope="row">Address</th>
-                                                                            <td>{this.state.currentServiceProvider.user !== undefined ? this.state.currentServiceProvider.user.location.city : ""}</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th scope="row">Orders Completed</th>
-                                                                            <td>{this.state.currentServiceProvider.orders !== undefined ? this.state.currentServiceProvider.orders.length : ""}</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th scope="row">Rating</th>
-                                                                            <td>{this.state.currentServiceProvider !== undefined ? this.state.currentServiceProvider.rating : ""}</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th scope="row">Member Since</th>
-                                                                            <td>{this.state.currentServiceProvider.user !== undefined ? this.state.currentServiceProvider.user.created_at.substr(0, 10) : ""}</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th scope="row">Provider Level</th>
-                                                                            <td>{this.state.currentServiceProvider !== undefined ? "Level" + " " + this.state.currentServiceProvider.level : "New Provider"}</td>
-                                                                        </tr>
-                                                                        {/* ))} */}
-                                                                    </tbody>
+                                                                <tbody>
+                                                                {/* {infotable.map((item, i) => ( */}
+                                                                <tr>
+                                                                <th scope="row">Name</th>
+                                                                <td>{this.state.currentServiceProvider.user !== undefined ? this.state.currentServiceProvider.user.fname + " " + this.state.currentServiceProvider.user.lname : ""}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                <th scope="row">Address</th>
+                                                                <td>{this.state.currentServiceProvider.user !== undefined ? this.state.currentServiceProvider.user.location.city : ""}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                <th scope="row">Orders Completed</th>
+                                                                <td>{this.state.currentServiceProvider.orders !== undefined ? this.state.currentServiceProvider.orders.length : ""}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                <th scope="row">Rating</th>
+                                                                <td>{this.state.currentServiceProvider !== undefined ? this.state.currentServiceProvider.rating : ""}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                <th scope="row">Member Since</th>
+                                                                <td>{this.state.currentServiceProvider.user !== undefined ? this.state.currentServiceProvider.user.created_at.substr(0, 10) : ""}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                <th scope="row">Provider Level</th>
+                                                                <td>{this.state.currentServiceProvider !== undefined ? "Level" + " " + this.state.currentServiceProvider.level : "New Provider"}</td>
+                                                                </tr>
+                                                                {/* ))} */}
+                                                                </tbody>
                                                                 </table>
-                                                            </div>
-                                                        </div>
-                                                    </Tab.Pane>
-                                                    <Tab.Pane eventKey="reviews">
-                                                        <div className="review-wrp">
-                                                            {this.state.feedbackCurrentServiceProvider.length &&
-
-                                                                this.state.feedbackCurrentServiceProvider.map(obj => {
-                                                                    return (
-                                                                        <>
+                                                                </div>
+                                                                </div>
+                                                                </Tab.Pane>
+                                                                <Tab.Pane eventKey="reviews">
+                                                                <div className="review-wrp">
+                                                                {this.state.feedbackCurrentServiceProvider.length &&
+                                                                    
+                                                                    this.state.feedbackCurrentServiceProvider.map(obj => {
+                                                                        return (
+                                                                            <>
                                                                             {this.state.isPending ? <div className="text-center"> <CircularProgress color="success" /></div> :
-                                                                                <div className="review-prdt">
-                                                                                    <img src={`${config.SERVER_URL}/${obj.service_taker?.user?.image}`} className="user-img" alt="" />
-                                                                                    <h4> {obj.service_taker?.user?.username}
-                                                                                        <span className="date">{obj.updated_at.substring(0, 10)}</span>
-                                                                                    </h4>
-                                                                                    <Rating value={parseInt(obj.rating)}
-                                                                                        size='normal'
-                                                                                        precision={0.5}
-                                                                                        readOnly
-                                                                                    />
-                                                                                    <p className="text-justify">
-                                                                                        {obj.service_taker_feedback}
-                                                                                    </p>
-                                                                                </div>}
-                                                                        </>)
-                                                                })
-
+                                                                            <div className="review-prdt">
+                                                                            <img src={`${config.SERVER_URL}/${obj.service_taker?.user?.image}`} className="user-img" alt="" />
+                                                                            <h4> {obj.service_taker?.user?.username}
+                                                                            <span className="date">{obj.updated_at.substring(0, 10)}</span>
+                                                                            </h4>
+                                                                            <Rating value={parseInt(obj.rating)}
+                                                                            size='normal'
+                                                                            precision={0.5}
+                                                                            readOnly
+                                                                            />
+                                                                            <p className="text-justify">
+                                                                            {obj.service_taker_feedback}
+                                                                            </p>
+                                                                            </div>}
+                                                                            </>)
+                                                                        })
+                                                                        
+                                                                    }
+                                                                    
+                                                                    {/* <Link to="/" className="btn btn-blue btn-md" data-toggle="modal" data-target="#addReview">WRITE A REVIEW</Link> */}
+                                                                    
+                                                                    </div>
+                                                                    </Tab.Pane>
+                                                                    </Tab.Content>
+                                                                    </Tab.Container>
+                                                                    </div>
+                                                                    </div>
+                                                                    </div>
+                                                                    </div>
+                                                                    </div>
+                                                                    </div>
+                                                                    </section >
+                                                                    </>
+                                                                    );
+                                                                }
                                                             }
-
-                                                            {/* <Link to="/" className="btn btn-blue btn-md" data-toggle="modal" data-target="#addReview">WRITE A REVIEW</Link> */}
-
-                                                        </div>
-                                                    </Tab.Pane>
-                                                </Tab.Content>
-                                            </Tab.Container>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section >
-            </>
-        );
-    }
-}
-
-export default withRouter(Productdetail);
+                                                            
+                                                            export default withRouter(Productdetail);
+                                                            

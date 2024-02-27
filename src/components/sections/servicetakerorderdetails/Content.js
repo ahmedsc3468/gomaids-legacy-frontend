@@ -144,8 +144,9 @@ class ServiceTakerOrderDetails extends Component {
         } else {
         if(user.role.name === 'service_provider')
         {
-            const status = (a === "2") ? "complete" : (a === "1") ? "accept" : "cancel"
-
+   
+            const status = (a === 2) ? "complete" : (a === 1) ? "accept" : "cancel"
+ 
             const order_id = this.props.match.params.order_id
             const that = this
 
@@ -154,7 +155,7 @@ class ServiceTakerOrderDetails extends Component {
                 text: `Do you want to ${status} the order? You will not be able to revert this action.`,
                 icon: "warning",
                 buttons: [
-                  'No, cancel it!',
+                  'No',
                   'Yes, I am sure!'
                 ],
                 dangerMode: true,
@@ -206,7 +207,7 @@ class ServiceTakerOrderDetails extends Component {
                 text: `Do you want to ${status} the order? You will not be able to revert this action.`,
                 icon: "warning",
                 buttons: [
-                  'No, cancel it!',
+                  'No',
                   'Yes, I am sure!'
                 ],
                 dangerMode: true,

@@ -182,7 +182,7 @@ class UserService extends Component {
       title: "Are you sure?",
       text: "You will not be able to recover this imaginary file!",
       icon: "warning",
-      buttons: ["No, cancel it!", "Yes, I am sure!"],
+      buttons: ["No", "Yes, I am sure!"],
       dangerMode: true,
     }).then(async function (isConfirm) {
       if (isConfirm) {

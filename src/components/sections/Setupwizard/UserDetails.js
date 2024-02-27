@@ -429,6 +429,7 @@ class UserDetails extends Component {
           >
             <Segment>
               <Button onClick={this.completeLater}>Complete Later</Button>
+              <p style={{color:"red", fontSize:"smaller"}}>You won't be able to receive any orders until you complete your profile!</p>
             </Segment>
             <Segment>
               {/* <Form.Field>

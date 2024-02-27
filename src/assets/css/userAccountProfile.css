@@ -19,6 +19,9 @@
   padding-top: 0.8rem;
   padding-bottom: 0.8rem;
 }
+#user-popup-popover .MuiPaper-elevation{
+  width: 180px;
+}
 .user-account-dashboard-link:hover {
   background-color: #e4f0f6;
   cursor: pointer;

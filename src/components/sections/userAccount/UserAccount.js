@@ -21,7 +21,7 @@ export default function PopoverPopupState(props) {
 
  
   return (
-    <PopupState variant="popover" popupId="demo-popup-popover">
+    <PopupState variant="popover" popupId="user-popup-popover">
       {(popupState) => (
         <div style={{marginTop: '0.8rem'}}>
           <div  {...bindTrigger(popupState)}>

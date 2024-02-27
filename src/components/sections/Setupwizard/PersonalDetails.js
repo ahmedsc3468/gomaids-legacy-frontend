@@ -471,6 +471,7 @@ class PersonalDetails extends Component {
                       onChange={this.onChangeTextFields}
                       value={this.state.price}
                       autoComplete="off"
+                      min={0}
                     />
                     {this.state.errors.price && (
                       <span className="text-danger">

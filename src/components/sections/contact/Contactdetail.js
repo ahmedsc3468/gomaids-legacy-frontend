@@ -15,18 +15,18 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Joi from "joi-browser";
 
 class Contactdetail extends Contacthelper {
-  // objectSchema = Joi.object({
-  //     label: Joi.string().required().label("Service").required(),
-  //     value: Joi.number().required().label("Service").required()
-  // }).required()
+  objectSchema = Joi.object({
+      label: Joi.string().required().label("Service").required(),
+      value: Joi.number().required().label("Service").required()
+  }).required()
 
-  // schema = {
-  //     name: Joi.string().required().label("Name"),
-  //     email: Joi.string().required().label("Email"),
-  //     mobile_no: Joi.string().required().label("Phone No"),
-  //     message: Joi.string().required().label("Message"),
-  //     service_type_id: Joi.required().label("Service Type"),
-  // };
+  schema = {
+      name: Joi.string().required().label("Name"),
+      email: Joi.string().required().email({ tlds: { allow: false } }),
+      mobile_no: Joi.string().required().label("Phone No"),
+      message: Joi.string().required().label("Message"),
+      service_type_id: Joi.required().label("Service Type"),
+  };
 
   _isMounted = false;
   constructor(props) {
@@ -43,34 +43,37 @@ class Contactdetail extends Contacthelper {
       status: 0,
       errors: "",
       loader: false,
+      errors:{
+        email: ''
+      }
     };
   }
 
-  // validate = () => {
-  //     let obj = {
-  //         name: this.state.name,
-  //         email: this.state.email,
-  //         mobile_no: this.state.mobile_no,
-  //         message: this.state.message,
-  //         service_type_id: this.state.service_type_id,
-  //     }
-  //     const { error } = Joi.validate(
-  //         obj,
-  //         this.schema,
-  //         {
-  //             abortEarly: false,
-  //         }
-  //     );
-  //     if (!error) return null;
-  //     let errors = {};
-  //     if (error) {
-  //         for (let item of error.details) {
-  //             errors[item.path] = item.message;
-  //         }
-  //     }
+  validate = () => {
+      let obj = {
+          name: this.state.name,
+          email: this.state.email,
+          mobile_no: this.state.mobile_no,
+          message: this.state.message,
+          service_type_id: this.state.service_type_id,
+      }
+      const { error } = Joi.validate(
+          obj,
+          this.schema,
+          {
+              abortEarly: false,
+          }
+      );
+      if (!error) return null;
+      let errors = {};
+      if (error) {
+          for (let item of error.details) {
+              errors[item.path] = item.message;
+          }
+      }
 
-  //     return Object.keys(errors).length === 0 ? null : errors;
-  // };
+      return Object.keys(errors).length === 0 ? null : errors;
+  };
 
   validateProperty = ({ value, name }) => {
     let dataProperty = { [name]: value };
@@ -117,17 +120,18 @@ class Contactdetail extends Contacthelper {
 
   async submit(e) {
     e.preventDefault();
-
-    // let errors = this.validate();
-    // if (errors) {
-    //     // console.log(errors)
-    //     this.setState({ errors });
-    //     return;
-    // }
+    this.setState({
+      errors: "",
+    });
+    let errors = this.validate();
+    if (errors) {
+        // console.log(errors)
+        this.setState({ errors });
+        return;
+    }
 
     this.setState({
       loader: true,
-      error: "",
     });
 
     const tempData = {
@@ -246,7 +250,7 @@ class Contactdetail extends Contacthelper {
                           required
                         />
                         <i className="far fa-user transform-v-center" />
-                        {/* {
+                        {
                                                     this.state.errors.name
                                                     &&
                                                     <span className="text-danger">
@@ -255,7 +259,7 @@ class Contactdetail extends Contacthelper {
 
                                                         }
                                                     </span>
-                                                } */}
+                                                }
                       </div>
                     </div>
                     <div className="col-lg-6">
@@ -270,7 +274,7 @@ class Contactdetail extends Contacthelper {
                           required
                         />
                         <i className="far fa-envelope transform-v-center" />
-                        {/* {
+                        {
                                                     this.state.errors.email
                                                     &&
                                                     <span className="text-danger">
@@ -279,7 +283,7 @@ class Contactdetail extends Contacthelper {
 
                                                         }
                                                     </span>
-                                                } */}
+                                                }
                       </div>
                     </div>
                     <div className="col-lg-6">
@@ -295,7 +299,7 @@ class Contactdetail extends Contacthelper {
                           required
                         />
                         <i className="fas fa-phone transform-v-center" />
-                        {/* {
+                        {
                                                     this.state.errors.mobile_no
                                                     &&
                                                     <span className="text-danger">
@@ -304,7 +308,7 @@ class Contactdetail extends Contacthelper {
 
                                                         }
                                                     </span>
-                                                } */}
+                                                }
                       </div>
                     </div>
                     {/* <div className="col-lg-6">
@@ -343,14 +347,14 @@ class Contactdetail extends Contacthelper {
                             );
                           })}
                         </select>
-                        {/* {
+                        {
                                                     this.state.errors.service_type_id &&
                                                     <span className="text-danger">
                                                         {
                                                             this.state.errors.service_type_id
                                                         }
                                                     </span>
-                                                } */}
+                                                }
                       </div>
                     </div>
                     {/* <div className="col-lg-6">
@@ -375,7 +379,7 @@ class Contactdetail extends Contacthelper {
                           onChange={this.handleInputChange}
                           required
                         />
-                        {/* {
+                        {
                                                     this.state.errors.message
                                                     &&
                                                     <span className="text-danger">
@@ -384,7 +388,7 @@ class Contactdetail extends Contacthelper {
 
                                                         }
                                                     </span>
-                                                } */}
+                                                }
                       </div>
                     </div>
                     <div className="col-lg-12">

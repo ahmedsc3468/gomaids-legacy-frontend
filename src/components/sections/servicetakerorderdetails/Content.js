@@ -272,7 +272,6 @@ class ServiceTakerOrderDetails extends Component {
         const currentTime = new Date();
     const differenceInMilliseconds = currentTime - orderCreatedAt;
     const differenceInHours = differenceInMilliseconds / (1000 * 60 * 60);
-    console.log('differenceInHours',differenceInHours);
     return differenceInHours;
     }
     getOrderDifference = (orderDate) => {
@@ -604,7 +603,7 @@ class ServiceTakerOrderDetails extends Component {
                                     </>)} 
   
                                     
-                                    {user.role.name === 'service_taker' && this.getTimeDifference(this.state.order.created_at) < 1 && ( <>
+                                    {user.role.name === 'service_taker'  && ( <>
                                   
                                      <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(3)} hidden={this.state.order.status =="2" ||this.state.order.sp_status =="2" || this.state.order.status =="3" || this.state.order.status =="5"}> Cancel</Button>
                                     </>)} 

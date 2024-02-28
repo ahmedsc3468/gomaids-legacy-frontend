@@ -321,13 +321,13 @@ const AnyReactComponent = ({ img_src }) => (
                     linklength: "",
                     isFilterActive: true,
                   });
-
-      swal({
-        title: 'No Service Provider Found',
-        text: 'We are rapidly expanding to new cities, please try and search for a provider in a neighboring city until then. Our service providers don’t mind driving. You May also Search Service Providers Near You, from the Map Search Option.',
-        icon: 'info',
-      });
- 
+                  
+                  swal({
+                    title: 'No Service Provider Found',
+                    text: 'We are rapidly expanding to new cities, please try and search for a provider in a neighboring city until then. Our service providers don’t mind driving. You May also Search Service Providers Near You, from the Map Search Option.',
+                    icon: 'info',
+                  });
+                  
                 };
               });
             } catch (err) {
@@ -445,7 +445,25 @@ const AnyReactComponent = ({ img_src }) => (
                 return false;
               }
               return !selectOptions.find(option => option.label === inputValue);
-            };
+    };
+    
+    handledetail = (url) => {
+      let userdetail = authService.getCurrentUser();
+      // console.log(userdetail);
+      if (userdetail.role.name == "service_taker") {
+              this.props.history.push(url);
+      } else {
+                swal({
+            title: 'Please Login!',
+            text: `Please Login as Customer to hire a service provider` ,
+            icon: 'info',
+            buttons: {
+                confirm: 'Okay'
+            }
+        })
+      }
+
+    };
             
             // Create a new option based on the entered value
             createOption = (inputValue) => ({
@@ -703,10 +721,11 @@ const AnyReactComponent = ({ img_src }) => (
                       data-wow-delay=".{item.animation}s"
                       >
                       <div className="service-each shadow-2 mb-30 transition-4 text-center">
-                      <Link
-                      to={`/service-details/${item.service_provider_id}`}
+                      {/* <Link
+                       to={`/service-details/${item.service_provider_id}`}
                       className="black"
-                      >
+                      > */}
+                      <div className="black products_shop" onClick={() => this.handledetail(`/service-details/${item.service_provider_id}`)}>
                       <div className="service-icn bg-light-white flex-center">
                       <img
                       style={{
@@ -745,7 +764,8 @@ const AnyReactComponent = ({ img_src }) => (
                       <p className="mb-0 pt-30"> {item.desc}</p>
                       <span className="line-servcie transition-4 bg-blue mt-5" />
                       </div>
-                      </Link>
+                      </div>
+                      {/* </Link> */}
                       </div>
                       </div>
                       ))}

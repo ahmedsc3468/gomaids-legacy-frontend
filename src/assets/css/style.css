@@ -5418,3 +5418,8 @@ background-size: contain;
     align-items: center;
       cursor: pointer;
         }
+
+        .products_shop:hover{
+          cursor:pointer;
+
+        }

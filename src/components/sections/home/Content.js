@@ -4,6 +4,7 @@ import Banner from "./Banner";
 // import Service from "./Service";
 // import Cta from "../../layouts/Cta";
 import Howitwork from "../../layouts/Howitwork";
+import Gomaidzwork from "../../layouts/GomaidzWorkPartner";
 import Smallcallback from "../../layouts/Smallcallback";
 // import Whyus from "./Whyus";
 import Testimonials from "./Testimonials";
@@ -61,6 +62,7 @@ class Content extends Component {
     this.updateMarkers = this.updateMarkers.bind(this);
     this.updateCenter = this.updateCenter.bind(this);
     this.apiIsLoaded = this.apiIsLoaded.bind(this);
+  
   }
   checkwebTour = () => {
     // get webtour varible value from native storage and set into setstate
@@ -265,7 +267,8 @@ updateCenter = (newCenter) => {
         {/* <Service /> */}
         {/* <Cta /> */}
         <section className="hw-it-wrks bg-dot-full pt-95 pb-75 pb-sm-35">
-          <Howitwork />
+          {(this.state.currentUser.role.name == "service_taker") ?(<Howitwork />):(<Gomaidzwork />)}
+          
         </section>
         {/* <Whyus /> */}
         <Smallcallback />

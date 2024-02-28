@@ -70,6 +70,8 @@ class Productdetail extends Component {
         
         super(props);
         
+        
+        
         let user = AuthService.getCurrentUser();
         let dateSplit = '';
         if (this.props.location.state !== undefined &&
@@ -85,31 +87,34 @@ class Productdetail extends Component {
             this.state = {
                 user_id: user ? user.id : "",
                 user_role: user ? user.role.name : "notsignin",
+                hoursLeft: "",
+                currentHours: new Date().getHours(),
+                todaybit:false,
                 time: [
-                    { label: "1:00AM", value: "1:00AM" },
-                    { label: "2:00AM", value: "2:00AM" },
-                    { label: "3:00AM", value: "3:00AM" },
-                    { label: "4:00AM", value: "4:00AM" },
-                    { label: "5:00AM", value: "5:00AM" },
-                    { label: "6:00AM", value: "6:00AM" },
-                    { label: "7:00AM", value: "7:00AM" },
-                    { label: "8:00AM", value: "8:00AM" },
-                    { label: "9:00AM", value: "9:00AM" },
-                    { label: "10:00AM", value: "10:00AM" },
-                    { label: "11:00AM", value: "11:00AM" },
-                    { label: "12:00PM", value: "12:00PM" },
-                    { label: "1:00PM", value: "1:00PM" },
-                    { label: "2:00PM", value: "2:00PM" },
-                    { label: "3:00PM", value: "3:00PM" },
-                    { label: "4:00PM", value: "4:00PM" },
-                    { label: "5:00PM", value: "5:00PM" },
-                    { label: "6:00PM", value: "6:00PM" },
-                    { label: "7:00PM", value: "7:00PM" },
-                    { label: "8:00PM", value: "8:00PM" },
-                    { label: "9:00PM", value: "9:00PM" },
-                    { label: "10:00PM", value: "10:00PM" },
-                    { label: "11:00PM", value: "11:00PM" },
-                    { label: "12:00AM", value: "12:00AM" },
+                    { label: "1:00 AM", value: "1:00 AM" },
+                    { label: "2:00 AM", value: "2:00 AM" },
+                    { label: "3:00 AM", value: "3:00 AM" },
+                    { label: "4:00 AM", value: "4:00 AM" },
+                    { label: "5:00 AM", value: "5:00 AM" },
+                    { label: "6:00 AM", value: "6:00 AM" },
+                    { label: "7:00 AM", value: "7:00 AM" },
+                    { label: "8:00 AM", value: "8:00 AM" },
+                    { label: "9:00 AM", value: "9:00 AM" },
+                    { label: "10:00 AM", value: "10:00 AM" },
+                    { label: "11:00 AM", value: "11:00 AM" },
+                    { label: "12:00 PM", value: "12:00 PM" },
+                    { label: "1:00 PM", value: "1:00 PM" },
+                    { label: "2:00 PM", value: "2:00 PM" },
+                    { label: "3:00 PM", value: "3:00 PM" },
+                    { label: "4:00 PM", value: "4:00 PM" },
+                    { label: "5:00 PM", value: "5:00 PM" },
+                    { label: "6:00 PM", value: "6:00 PM" },
+                    { label: "7:00 PM", value: "7:00 PM" },
+                    { label: "8:00 PM", value: "8:00 PM" },
+                    { label: "9:00 PM", value: "9:00 PM" },
+                    { label: "10:00 PM", value: "10:00 PM" },
+                    { label: "11:00 PM", value: "11:00 PM" },
+                    { label: "12:00 AM", value: "12:00 AM" },
                     
                     
                 ],
@@ -138,6 +143,7 @@ class Productdetail extends Component {
                             profileCompletion: "",
                             additionalNotes: "",
                         };
+                        console.log(this.state.currentHours);
                         
                     }
                     
@@ -281,11 +287,70 @@ class Productdetail extends Component {
                                         
                                         
                                     }
+                                    convertTo24HourFormat(time12h) {
+                                        // Parse the time string in 12-hour format
+                                        const time12hParts = time12h.split(/[: ]/);
+                                        // console.log(time12hParts);
+                                        let hours = parseInt(time12hParts[0]);
+                                        const minutes = parseInt(time12hParts[1]);
+                                        const period = time12hParts[2].toUpperCase();
+                                        
+                                        // Adjust hours for PM times
+                                        if (period === "PM" && hours !== 12) {
+                                            hours += 12;
+                                        }
+                                        
+                                        // Adjust hours for 12AM
+                                        if (period === "AM" && hours === 12) {
+                                            hours = 0;
+                                        }
+                                        
+                                        // Convert to 24-hour format
+                                        const hours24h = hours.toString().padStart(2, '0');
+                                        
+                                        return `${hours24h}:${minutes.toString().padStart(2, '0')}`;
+                                    }
                                     onChangeDate = async (date) => {
                                         if(date){
+                                            const newDate = new Date(date);
+                                            
+                                            const now = new Date();
+                                            // console.log(now);
+                                            // console.log(newDate);
+                                            if(now.getDate() == newDate.getDate()){
+                                                
+                                                // Get the current hour and minute
+                                                const currentHour = now.getHours();
+                                                const currentMinute = now.getMinutes();
+                                                
+                                                // Calculate the total minutes left in the day
+                                                const totalMinutesLeft = (23 - currentHour) * 60 + (59 - currentMinute);
+                                                
+                                                // Convert total minutes left to hours and minutes
+                                                const hoursLeft = Math.floor(totalMinutesLeft / 60);
+                                                const minutesLeft = totalMinutesLeft % 60;
+                                                
+                                                // console.log(`There are ${hoursLeft} hours and ${minutesLeft} minutes left in the day.`);
+                                                this.setState({ hoursLeft: hoursLeft });
+                                                this.setState({ todaybit: true });
+                                                // const currentHours = new Date().getHours();
+                                                // const minHour = currentHour + this.state.hoursLeft;
+                                                // console.log(minHour);
+                                                // console.log(currentHours);
+                                                // const time24HourFormat = this.state.time.map(({ label, value }) => ({
+                                                //     label: this.convertTo24HourFormat(label),
+                                                //     value: this.convertTo24HourFormat(value)
+                                                // }));
+                                                // console.log(time24HourFormat);
+                                                
+                                            } else {
+                                                this.setState({ hoursLeft: "" });
+                                                this.setState({ todaybit: false });
+                                                
+                                            }
                                             
                                             // You can create a Date object by passing the date string
-                                            const newDate = new Date(date);
+                                            
                                             
                                             
                                             // Extract year, month, and day
@@ -453,7 +518,7 @@ class Productdetail extends Component {
                                         
                                         // const proceed = window.confirm("Are you sure you want to Hire")
                                         // if (proceed) {
-                                         let user = AuthService.getCurrentUser();
+                                        let user = AuthService.getCurrentUser();
                                         console.log(user);
                                         if (typeof user == 'undefined') {
                                             
@@ -565,7 +630,7 @@ class Productdetail extends Component {
                                             smartSpeed: 450,
                                             margin: 0,
                                             nav: true,
-                                            navText: ["<i class='fas fa-chevron-left'></i>", "<i class='fas fa-chevron-right'></i>"],
+                                            navText: ["<i className='fas fa-chevron-left'></i>", "<i className='fas fa-chevron-right'></i>"],
                                             dots: false
                                         }
                                         return (
@@ -879,7 +944,7 @@ class Productdetail extends Component {
                                                         >
                                                         <select
                                                         type="select"
-                                                        className={`form-control ${this.state.TimeFromclass}`}
+                                                        className={`form-control`}
                                                         name="timeForm"
                                                         onChange={this.onChangeTextFields}
                                                         value={this.state.timeForm}
@@ -893,199 +958,246 @@ class Productdetail extends Component {
                                                         <option value="">
                                                         -- Select Start Time --
                                                         </option>
-                                                        {this.state.time.map((data, index) => (
-                                                            <option value={data.value} key={index}>
-                                                            {data.label}
-                                                            </option>
-                                                            ))}
-                                                            </select>
-                                                            {this.state.errors &&
-                                                                this.state.errors.timeForm &&
-                                                                <span className="text-danger">
-                                                                {
-                                                                    this.state.errors.timeForm
-                                                                }
-                                                                </span>
-                                                            }
-                                                            
-                                                            </div>
-                                                            
-                                                            <div className="col">
-                                                            <select
-                                                            type="select"
-                                                            className={`form-control ${this.state.TimeToclass}`}
-                                                            name="timeTo"
-                                                            onChange={this.onChangeTextFields}
-                                                            
-                                                            value={this.state.timeTo}
-                                                            // onChange={this.onChangeServiceType}
-                                                            >
-                                                            <option value="">
-                                                            -- Select End Time --
-                                                            </option>
-                                                            {this.state.time.map((data, index) => (
-                                                                <option value={data.value} key={index}>
-                                                                {data.label}
-                                                                </option>
-                                                                ))}
-                                                                </select>
-                                                                {this.state.errors &&
-                                                                    this.state.errors.timeTo &&
-                                                                    <span className="text-danger">
-                                                                    {
-                                                                        this.state.errors.timeTo
-                                                                    }
-                                                                    </span>
-                                                                }
-                                                                
-                                                                </div>
-                                                                
-                                                                </div>
-                                                                <div className='row' style={{ marginTop: "2rem" }}>
-                                                                <div className='col col-md-12'>
-                                                                <textarea rows={3} name="additional_notes" value={this.state.additionalNotes} onChange={this.setAddtionalNotes} placeholder={"Additional Notes"}/>
-                                                                </div>
-                                                                </div>
-                                                                
-                                                                </div>
-                                                                
-                                                                {this.state.slotUnavailable &&
-                                                                    <UncontrolledAlert color="danger"
-                                                                    
-                                                                    >
-                                                                    {this.state.slotUnavailable}
-                                                                    </UncontrolledAlert>}
-                                                                    
-                                                                    
-                                                                    <button
-                                                                    type="submit"
-                                                                    className="btn btn-black btn-block mt-20" disabled={this.state.user_role == "service_provider"}
-                                                                    onClick={this.hireNow}
-                                                                    > Hire Now
-                                                                    </button>
-                                                                    
-                                                                    
-                                                                    
-                                                                    <div className="prdt-tabs row pt-40 pt-md-25 mb-5">
-                                                                    <div className="col-md-12">
-                                                                    
-                                                                    <div className="prdt-tab mt-5 service-provider-nav-container">
-                                                                    <Tab.Container defaultActiveKey="description">
-                                                                    <Nav variant="tabs" className="nav nav-pills justify-content-center justify-content-sm-start">
-                                                                    <Nav.Item>
-                                                                    <Nav.Link eventKey="description">Description</Nav.Link>
-                                                                    </Nav.Item>
-                                                                    <Nav.Item>
-                                                                    <Nav.Link eventKey="addinfo">Detail</Nav.Link>
-                                                                    </Nav.Item>
-                                                                    <Nav.Item>
-                                                                    <Nav.Link eventKey="reviews">Reviews</Nav.Link>
-                                                                    </Nav.Item>
-                                                                    </Nav>
-                                                                    <Tab.Content className="pt-20">
-                                                                    <Tab.Pane eventKey="description">
-                                                                    <h4 className="mb-10 lh-13"></h4>
-                                                                    <p className="text-justify">
-                                                                    {this.state.serviceprovider.detail}
-                                                                    </p>
-                                                                    {this.state.serviceprovider_services_type.map((service) => {
-                                                                        
-                                                                        return (
-                                                                            <>
-                                                                            <h4 className="mb-10 lh-13">{service.service_type.name}</h4>
-                                                                            <p className="text-justify">{service.description} </p>
-                                                                            
-                                                                            </>
-                                                                            )
-                                                                        })
-                                                                        
-                                                                    }
-                                                                    
-                                                                    {/* <h4 className="mb-10 lh-13">{this.state.serviceprovider_services_type.name}</h4>
-                                                                <p className="text-justify">{this.state.serviceprovider_services.description} */}
-                                                                {/* </p> */}
-                                                                </Tab.Pane>
-                                                                <Tab.Pane eventKey="addinfo">
-                                                                <div className="row align-items-center">
-                                                                <div className="col-12">
-                                                                <p className="text-justify">{this.state.serviceprovider.detail} </p>
-                                                                <table className="table table-bordered mb-0">
-                                                                <tbody>
-                                                                {/* {infotable.map((item, i) => ( */}
-                                                                <tr>
-                                                                <th scope="row">Name</th>
-                                                                <td>{this.state.currentServiceProvider.user !== undefined ? this.state.currentServiceProvider.user.fname + " " + this.state.currentServiceProvider.user.lname : ""}</td>
-                                                                </tr>
-                                                                <tr>
-                                                                <th scope="row">Address</th>
-                                                                <td>{this.state.currentServiceProvider.user !== undefined ? this.state.currentServiceProvider.user.location.city : ""}</td>
-                                                                </tr>
-                                                                <tr>
-                                                                <th scope="row">Orders Completed</th>
-                                                                <td>{this.state.currentServiceProvider.orders !== undefined ? this.state.currentServiceProvider.orders.length : ""}</td>
-                                                                </tr>
-                                                                <tr>
-                                                                <th scope="row">Rating</th>
-                                                                <td>{this.state.currentServiceProvider !== undefined ? this.state.currentServiceProvider.rating : ""}</td>
-                                                                </tr>
-                                                                <tr>
-                                                                <th scope="row">Member Since</th>
-                                                                <td>{this.state.currentServiceProvider.user !== undefined ? this.state.currentServiceProvider.user.created_at.substr(0, 10) : ""}</td>
-                                                                </tr>
-                                                                <tr>
-                                                                <th scope="row">Provider Level</th>
-                                                                <td>{this.state.currentServiceProvider !== undefined ? "Level" + " " + this.state.currentServiceProvider.level : "New Provider"}</td>
-                                                                </tr>
-                                                                {/* ))} */}
-                                                                </tbody>
-                                                                </table>
-                                                                </div>
-                                                                </div>
-                                                                </Tab.Pane>
-                                                                <Tab.Pane eventKey="reviews">
-                                                                <div className="review-wrp">
-                                                                {this.state.feedbackCurrentServiceProvider.length &&
-                                                                    
-                                                                    this.state.feedbackCurrentServiceProvider.map(obj => {
-                                                                        return (
-                                                                            <>
-                                                                            {this.state.isPending ? <div className="text-center"> <CircularProgress color="success" /></div> :
-                                                                            <div className="review-prdt">
-                                                                            <img src={`${config.SERVER_URL}/${obj.service_taker?.user?.image}`} className="user-img" alt="" />
-                                                                            <h4> {obj.service_taker?.user?.username}
-                                                                            <span className="date">{obj.updated_at.substring(0, 10)}</span>
-                                                                            </h4>
-                                                                            <Rating value={parseInt(obj.rating)}
-                                                                            size='normal'
-                                                                            precision={0.5}
-                                                                            readOnly
-                                                                            />
-                                                                            <p className="text-justify">
-                                                                            {obj.service_taker_feedback}
-                                                                            </p>
-                                                                            </div>}
-                                                                            </>)
-                                                                        })
-                                                                        
-                                                                    }
-                                                                    
-                                                                    {/* <Link to="/" className="btn btn-blue btn-md" data-toggle="modal" data-target="#addReview">WRITE A REVIEW</Link> */}
-                                                                    
-                                                                    </div>
-                                                                    </Tab.Pane>
-                                                                    </Tab.Content>
-                                                                    </Tab.Container>
-                                                                    </div>
-                                                                    </div>
-                                                                    </div>
-                                                                    </div>
-                                                                    </div>
-                                                                    </div>
-                                                                    </section >
-                                                                    </>
-                                                                    );
-                                                                }
-                                                            }
-                                                            
-                                                            export default withRouter(Productdetail);
-                                                            
+                                                        {this.state.todaybit ? (
+                                                            this.state.time.map((data, index) => (
+                                                                this.state.currentHours < parseInt(this.convertTo24HourFormat(data.value)) ? (
+                                                                    <option value={data.value} key={index}>
+                                                                    {data.label}
+                                                                    </option>
+                                                                    ) : (parseInt(this.convertTo24HourFormat(data.value)) === 0 ? (
+                                                                        <option value={data.value} key={index}>
+                                                                        {data.label}
+                                                                        </option>
+                                                                        ) : (
+                                                                            <option value={data.value} key={index} disabled>
+                                                                            {data.label}
+                                                                            </option>
+                                                                            ))
+                                                                            ))
+                                                                            ) : (
+                                                                                this.state.time.map((data, index) => (
+                                                                                    <option value={data.value} key={index}>
+                                                                                    {data.label}
+                                                                                    </option>
+                                                                                    ))
+                                                                                    )}
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    </select>
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    {this.state.errors &&
+                                                                                        this.state.errors.timeForm &&
+                                                                                        <span className="text-danger">
+                                                                                        {
+                                                                                            this.state.errors.timeForm
+                                                                                        }
+                                                                                        </span>
+                                                                                    }
+                                                                                    
+                                                                                    </div>
+                                                                                    
+                                                                                    <div className="col">
+                                                                                    <select
+                                                                                    type="select"
+                                                                                    className={`form-control`}
+                                                                                    name="timeTo"
+                                                                                    onChange={this.onChangeTextFields}
+                                                                                    
+                                                                                    value={this.state.timeTo}
+                                                                                    // onChange={this.onChangeServiceType}
+                                                                                    >
+                                                                                    <option value="">
+                                                                                    -- Select End Time --
+                                                                                    </option>
+                                                                                    {/* {this.state.time.map((data, index) => (
+                                                                                        <option value={data.value} key={index}>
+                                                                                        {data.label}
+                                                                                        </option>
+                                                                                    ))} */}
+                                                                                    {this.state.todaybit ? (
+                                                                                        this.state.time.map((data, index) => (
+                                                                                            this.state.currentHours < parseInt(this.convertTo24HourFormat(data.value)) ? (
+                                                                                                <option value={data.value} key={index}>
+                                                                                                {data.label}
+                                                                                                </option>
+                                                                                                ) : (parseInt(this.convertTo24HourFormat(data.value)) === 0 ? (
+                                                                                                    <option value={data.value} key={index}>
+                                                                                                    {data.label}
+                                                                                                    </option>
+                                                                                                    ) : (
+                                                                                                        <option value={data.value} key={index} disabled>
+                                                                                                        {data.label}
+                                                                                                        </option>
+                                                                                                        ))
+                                                                                                        ))
+                                                                                                        ) : (
+                                                                                                            this.state.time.map((data, index) => (
+                                                                                                                <option value={data.value} key={index}>
+                                                                                                                {data.label}
+                                                                                                                </option>
+                                                                                                                ))
+                                                                                                                )}
+                                                                                                                </select>
+                                                                                                                {this.state.errors &&
+                                                                                                                    this.state.errors.timeTo &&
+                                                                                                                    <span className="text-danger">
+                                                                                                                    {
+                                                                                                                        this.state.errors.timeTo
+                                                                                                                    }
+                                                                                                                    </span>
+                                                                                                                }
+                                                                                                                
+                                                                                                                </div>
+                                                                                                                
+                                                                                                                </div>
+                                                                                                                <div className='row' style={{ marginTop: "2rem" }}>
+                                                                                                                <div className='col col-md-12'>
+                                                                                                                <textarea rows={3} name="additional_notes" value={this.state.additionalNotes} onChange={this.setAddtionalNotes} placeholder={"Additional Notes"}/>
+                                                                                                                </div>
+                                                                                                                </div>
+                                                                                                                
+                                                                                                                </div>
+                                                                                                                
+                                                                                                                {this.state.slotUnavailable &&
+                                                                                                                    <UncontrolledAlert color="danger"
+                                                                                                                    
+                                                                                                                    >
+                                                                                                                    {this.state.slotUnavailable}
+                                                                                                                    </UncontrolledAlert>}
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    <button
+                                                                                                                    type="submit"
+                                                                                                                    className="btn btn-black btn-block mt-20" disabled={this.state.user_role == "service_provider"}
+                                                                                                                    onClick={this.hireNow}
+                                                                                                                    > Hire Now
+                                                                                                                    </button>
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    <div className="prdt-tabs row pt-40 pt-md-25 mb-5">
+                                                                                                                    <div className="col-md-12">
+                                                                                                                    
+                                                                                                                    <div className="prdt-tab mt-5 service-provider-nav-container">
+                                                                                                                    <Tab.Container defaultActiveKey="description">
+                                                                                                                    <Nav variant="tabs" className="nav nav-pills justify-content-center justify-content-sm-start">
+                                                                                                                    <Nav.Item>
+                                                                                                                    <Nav.Link eventKey="description">Description</Nav.Link>
+                                                                                                                    </Nav.Item>
+                                                                                                                    <Nav.Item>
+                                                                                                                    <Nav.Link eventKey="addinfo">Detail</Nav.Link>
+                                                                                                                    </Nav.Item>
+                                                                                                                    <Nav.Item>
+                                                                                                                    <Nav.Link eventKey="reviews">Reviews</Nav.Link>
+                                                                                                                    </Nav.Item>
+                                                                                                                    </Nav>
+                                                                                                                    <Tab.Content className="pt-20">
+                                                                                                                    <Tab.Pane eventKey="description">
+                                                                                                                    <h4 className="mb-10 lh-13"></h4>
+                                                                                                                    <p className="text-justify">
+                                                                                                                    {this.state.serviceprovider.detail}
+                                                                                                                    </p>
+                                                                                                                    {this.state.serviceprovider_services_type.map((service) => {
+                                                                                                                        
+                                                                                                                        return (
+                                                                                                                            <>
+                                                                                                                            <h4 className="mb-10 lh-13">{service.service_type.name}</h4>
+                                                                                                                            <p className="text-justify">{service.description} </p>
+                                                                                                                            
+                                                                                                                            </>
+                                                                                                                            )
+                                                                                                                        })
+                                                                                                                        
+                                                                                                                    }
+                                                                                                                    
+                                                                                                                    {/* <h4 className="mb-10 lh-13">{this.state.serviceprovider_services_type.name}</h4>
+                                                                                                                <p className="text-justify">{this.state.serviceprovider_services.description} */}
+                                                                                                                {/* </p> */}
+                                                                                                                </Tab.Pane>
+                                                                                                                <Tab.Pane eventKey="addinfo">
+                                                                                                                <div className="row align-items-center">
+                                                                                                                <div className="col-12">
+                                                                                                                <p className="text-justify">{this.state.serviceprovider.detail} </p>
+                                                                                                                <table className="table table-bordered mb-0">
+                                                                                                                <tbody>
+                                                                                                                {/* {infotable.map((item, i) => ( */}
+                                                                                                                <tr>
+                                                                                                                <th scope="row">Name</th>
+                                                                                                                <td>{this.state.currentServiceProvider.user !== undefined ? this.state.currentServiceProvider.user.fname + " " + this.state.currentServiceProvider.user.lname : ""}</td>
+                                                                                                                </tr>
+                                                                                                                <tr>
+                                                                                                                <th scope="row">Address</th>
+                                                                                                                <td>{this.state.currentServiceProvider.user !== undefined ? this.state.currentServiceProvider.user.location.city : ""}</td>
+                                                                                                                </tr>
+                                                                                                                <tr>
+                                                                                                                <th scope="row">Orders Completed</th>
+                                                                                                                <td>{this.state.currentServiceProvider.orders !== undefined ? this.state.currentServiceProvider.orders.length : ""}</td>
+                                                                                                                </tr>
+                                                                                                                <tr>
+                                                                                                                <th scope="row">Rating</th>
+                                                                                                                <td>{this.state.currentServiceProvider !== undefined ? this.state.currentServiceProvider.rating : ""}</td>
+                                                                                                                </tr>
+                                                                                                                <tr>
+                                                                                                                <th scope="row">Member Since</th>
+                                                                                                                <td>{this.state.currentServiceProvider.user !== undefined ? this.state.currentServiceProvider.user.created_at.substr(0, 10) : ""}</td>
+                                                                                                                </tr>
+                                                                                                                <tr>
+                                                                                                                <th scope="row">Provider Level</th>
+                                                                                                                <td>{this.state.currentServiceProvider !== undefined ? "Level" + " " + this.state.currentServiceProvider.level : "New Provider"}</td>
+                                                                                                                </tr>
+                                                                                                                {/* ))} */}
+                                                                                                                </tbody>
+                                                                                                                </table>
+                                                                                                                </div>
+                                                                                                                </div>
+                                                                                                                </Tab.Pane>
+                                                                                                                <Tab.Pane eventKey="reviews">
+                                                                                                                <div className="review-wrp">
+                                                                                                                {this.state.feedbackCurrentServiceProvider.length &&
+                                                                                                                    
+                                                                                                                    this.state.feedbackCurrentServiceProvider.map(obj => {
+                                                                                                                        return (
+                                                                                                                            <>
+                                                                                                                            {this.state.isPending ? <div className="text-center"> <CircularProgress color="success" /></div> :
+                                                                                                                            <div className="review-prdt">
+                                                                                                                            <img src={`${config.SERVER_URL}/${obj.service_taker?.user?.image}`} className="user-img" alt="" />
+                                                                                                                            <h4> {obj.service_taker?.user?.username}
+                                                                                                                            <span className="date">{obj.updated_at.substring(0, 10)}</span>
+                                                                                                                            </h4>
+                                                                                                                            <Rating value={parseInt(obj.rating)}
+                                                                                                                            size='normal'
+                                                                                                                            precision={0.5}
+                                                                                                                            readOnly
+                                                                                                                            />
+                                                                                                                            <p className="text-justify">
+                                                                                                                            {obj.service_taker_feedback}
+                                                                                                                            </p>
+                                                                                                                            </div>}
+                                                                                                                            </>)
+                                                                                                                        })
+                                                                                                                        
+                                                                                                                    }
+                                                                                                                    
+                                                                                                                    {/* <Link to="/" className="btn btn-blue btn-md" data-toggle="modal" data-target="#addReview">WRITE A REVIEW</Link> */}
+                                                                                                                    
+                                                                                                                    </div>
+                                                                                                                    </Tab.Pane>
+                                                                                                                    </Tab.Content>
+                                                                                                                    </Tab.Container>
+                                                                                                                    </div>
+                                                                                                                    </div>
+                                                                                                                    </div>
+                                                                                                                    </div>
+                                                                                                                    </div>
+                                                                                                                    </div>
+                                                                                                                    </section >
+                                                                                                                    </>
+                                                                                                                    );
+                                                                                                                }
+                                                                                                            }
+                                                                                                            
+                                                                                                            export default withRouter(Productdetail);
+                                                                                                            

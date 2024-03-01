@@ -448,20 +448,9 @@ const AnyReactComponent = ({ img_src }) => (
     };
     
     handledetail = (url) => {
-      let userdetail = authService.getCurrentUser();
-      // console.log(userdetail);
-      if (userdetail.role.name == "service_taker") {
+
               this.props.history.push(url);
-      } else {
-                swal({
-            title: 'Please Login!',
-            text: `Please Login as Customer to hire a service provider` ,
-            icon: 'info',
-            buttons: {
-                confirm: 'Okay'
-            }
-        })
-      }
+
 
     };
             

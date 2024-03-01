@@ -51,7 +51,8 @@ const useStyles = makeStyles({
   borderRight500: {
     borderRight: '1px solid #e0e0e0',
     // height: '60vh',
-    overflowY: 'auto'
+    overflowY: 'auto',
+    maxHeight: "520px",
   },
   messageArea: {
     height: '46vh',

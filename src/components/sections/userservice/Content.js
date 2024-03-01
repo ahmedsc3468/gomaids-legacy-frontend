@@ -180,7 +180,7 @@ class UserService extends Component {
     let that = this;
     swal({
       title: "Are you sure?",
-      text: "You will not be able to recover this imaginary file!",
+      text: "",
       icon: "warning",
       buttons: ["No", "Yes, I am sure!"],
       dangerMode: true,

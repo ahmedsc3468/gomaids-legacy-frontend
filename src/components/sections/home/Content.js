@@ -267,7 +267,7 @@ updateCenter = (newCenter) => {
         {/* <Service /> */}
         {/* <Cta /> */}
         <section className="hw-it-wrks bg-dot-full pt-95 pb-75 pb-sm-35">
-          {(this.state.currentUser.role.name == "service_taker") ?(<Howitwork />):(<Gomaidzwork />)}
+          {(this.state.currentUser?.role?.name == "service_provider") ?(<Gomaidzwork />):(<Howitwork />)}
           
         </section>
         {/* <Whyus /> */}

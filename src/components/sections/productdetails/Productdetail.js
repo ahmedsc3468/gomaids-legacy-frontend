@@ -518,22 +518,38 @@ class Productdetail extends Component {
                                         
                                         // const proceed = window.confirm("Are you sure you want to Hire")
                                         // if (proceed) {
-                                        let user = AuthService.getCurrentUser();
-                                        console.log(user);
-                                        if (typeof user == 'undefined') {
+                                        // let user = AuthService.getCurrentUser();
+                                        // console.log(user);
+                                        // if (typeof user == 'undefined') {
                                             
+                                        //     swal({
+                                        //         title: 'Incomplete User Profile',
+                                        //         text: 'You must Login/Signup to hire as Service Provider.',
+                                        //         icon: 'warning',
+                                        //         buttons: {
+                                        //             confirm: 'Login',
+                                        //             cancel: 'Close'
+                                        //         }
+                                        //     }).then((value) => {
+                                        //         if (value) {
+                                        //             this.props.history.push("/login")
+                                        //         } 
+                                        //     });
+                                        //     return
+                                        // }
+                                        
+                                        
+                                        
+                                        let userdetail = AuthService.getCurrentUser();
+                                        console.log(userdetail);
+                                        if (userdetail?.role?.name !== "service_taker") {
                                             swal({
-                                                title: 'Incomplete User Profile',
-                                                text: 'You must Login/Signup to hire as Service Provider.',
-                                                icon: 'warning',
+                                                title: 'Please Login!',
+                                                text: `Please Login as Customer to hire a service provider`,
+                                                icon: 'info',
                                                 buttons: {
-                                                    confirm: 'Login',
-                                                    cancel: 'Close'
+                                                    confirm: 'Okay'
                                                 }
-                                            }).then((value) => {
-                                                if (value) {
-                                                    this.props.history.push("/login")
-                                                } 
                                             });
                                             return
                                         }
@@ -1071,7 +1087,7 @@ class Productdetail extends Component {
                                                                                                                     
                                                                                                                     <button
                                                                                                                     type="submit"
-                                                                                                                    className="btn btn-black btn-block mt-20" disabled={this.state.user_role == "service_provider"}
+                                                                                                                    className="btn btn-black btn-block mt-20"
                                                                                                                     onClick={this.hireNow}
                                                                                                                     > Hire Now
                                                                                                                     </button>

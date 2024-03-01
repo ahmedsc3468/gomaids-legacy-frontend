@@ -448,7 +448,7 @@ class Content extends Component {
   }
 
   componentDidMount() {
-    // window.scrollTo(0, 20);
+    window.scrollTo(0, 300);
     let that = this;
 
     axios

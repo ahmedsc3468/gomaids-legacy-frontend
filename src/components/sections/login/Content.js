@@ -42,6 +42,10 @@ class Content extends Component {
     };
     this.toggleShow = this.toggleShow.bind(this);
   }
+
+  componentDidMount() { 
+    window.scrollTo(0, 200);
+  }
   toggleShow(e) {
     e.preventDefault();
     this.setState({ hidden: !this.state.hidden });

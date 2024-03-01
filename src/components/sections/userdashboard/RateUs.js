@@ -195,7 +195,7 @@ function Rate() {
 
           <Form>
             <Form.Group
-              hidden={userr === "service_provider"}
+              // hidden={user === "service_provider"}
               className="mb-3"
               // controlId="exampleForm.ControlTextarea2"
             >
@@ -209,6 +209,9 @@ function Rate() {
                 onChange={(e) => handleFeedbackMessage(e)}
                 required
               />
+            </Form.Group>
+            <Form.Group
+             hidden={userr === "service_provider"}>
 
               <Form.Label>Enter the tip amount</Form.Label>
               <Form.Control

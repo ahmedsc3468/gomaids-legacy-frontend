@@ -15,17 +15,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 
 class UserDetails extends Component {
-  schema = {
-    // dob: Joi.string().required().label("Date Of Birth"),
-    //        mobile_no: Joi.string().required().label("Mobile No"),
-    street_address: Joi.string().required().label("Address"),
-    country: Joi.string().required().label("Country"),
-    city: Joi.string().required().label("City"),
-    postal_code: Joi.string().required().label("Postal Code"),
-    rawImage: Joi.string().required().label("Image"),
-    state: Joi.string().required().label("State"),
-    identity: Joi.string().required().label("identity"),
-  };
+
+
 
   constructor(props) {
     let user = AuthService.getCurrentUser();
@@ -58,6 +49,26 @@ class UserDetails extends Component {
       identity: props.userDetailsData.identity || "",
       isloading: false,
     };
+      this.schema = {
+    // dob: Joi.string().required().label("Date Of Birth"),
+    //        mobile_no: Joi.string().required().label("Mobile No"),
+    street_address: Joi.string().required().label("Address"),
+    country: Joi.string().required().label("Country"),
+    city: Joi.string().required().label("City"),
+    postal_code: Joi.string().required().label("Postal Code"),
+    rawImage: Joi.string().required().label("Image"),
+    state: Joi.string().required().label("State"),
+    // identity: Joi.string().required().label("identity"),
+    };
+
+        if (this.state.role === "service_taker") {
+      // If service_taker, make identity optional
+      this.schema.identity = Joi.string().label("identity");
+    } else {
+      // If not service_taker, identity is required
+      this.schema.identity = Joi.string().required().label("identity");
+    }
+
   }
 
   populateCityDropDown = async (state) => {
@@ -120,9 +131,15 @@ class UserDetails extends Component {
       city: this.state.city,
       postal_code: this.state.postal_code,
       rawImage: this.state.rawImage,
-      identity: this.state.identity,
+      // identity: this.state.identity,
       state: this.state.state,
     };
+        if (this.state.role !== "service_taker") {
+      // If service_taker, make identity optional
+      obj.identity = this.state.identity;
+    } 
+
+    console.log(obj);
     const { error } = Joi.validate(obj, this.schema, {
       abortEarly: false,
     });
@@ -246,6 +263,7 @@ class UserDetails extends Component {
   saveAndContinue = async (e) => {
     this.setState({ isloading: true });
     console.log(e);
+        console.log(this.state.role);
     let that = this;
     e.preventDefault();
     let errors = this.validate();

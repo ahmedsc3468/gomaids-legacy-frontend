@@ -269,32 +269,51 @@ class ServiceTakerOrderDetails extends Component {
         
         this.setState({ dropDownOpen: !this.state.dropDownOpen })
     }
-    getTimeDifference = (orderDate) => {
-        const orderCreatedAt = new Date(orderDate); 
-        const currentTime = new Date();
-        const differenceInMilliseconds = currentTime - orderCreatedAt;
-        const differenceInHours = differenceInMilliseconds / (1000 * 60 * 60);
-        return differenceInHours;
-    }
-    getOrderDifference = (orderDate,orderTime) => {
-        var orderDate = new Date(orderDate); // Sample order date
-        console.log(orderTime);
-        const [hours, minutes, seconds] = orderTime.split(":");
-        orderDate.setHours(hours, minutes, seconds);
-        console.log(orderDate);
-        // Get the current date
-        var currentDate = new Date();
-        console.log(currentDate);
-        // Check if the order date is greater than the current date
-        if (orderDate > currentDate) {
-            console.log("False");
-            return false;
-        } else {
-            console.log("True");
-            return true;
-        }
+    // getOrderDifference = (orderDate,orderTime) => {
+    //     var orderDate = new Date(orderDate); // Sample order date
+    //     const [hours, minutes, seconds] = orderTime.split(":");
+    //     orderDate.setHours(hours, minutes, seconds);
 
+    //     // Get the current date
+    //     var currentDate = new Date();
+    //     // Check if the order date is greater than the current date
+    //     if (currentDate > orderDate) {
+    //         console.log("true");
+    //         return true;
+    //     } else {
+    //         console.log("false");
+    //         return false;
+    //     }
+
+    // }
+    getOrderDifference = (orderDate, orderTime) => {
+    // Sample order date in ISO format
+        var orderDateTimeString = orderDate + 'T' + orderTime;
+        console.log(orderDateTimeString);
+    
+    // Create orderDate in local time zone
+        var orderDate = new Date(orderDateTimeString);
+        console.log(orderDate);
+
+    // Get the current date in local time zone
+    var currentDate = new Date();
+
+    // Get the time zone offset difference in minutes
+    var timeZoneOffsetDiff = currentDate.getTimezoneOffset() - orderDate.getTimezoneOffset();
+        console.log(timeZoneOffsetDiff);
+    // Adjust orderDate to current time zone
+    orderDate.setMinutes(orderDate.getMinutes() - timeZoneOffsetDiff);
+console.log(orderDate)
+    // Check if the order date is greater than the current date
+    if (currentDate > orderDate) {
+        console.log("true");
+        return true;
+    } else {
+        console.log("false");
+        return false;
     }
+}
+
     feedbackSentTo = async (event, errors, values) => {
         event.preventDefault()
         console.log("FeedBack Call")

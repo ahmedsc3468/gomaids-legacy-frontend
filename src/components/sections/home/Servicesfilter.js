@@ -6,7 +6,7 @@ import OwlCarousel from "react-owl-carousel2";
 import authHeader from "../../../services/auth-header";
 import icon9 from "../../../assets/img/service/star-rating.png";
 import { tag } from "react-feather";
-import Rating from "@mui/material/Rating";
+import Rating from "@mui/material/Rating"; 
 import authService from "../../../services/auth.service";
 import GoogleMapReact from "google-map-react";
 import AuthService from "../../../services/auth.service";

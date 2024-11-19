@@ -15,9 +15,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 
 class UserDetails extends Component {
-
-
-
   constructor(props) {
     let user = AuthService.getCurrentUser();
     console.log("authService: ", AuthService);
@@ -49,26 +46,25 @@ class UserDetails extends Component {
       identity: props.userDetailsData.identity || "",
       isloading: false,
     };
-      this.schema = {
-    // dob: Joi.string().required().label("Date Of Birth"),
-    //        mobile_no: Joi.string().required().label("Mobile No"),
-    street_address: Joi.string().required().label("Address"),
-    country: Joi.string().required().label("Country"),
-    city: Joi.string().required().label("City"),
-    postal_code: Joi.string().required().label("Postal Code"),
-    rawImage: Joi.string().required().label("Image"),
-    state: Joi.string().required().label("State"),
-    // identity: Joi.string().required().label("identity"),
+    this.schema = {
+      // dob: Joi.string().required().label("Date Of Birth"),
+      //        mobile_no: Joi.string().required().label("Mobile No"),
+      street_address: Joi.string().required().label("Address"),
+      country: Joi.string().required().label("Country"),
+      city: Joi.string().required().label("City"),
+      postal_code: Joi.string().required().label("Postal Code"),
+      rawImage: Joi.string().required().label("Image"),
+      state: Joi.string().required().label("State"),
+      // identity: Joi.string().required().label("identity"),
     };
 
-        if (this.state.role === "service_taker") {
+    if (this.state.role === "service_taker") {
       // If service_taker, make identity optional
       this.schema.identity = Joi.string().label("identity");
     } else {
       // If not service_taker, identity is required
       this.schema.identity = Joi.string().required().label("identity");
     }
-
   }
 
   populateCityDropDown = async (state) => {
@@ -134,10 +130,10 @@ class UserDetails extends Component {
       // identity: this.state.identity,
       state: this.state.state,
     };
-        if (this.state.role !== "service_taker") {
+    if (this.state.role !== "service_taker") {
       // If service_taker, make identity optional
       obj.identity = this.state.identity;
-    } 
+    }
 
     console.log(obj);
     const { error } = Joi.validate(obj, this.schema, {
@@ -263,7 +259,7 @@ class UserDetails extends Component {
   saveAndContinue = async (e) => {
     this.setState({ isloading: true });
     console.log(e);
-        console.log(this.state.role);
+    console.log(this.state.role);
     let that = this;
     e.preventDefault();
     let errors = this.validate();
@@ -381,7 +377,7 @@ class UserDetails extends Component {
         localStorage.getItem("user") !== null
       ) {
         sessionStorage.setItem("reload", true);
-       // window.location.reload();
+        // window.location.reload();
       } else {
         sessionStorage.removeItem("reload");
       }
@@ -447,7 +443,10 @@ class UserDetails extends Component {
           >
             <Segment>
               <Button onClick={this.completeLater}>Complete Later</Button>
-              <p style={{color:"red", fontSize:"smaller"}}>You won't be able to receive any orders until you complete your profile!</p>
+              <p style={{ color: "red", fontSize: "smaller" }}>
+                You won't be able to receive any orders until you complete your
+                profile!
+              </p>
             </Segment>
             <Segment>
               {/* <Form.Field>
@@ -494,7 +493,7 @@ class UserDetails extends Component {
 
               <Form.Field>
                 <label>
-                  Address<span class="red-star">*</span>
+                  Address<span className="red-star">*</span>
                 </label>
                 <Address
                   page="setUpWizard streetAddress"
@@ -538,7 +537,7 @@ class UserDetails extends Component {
                             } */}
 
                 <label>
-                  Location<span class="red-star">*</span>
+                  Location<span className="red-star">*</span>
                 </label>
 
                 <input
@@ -632,7 +631,7 @@ class UserDetails extends Component {
 
               <Form.Field>
                 <label>
-                  User Picture<span class="red-star">*</span>
+                  User Picture<span className="red-star">*</span>
                 </label>
                 <input
                   name="rawImage"
@@ -650,7 +649,7 @@ class UserDetails extends Component {
               </Form.Field>
 
               <label>
-                Identity<span class="red-star">*</span>
+                Identity<span className="red-star">*</span>
               </label>
               <Segment>
                 <span className="d-flex justify-content-center mt-3">

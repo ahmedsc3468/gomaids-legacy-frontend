@@ -415,7 +415,7 @@ class PersonalDetails extends Component {
             <Segment>
               <Form.Field>
                 <label>
-                  Date Of Birth <span class="red-star">*</span>
+                  Date Of Birth <span className="red-star">*</span>
                 </label>
                 <input
                   name="dob"
@@ -435,7 +435,7 @@ class PersonalDetails extends Component {
             <Segment>
               <Form.Field>
                 <label>
-                  Service Type<span class="red-star">*</span>
+                  Service Type<span className="red-star">*</span>
                 </label>
                 {/* <Select
                             onChange={this.servicesSelected}
@@ -462,7 +462,7 @@ class PersonalDetails extends Component {
                 <Row>
                   <Col md={8}>
                     <label>
-                      Price Per hour<span class="red-star">*</span>
+                      Price Per hour<span className="red-star">*</span>
                     </label>
                     <input
                       name="price"
@@ -482,7 +482,7 @@ class PersonalDetails extends Component {
 
                   <Col md={4}>
                     <label>
-                      Currency<span class="red-star">*</span>
+                      Currency<span className="red-star">*</span>
                     </label>
                     <Select
                       onChange={this.handleCurrency}
@@ -501,7 +501,7 @@ class PersonalDetails extends Component {
               </Form.Field>
               <Form.Field>
                 <label>
-                  Experience (In Years)<span class="red-star">*</span>
+                  Experience (In Years)<span className="red-star">*</span>
                 </label>
                 <input
                   name="experience"
@@ -530,7 +530,7 @@ class PersonalDetails extends Component {
 
               <Form.Field>
                 <label>
-                  Languages you can speak<span class="red-star">*</span>
+                  Languages you can speak<span className="red-star">*</span>
                 </label>
                 <Select
                   className="react-select"
@@ -552,7 +552,7 @@ class PersonalDetails extends Component {
 
               <Form.Field>
                 <label>
-                  Description<span class="red-star">*</span>
+                  Description<span className="red-star">*</span>
                 </label>
 
                 <textarea

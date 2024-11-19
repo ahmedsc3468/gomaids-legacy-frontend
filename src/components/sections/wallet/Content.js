@@ -219,7 +219,7 @@ class Wallet extends Component {
                               {order.cost}$
                             </Col>
                             <Col className="align-self-center custom_w_s_c">
-                              <span class={`badge bg-secondary text-light`}>
+                              <span className={`badge bg-secondary text-light`}>
                                 {status}
                               </span>
                             </Col>

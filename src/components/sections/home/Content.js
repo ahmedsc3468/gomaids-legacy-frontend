@@ -1,14 +1,14 @@
 import React, { Component, Fragment } from "react";
 import About from "./About";
 import Banner from "./Banner";
-// import Service from "./Service";
-// import Cta from "../../layouts/Cta";
+import Service from "./Service";
+import Cta from "../../layouts/Cta";
 import Howitwork from "../../layouts/Howitwork";
 import Gomaidzwork from "../../layouts/GomaidzWorkPartner";
 import Smallcallback from "../../layouts/Smallcallback";
-// import Whyus from "./Whyus";
+import Whyus from "./Whyus";
 import Testimonials from "./Testimonials";
-// import Ctaft from "./Cta";
+import Ctaft from "./Cta";
 import Servicesfilter from "./Servicesfilter";
 import { withRouter } from "react-router-dom";
 import { Steps } from "intro.js-react";
@@ -21,7 +21,7 @@ import config from "../../../config.json";
 import icon9 from "../../../assets/img/service/star-rating.png";
 import YouTubeCarousel from "./YoutubeCarousel";
 // import { UncontrolledAlert, Button } from 'reactstrap';
-// import Callback from '../../layouts/Callback';
+import Callback from "../../layouts/Callback";
 // import Joi from "joi-browser";
 //import authHeader from "../../../services/auth-header";
 //import OwlCarousel from 'react-owl-carousel2';
@@ -31,7 +31,7 @@ import YouTubeCarousel from "./YoutubeCarousel";
 ></script>;
 let circle;
 const defaultLng = -79.34;
-const defaultLat =  43.65;
+const defaultLat = 43.65;
 class Content extends Component {
   _isMounted = false;
 
@@ -48,11 +48,14 @@ class Content extends Component {
       status: false,
       webTour: false,
       currentUser: authService.getCurrentUser(),
-      center: {lat: parseFloat(user?.lat) || defaultLat, lng: parseFloat(user?.lng) || defaultLng  },
+      center: {
+        lat: parseFloat(user?.lat) || defaultLat,
+        lng: parseFloat(user?.lng) || defaultLng,
+      },
       markers: [
         {
           lat: user?.lat || defaultLat,
-          lng: user?.lng  || defaultLng,
+          lng: user?.lng || defaultLng,
           img_src: "../../../assets/img/lcoation.png",
         },
       ],
@@ -62,7 +65,6 @@ class Content extends Component {
     this.updateMarkers = this.updateMarkers.bind(this);
     this.updateCenter = this.updateCenter.bind(this);
     this.apiIsLoaded = this.apiIsLoaded.bind(this);
-  
   }
   checkwebTour = () => {
     // get webtour varible value from native storage and set into setstate
@@ -105,7 +107,6 @@ class Content extends Component {
             ],
           });
           that.componentDidMount();
-
         },
         function errorCallback(error) {
           navigator.permissions
@@ -115,8 +116,7 @@ class Content extends Component {
               } else if (result.state === "prompt") {
               } else if (result.state === "denied") {
               }
-              result.onchange = function () {
-              };
+              result.onchange = function () {};
             });
         },
         {
@@ -216,28 +216,31 @@ class Content extends Component {
       alert("Please select city first");
     }
   };
- // Callback function to update marker state
- updateMarkers = (newMarkers) => {
-  this.setState({ markers: newMarkers });
-}
+  // Callback function to update marker state
+  updateMarkers = (newMarkers) => {
+    this.setState({ markers: newMarkers });
+  };
 
-// Callback function to update center state
-updateCenter = (newCenter) => {
-  this.setState({ center: newCenter,lat:newCenter.lat,lng:newCenter.lng });
-  
-}
- apiIsLoaded = (map, maps) => {
-  circle = new maps.Circle({
-    strokeColor: "#FF0000",
-    strokeOpacity: 0.8,
-    strokeWeight: 2,
-    fillColor: "#FF0000",
-    fillOpacity: 0.3,
-    map,
-    center: this.props.center,
-    radius: this.state.inputRad,
-  });
-};
+  // Callback function to update center state
+  updateCenter = (newCenter) => {
+    this.setState({
+      center: newCenter,
+      lat: newCenter.lat,
+      lng: newCenter.lng,
+    });
+  };
+  apiIsLoaded = (map, maps) => {
+    circle = new maps.Circle({
+      strokeColor: "#FF0000",
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: "#FF0000",
+      fillOpacity: 0.3,
+      map,
+      center: this.props.center,
+      radius: this.state.inputRad,
+    });
+  };
   render() {
     const { stepsEnabled, steps, initialStep, webTour } = this.state;
     window.scrollTo(0, 0);
@@ -251,26 +254,50 @@ updateCenter = (newCenter) => {
                         ?
                         <Steps enabled={stepsEnabled} steps={steps} initialStep={initialStep} onExit={() => { this.setWebTour() }} options={{ exitOnOverlayClick: false, tooltipClass: 'webtour', showBullets: false }} /> : "")} */}
 
-        <Banner findServiceProviders={this.findServiceProviders} lat={this.state.lat} lng={this.state.lng} center={this.state.center} markers={this.state.markers} updateCenter={this.updateCenter} updateMarkers={this.updateMarkers}  />
-        <Servicesfilter serviceblock={this.state.serviceblock} lat={this.state.lat} lng={this.state.lng} center={this.state.center} markers={this.state.markers} updateCenter={this.updateCenter} updateMarkers={this.updateMarkers} apiIsLoaded={this.apiIsLoaded}/>
+        <Banner
+          findServiceProviders={this.findServiceProviders}
+          lat={this.state.lat}
+          lng={this.state.lng}
+          center={this.state.center}
+          markers={this.state.markers}
+          updateCenter={this.updateCenter}
+          updateMarkers={this.updateMarkers}
+        />
+        <Servicesfilter
+          serviceblock={this.state.serviceblock}
+          lat={this.state.lat}
+          lng={this.state.lng}
+          center={this.state.center}
+          markers={this.state.markers}
+          updateCenter={this.updateCenter}
+          updateMarkers={this.updateMarkers}
+          apiIsLoaded={this.apiIsLoaded}
+        />
+
+        <About />
+        <Cta />
+        <Whyus />
+        <section className="hw-it-wrks bg-dot-full pt-95 pb-75 pb-sm-35">
+          {this.state.currentUser?.role?.name == "service_provider" ? (
+            <Gomaidzwork />
+          ) : (
+            <Howitwork />
+          )}
+        </section>
         {/* <IntroVideos /> */}
-        <section class="service pt-30 pb-10 bg-light-white">
-          <div class="container">
-            <div class="row">
-              <div class="col-lg-12">
+
+        <section className="service pt-30 pb-10 bg-light-white">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-12">
                 <YouTubeCarousel />
               </div>
             </div>
           </div>
         </section>
-        <About />
+
         {/* <Service /> */}
-        {/* <Cta /> */}
-        <section className="hw-it-wrks bg-dot-full pt-95 pb-75 pb-sm-35">
-          {(this.state.currentUser?.role?.name == "service_provider") ?(<Gomaidzwork />):(<Howitwork />)}
-          
-        </section>
-        {/* <Whyus /> */}
+
         <Smallcallback />
         <Testimonials />
         {/* <Callback /> */}

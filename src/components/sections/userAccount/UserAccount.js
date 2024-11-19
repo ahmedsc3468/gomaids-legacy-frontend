@@ -1,85 +1,141 @@
-import * as React from 'react';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Popover from '@mui/material/Popover';
-import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChalkboardUser } from '@fortawesome/free-solid-svg-icons';
-import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
-import AuthService from '../../../services/auth.service';
-
-import UserImage from './userImage';
-import axios from 'axios';
+import * as React from "react";
+import { useHistory } from "react-router-dom";
+import AuthService from "../../../services/auth.service";
+import axios from "axios";
 import config from "../../../config.json";
-import { useEffect } from 'react';
+import {
+  Box,
+  Tooltip,
+  IconButton,
+  Avatar,
+  Menu,
+  MenuItem,
+  Divider,
+  ListItemIcon,
+  Typography,
+} from "@mui/material";
+import Logout from "@mui/icons-material/Logout";
+import OrdersIcon from "@mui/icons-material/ShoppingCart"; // Appropriate icon for "Orders"
+import DashboardIcon from "@mui/icons-material/Dashboard"; // Appropriate icon for "Dashboard"
+import { deepPurple } from "@mui/material/colors";
 
 export default function PopoverPopupState(props) {
-  const history = useHistory()
-  const userObj=AuthService.getCurrentUser();
+  const history = useHistory();
+  const userObj = AuthService.getCurrentUser();
+  const { avatar, username, email, fullName } = userObj || {};
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleItemClick = (path) => {
+    handleClose();
+    history.push(path); // Navigate to Userdashboard
+  };
 
- 
   return (
-    <PopupState variant="popover" popupId="user-popup-popover">
-      {(popupState) => (
-        <div style={{marginTop: '0.8rem'}}>
-          <div  {...bindTrigger(popupState)}>
-          <UserImage
-          user_image={userObj.user && userObj.user.image ? userObj.user.image: userObj.avatar}
-          username={userObj.user && userObj.user.username? userObj.user.username : userObj.username}
-          />
-          </div>
-          <Popover
-            {...bindPopover(popupState)}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'center',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'center',
-            }}
+    <React.Fragment>
+      <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
+        <Tooltip title="Account settings">
+          <IconButton
+            onClick={handleClick}
+            size="small"
+            sx={{ ml: 2 }}
+            aria-controls={open ? "account-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
           >
-           <div className="user-profile-menu-container">
-
-        {!props.dontShowDashboard &&<div className='user-account-dashboard-link'>
-            <Link to="/Userdashboard">
-                <p className='dashboard'>
-                  <FontAwesomeIcon icon={faChalkboardUser}
-                  className="user-profile-menu"
-              
-                  />
-                  Dashboard
-                  </p>
-
-            </Link>
-
-          </div>}
-
-
-          <div className='user-account-dashboard-link'>
-
-        
-          <p className='dashboard'
-              onClick={()=>{
-                AuthService.logout()
-                history.push('/login')
-              }}
-              >
-              <FontAwesomeIcon icon={faRightFromBracket}
-                className="user-profile-menu"
-              
-            
-              />
-                Logout
-          </p>
-          
-        </div>
-        </div>
-          </Popover>
-        </div>
-      )}
-    </PopupState>
+            <Avatar
+              sx={{ width: 45, height: 45 }}
+              src={config.SERVER_URL + "/" + avatar || ""}
+            >
+              {!avatar && userObj?.fullName[0]}
+            </Avatar>
+          </IconButton>
+        </Tooltip>
+      </Box>
+      <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={open}
+        onClose={handleClose}
+        onClick={handleClose}
+        sx={{
+          width: 250, // Increase width directly on Menu component
+          "& .MuiPaper-root": {
+            overflow: "visible",
+            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+            mt: 1.5,
+            "& .MuiAvatar-root": {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            "&::before": {
+              content: '""',
+              display: "block",
+              position: "absolute",
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: "background.paper",
+              transform: "translateY(-50%) rotate(45deg)",
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        {/* User info header */}
+        <MenuItem
+          onClick={handleClose}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            paddingY: 2,
+            paddingX: 2,
+          }}
+        >
+          <Box display="flex" alignItems="center">
+            <Avatar sx={{ bgcolor: deepPurple[500] }}>
+              {username ? username[0].toUpperCase() : "U"}
+            </Avatar>
+            <Box>
+              <Typography variant="body1" fontWeight="bold">
+                {fullName || "Username"}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                {email || "user@example.com"}
+              </Typography>
+            </Box>
+          </Box>
+        </MenuItem>
+        <Divider />
+        <MenuItem onClick={() => handleItemClick("Userdashboard")}>
+          <ListItemIcon>
+            <DashboardIcon fontSize="small" />
+          </ListItemIcon>
+          Dashboard
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            AuthService.logout();
+            history.push("/login");
+          }}
+        >
+          <ListItemIcon>
+            <Logout fontSize="small" />
+          </ListItemIcon>
+          Logout
+        </MenuItem>
+      </Menu>
+    </React.Fragment>
   );
 }

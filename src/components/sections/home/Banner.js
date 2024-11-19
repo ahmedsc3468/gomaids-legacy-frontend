@@ -9,8 +9,8 @@ import axios from "axios";
 import bannerbg from "../../../assets/img/banner/banner-2.jpg";
 import authService from "../../../services/auth.service";
 import Select from "react-select";
-import { withRouter } from 'react-router-dom';
-import AsyncSelect from 'react-select/async';
+import { withRouter } from "react-router-dom";
+import AsyncSelect from "react-select/async";
 class Banner extends Component {
   _isMounted = false;
   constructor(props) {
@@ -80,87 +80,94 @@ class Banner extends Component {
     this.setState({ city_id: selectedOption.label });
   };
   handleCityInputChange = (newValue) => {
-    const inputValue = newValue.replace(/\W/g, '');
+    const inputValue = newValue.replace(/\W/g, "");
     return inputValue;
   };
 
   handleCityChange = (selectedOption) => {
     this.setState({ city_id: selectedOption?.value });
-  
+
     this.handleGeocode(selectedOption?.value);
   };
 
   loadOptions = async (inputValue, callback) => {
     try {
-      const cities = await axios.get(config.SERVER_URL + `/api/cities?search=${inputValue}`, {
-        headers: authHeader(),
-      });
-  
-      let options = cities.data.data.map(option => {
+      const cities = await axios.get(
+        config.SERVER_URL + `/api/cities?search=${inputValue}`,
+        {
+          headers: authHeader(),
+        }
+      );
+
+      let options = cities.data.data.map((option) => {
         return {
-        value: option.city,
-        label: option.city
-      }});
-      
+          value: option.city,
+          label: option.city,
+        };
+      });
+
       this.setState({ cities: options });
       callback(options);
     } catch (error) {
-      console.error('Error loading options:', error);
+      console.error("Error loading options:", error);
       callback([]);
     }
   };
-    // Check if the entered value is valid for creation
-    isValidNewOption = (inputValue, selectValue, selectOptions) => {
-      if (inputValue.trim() === '') {
-        return false;
-      }
-      return !selectOptions.find(option => option.label === inputValue);
-    };
-  
-    // Create a new option based on the entered value
-    createOption = (inputValue) => ({
-      label: inputValue,
-      value: inputValue.toLowerCase().replace(/\W/g, ''),
-    });
+  // Check if the entered value is valid for creation
+  isValidNewOption = (inputValue, selectValue, selectOptions) => {
+    if (inputValue.trim() === "") {
+      return false;
+    }
+    return !selectOptions.find((option) => option.label === inputValue);
+  };
 
-    handleGeocode = (city) => {
+  // Create a new option based on the entered value
+  createOption = (inputValue) => ({
+    label: inputValue,
+    value: inputValue.toLowerCase().replace(/\W/g, ""),
+  });
 
-      // Construct the URL for the Google Maps Geocoding API
-      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(city)},Canada&key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM`;
-      
-      // Make the API request using fetch
-      fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          if (data.results && data.results.length > 0) {
-            const { lat, lng } = data.results[0].geometry.location;
-            
-            this.props.updateMarkers([{ lat, lng, img_src: "../../../assets/img/lcoation.png"}]);
-            // this.setState({
-            //   markers:[{ lat, lng, img_src: "../../../assets/img/lcoation.png"}],
-             
-            //   lat: lat,
-            //   lng: lng,
-            // });
-            const newCenter =  {
-              lat: lat,
-              lng: lng
-            };
-            this.props.updateCenter(newCenter)
-            // this.setState({
-            //   center: {
-            //     lat: lat,
-            //     lng: lng,
-            //   },
-            //   lat: lat,
-            //   lng: lng,
-            // });
-          }
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
-    };
+  handleGeocode = (city) => {
+    // Construct the URL for the Google Maps Geocoding API
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+      city
+    )},Canada&key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM`;
+
+    // Make the API request using fetch
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.results && data.results.length > 0) {
+          const { lat, lng } = data.results[0].geometry.location;
+
+          this.props.updateMarkers([
+            { lat, lng, img_src: "../../../assets/img/lcoation.png" },
+          ]);
+          // this.setState({
+          //   markers:[{ lat, lng, img_src: "../../../assets/img/lcoation.png"}],
+
+          //   lat: lat,
+          //   lng: lng,
+          // });
+          const newCenter = {
+            lat: lat,
+            lng: lng,
+          };
+          this.props.updateCenter(newCenter);
+          // this.setState({
+          //   center: {
+          //     lat: lat,
+          //     lng: lng,
+          //   },
+          //   lat: lat,
+          //   lng: lng,
+          // });
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
   render() {
     return (
       <section
@@ -173,16 +180,8 @@ class Banner extends Component {
             <div className="col-lg-10 offset-lg-1 text-center">
               <div className="banner-content-4 white">
                 <h1 className="f-900 mb-25">
-                  Effortless, Stress-Free Cleaning at the Click of a Button!
+                  Experience a Cleaner Home With Just a Tap!
                 </h1>
-
-                {/* {(this.state.currentUser === null) ||
-                                    (this.state.currentUser &&
-                                        this.state.currentUser.role.name === "service_taker") &&
-                                    <div className="d-flex justify-content-start ">
-                                        <Link to="/" className="arrow arrow-bottom  mb-25 ml-60 " disabled >Service Providor</Link>
-                                    </div>} */}
-
                 {(this.state.currentUser === null ||
                   (this.state.currentUser &&
                     this.state.currentUser.role.name === "service_taker")) && (
@@ -207,27 +206,27 @@ class Banner extends Component {
                             },
                           })}
                         /> */}
-                         <AsyncSelect
-          cacheOptions
-          id="city"
-          className="find_service_cities"
-          classNamePrefix="find_service_cities"
-          defaultOptions={this.state.cities} 
-          loadOptions={this.loadOptions}
-          onInputChange={this.handleCityInputChange}
-          onChange={this.handleCityChange}
-          defaultInputValue={this.state.city_name}
-          placeholder="Select City...."
-          theme={(theme) => ({
-            ...theme,
-            borderRadius: 5,
-            colors: {
-              ...theme.colors,
-              primary25: "#036905",
-              primary: "transparent",
-            },
-          })}
-        ></AsyncSelect>
+                        <AsyncSelect
+                          cacheOptions
+                          id="city"
+                          className="find_service_cities"
+                          classNamePrefix="find_service_cities"
+                          defaultOptions={this.state.cities}
+                          loadOptions={this.loadOptions}
+                          onInputChange={this.handleCityInputChange}
+                          onChange={this.handleCityChange}
+                          defaultInputValue={this.state.city_name}
+                          placeholder="Select City...."
+                          theme={(theme) => ({
+                            ...theme,
+                            borderRadius: 5,
+                            colors: {
+                              ...theme.colors,
+                              primary25: "#036905",
+                              primary: "transparent",
+                            },
+                          })}
+                        ></AsyncSelect>
                         {/* <select
                           className="form-control input-white select-nice mb-xs-15 step-two"
                           id="sel1"
@@ -249,15 +248,18 @@ class Banner extends Component {
                         <button
                           type="submit"
                           onClick={(event) => {
-                           this.props.history.push('/find-a-services',{ city: this.state.city_id,plng:this.props.lng,plat:this.props.lat });
+                            this.props.history.push("/find-a-services", {
+                              city: this.state.city_id,
+                              plng: this.props.lng,
+                              plat: this.props.lat,
+                            });
                             // }
                             // this.props.findServiceProviders(
                             //   event,
                             //   this.state.city_id,
                             //   this.state.service_type_id
                             // )
-                          }
-                          }
+                          }}
                           className="btn btn-black ml-15 ml-xs-00 mt-xs-15 step-four"
                         >
                           Search

@@ -86,13 +86,13 @@ class Headerinner extends Component {
       false
     );
 
-    window.Echo.private(`notification_${user && user.id}`).listen(
-      "NotificationSent",
-      (e) => {
-        // console.log('Listening for new notification')
-        this.getNotifications();
-      }
-    );
+    // window.Echo.private(`notification_${user && user.id}`).listen(
+    //   "NotificationSent",
+    //   (e) => {
+    //     // console.log('Listening for new notification')
+    //     this.getNotifications();
+    //   }
+    // );
 
     // window.Echo.private(`notification_${this.state && this.state.userDetials.id}`).listen("NotificationSent", (
     //     e) => {

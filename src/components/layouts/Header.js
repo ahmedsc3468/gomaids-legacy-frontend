@@ -41,7 +41,6 @@ class Header extends Component {
   }
 
   getNotifications = async () => {
-    // console.log("getNotifications getNotifications!!!!!!!")
     const user = AuthService.getCurrentUser();
 
     // if(user.role[0]==="service_provider"){
@@ -52,14 +51,11 @@ class Header extends Component {
           headers: authHeader(),
         }
       );
-
+      console.log("notidata", data);
       const temp = data.data.data.filter((x) => x.status === 0).length;
 
       this.setState({ NotificationsUnread: temp });
     }
-    // mosa1122
-
-    // }
   };
   // Sticky Header
   async componentDidMount() {
@@ -78,12 +74,15 @@ class Header extends Component {
       false
     );
     const user = AuthService.getCurrentUser();
-    window.Echo.private(`notification_${user && user.id}`).listen(
-      "NotificationSent",
-      (e) => {
-        this.getNotifications();
-      }
-    );
+    console.log("user", user);
+    console.log(`notification_${user && user.id}`);
+    // window.Echo.private(`notification_${user && user.id}`).listen(
+    //   "NotificationSent",
+    //   (e) => {
+    //     console.log("notification_listner");
+    //     this.getNotifications();
+    //   }
+    // );
   }
 
   componentWillUnmount() {
@@ -115,20 +114,7 @@ class Header extends Component {
                 </div>
               </div>
             </div>
-            {/* <div className="col-lg-3">
-                            <div className="d-flex justify-content-center align-items-center">
-                                    <a className="serivce-image">
-                                        <img src={chef} alt="" />
-                                    </a>
-                                    <a className="serivce-image">
-                                        <img src={maid} alt="" />
-                                    </a>
-                                
-                                    <a className="serivce-image">
-                                        <img src={cook} alt="" />
-                                    </a>
-                                </div>
-                        </div> */}
+
             <div className="col-lg-10">
               <div className="d-flex justify-content-center align-items-center">
                 <nav

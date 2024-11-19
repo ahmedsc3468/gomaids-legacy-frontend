@@ -1,0 +1,20 @@
+.notification-header{
+ display: flex;
+ justify-content: space-between;
+ padding: 24px 16px;
+}
+
+/* Notification Title */
+.notification-header .MuiTypography-h6 {
+  color: rgb(33, 38, 54) !important;
+}
+.notification-header .notification-msg-icon {
+    margin: 0;
+    padding: 0;
+    font-size: 24px;
+    color: rgb(50, 56, 62);
+}
+body {
+    overflow: auto !important;
+    padding-right: unset !important;
+}

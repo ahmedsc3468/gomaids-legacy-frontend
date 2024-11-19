@@ -15,3 +15,11 @@
 .chat-icon{
     padding: 6px 20px;
 }
+@media (min-width: 1200px) {
+    .container {
+      max-width: 1400px !important;
+    }
+   .banner-type-4 .banner-content-4 {
+    padding: 0 120px;
+    }
+  }

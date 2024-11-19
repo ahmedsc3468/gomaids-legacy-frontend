@@ -475,3 +475,7 @@ h6 a {
 .service-each:hover .service-text h3 {
   color: #fff;
 }
+
+.bg-blue-light {
+  background-color: #f9f9ff;
+}

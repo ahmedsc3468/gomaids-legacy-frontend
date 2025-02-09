@@ -2,10 +2,7 @@ import emergencyicon from "../../assets/img/icons/emergency.png";
 import UserAccount from "../sections/userAccount/UserAccount";
 import Notification from "../sections/Notification/Content";
 import AuthService from "../../services/auth.service";
-import logo from "../../assets/img/logo/logo.png";
-import chef from "../../assets/img/service/chef.png";
-import maid from "../../assets/img/service/maid55.png";
-import cook from "../../assets/img/service/1.png";
+import logo from "../../assets/img/logo/gomaids-logo.png";
 import NotificationCount from "../sections/Notification/NotificationCount";
 import axios from "axios";
 import config from "../../config.json";
@@ -96,21 +93,32 @@ class Header extends Component {
         <div className="container-fluid">
           <div className="row align-items-center no-gutters">
             <div className="col-lg-2">
-              <div className="d-flex align-self-end logo-class">
-                <div className="logo">
-                  <Link to="/">
-                    <img src={logo} alt="" />
-                  </Link>
+              <div className="row">
+                <div className="col-4">
+                  <div className="logo">
+                    <Link to="/">
+                      <img src={logo} alt="" />
+                    </Link>
+                  </div>
                 </div>
-                <div
-                  className={classNames("mobile-trigger", {
-                    active: this.state.navmethod,
-                  })}
-                  onClick={this.toggleNav}
-                >
-                  <span />
-                  <span />
-                  <span />
+                <div className="col-8 mobile-right-menu">
+                  {this.state.userDetials && (
+                    <Notification
+                      Notifications={this.state.Notifications}
+                      readAllMsgs={this.readAllMsgs}
+                    />
+                  )}
+                  {this.state.userDetials && <UserAccount />}
+                  <div
+                    className={classNames("mobile-trigger", {
+                      active: this.state.navmethod,
+                    })}
+                    onClick={this.toggleNav}
+                  >
+                    <span />
+                    <span />
+                    <span />
+                  </div>
                 </div>
               </div>
             </div>
@@ -142,7 +150,7 @@ class Header extends Component {
                         <span></span>
                       )}
                     </span>
-                    <span className="ml-4 ">
+                    <span className="ml-4 notification-panel">
                       {this.state.userDetials && (
                         <Notification
                           count={this.state.NotificationsUnread}

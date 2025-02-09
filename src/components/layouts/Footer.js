@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import AuthService from "../../services/auth.service";
 // import footerbg from "../../assets/img/bg/footerbg-1.jpg";
-import logo from "../../assets/img/logo/logo.png";
+import logo from "../../assets/img/logo/gomaids-logo.png";
 // import { AssessmentTwoTone } from "@material-ui/icons";
 import "../../assets/MyCSS/footermob.css";
 
@@ -54,16 +54,16 @@ class Footer extends Component {
         <div className="container">
           <div className="row z-5 justify-content-between">
             <div className="col-lg-5 col-md-6 mb-md-60 mb-sm-40">
-              <div className="logo-footer mb-1 custom_displaymaidz">
+              <div className="logo logo-footer mb-2 custom_displaymaidz">
                 <Link to="/">
-                  <img src={logo} alt="" style={{ marginTop: "-30px" }} />
+                  <img src={logo} alt="" />
                 </Link>
               </div>
               {/* <h6 className="mb-25 ">
                             When it comes to GoMaids, the object of the word 'Go' reflects our motive to add value to our customers' lives by providing all the essential services in their day-to-day lives.
                             On the other hand, the word 'Maidz' highlights our motive to reduce the unemployment by hiring in-house staff whom we train in any given skills.
                             </h6> */}
-              <h6 className="mb-15 foooterparagraphp">
+              <h6 className="mb-15 ">
                 Discover the epitome of cleanliness with GoMaids, your trusted
                 maids provider. At GoMaids, we believe in the power of
                 'Go'—signifying action, efficiency, and a leap towards
@@ -147,10 +147,13 @@ class Footer extends Component {
             </div> */}
             <div className="col-lg-2 col-md-6 text-center">
               <div className="footer-buttons">
-                
-                  <Link to="/find-a-services" className="btn shine-btn btn-lg mb-15 btn-blue">Order Now</Link>
-                
-              
+                <Link
+                  to="/find-a-services"
+                  className="btn shine-btn btn-lg mb-15 btn-blue"
+                >
+                  Order Now
+                </Link>
+
                 {isLoggedIn === "notsignin" ? (
                   <Link
                     to="/partner-with-us"

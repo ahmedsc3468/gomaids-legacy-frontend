@@ -1,33 +1,33 @@
-import React, { Component, Fragment } from "react";
-import About from "./About";
-import Banner from "./Banner";
-import Service from "./Service";
-import Cta from "../../layouts/Cta";
-import Howitwork from "../../layouts/Howitwork";
-import Gomaidzwork from "../../layouts/GomaidzWorkPartner";
-import Smallcallback from "../../layouts/Smallcallback";
-import Whyus from "./Whyus";
-import Testimonials from "./Testimonials";
-import Ctaft from "./Cta";
-import Servicesfilter from "./Servicesfilter";
-import { withRouter } from "react-router-dom";
-import { Steps } from "intro.js-react";
-import authService from "../../../services/auth.service";
-import AuthService from "../../../services/auth.service";
-import axios from "axios";
-import "intro.js/introjs.css";
-import swal from "sweetalert";
-import config from "../../../config.json";
-import icon9 from "../../../assets/img/service/star-rating.png";
-import YouTubeCarousel from "./YoutubeCarousel";
+import React, { Component, Fragment } from 'react';
+import About from './About';
+import Banner from './Banner';
+import Service from './Service';
+import Cta from '../../layouts/Cta';
+import Howitwork from '../../layouts/Howitwork';
+import Gomaidzwork from '../../layouts/GomaidzWorkPartner';
+import Smallcallback from '../../layouts/Smallcallback';
+import Whyus from './Whyus';
+import Testimonials from './Testimonials';
+import Ctaft from './Cta';
+import Servicesfilter from './Servicesfilter';
+import { withRouter } from 'react-router-dom';
+import { Steps } from 'intro.js-react';
+import authService from '../../../services/auth.service';
+import AuthService from '../../../services/auth.service';
+import axios from 'axios';
+import 'intro.js/introjs.css';
+import swal from 'sweetalert';
+import config from '../../../config.json';
+import icon9 from '../../../assets/img/service/star-rating.png';
+import YouTubeCarousel from './YoutubeCarousel';
 // import { UncontrolledAlert, Button } from 'reactstrap';
-import Callback from "../../layouts/Callback";
+import Callback from '../../layouts/Callback';
 // import Joi from "joi-browser";
 //import authHeader from "../../../services/auth-header";
 //import OwlCarousel from 'react-owl-carousel2';
 <script
   async
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM&callback=initMap"
+  src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCDNkZ-OdVb0rc-rJImSM9fZ1oONuoih4o&callback=initMap'
 ></script>;
 let circle;
 const defaultLng = -79.34;
@@ -56,7 +56,7 @@ class Content extends Component {
         {
           lat: user?.lat || defaultLat,
           lng: user?.lng || defaultLng,
-          img_src: "../../../assets/img/lcoation.png",
+          img_src: '../../../assets/img/lcoation.png',
         },
       ],
       lat: defaultLat,
@@ -69,7 +69,7 @@ class Content extends Component {
   checkwebTour = () => {
     // get webtour varible value from native storage and set into setstate
 
-    let webTourValue = localStorage.getItem("webTour") || false;
+    let webTourValue = localStorage.getItem('webTour') || false;
 
     // console.log("local storage: ", webTourValue)
     if (webTourValue) {
@@ -79,8 +79,8 @@ class Content extends Component {
     }
   };
   setWebTour = () => {
-    localStorage.setItem("webTour", this.state.webTour);
-    console.log("valued set local storage");
+    localStorage.setItem('webTour', this.state.webTour);
+    console.log('valued set local storage');
     // set webtour as a true in native storage and also set this value this set state
     this.setState({ webTour: true });
   };
@@ -90,7 +90,7 @@ class Content extends Component {
 
     window.scrollTo(0, 0);
     const that = this;
-    if ("geolocation" in navigator) {
+    if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         function (position) {
           that.setState({
@@ -102,7 +102,7 @@ class Content extends Component {
               {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude,
-                img_src: "../../../assets/img/lcoation.png",
+                img_src: '../../../assets/img/lcoation.png',
               },
             ],
           });
@@ -110,18 +110,18 @@ class Content extends Component {
         },
         function errorCallback(error) {
           navigator.permissions
-            .query({ name: "geolocation" })
+            .query({ name: 'geolocation' })
             .then(function (result) {
-              if (result.state === "granted") {
-              } else if (result.state === "prompt") {
-              } else if (result.state === "denied") {
+              if (result.state === 'granted') {
+              } else if (result.state === 'prompt') {
+              } else if (result.state === 'denied') {
               }
               result.onchange = function () {};
             });
         },
         {
           timeout: 5000,
-        }
+        },
       );
     } else {
     }
@@ -171,19 +171,19 @@ class Content extends Component {
 
   findServiceProviders = async (event, city, service_type_id) => {
     event.preventDefault();
-    if (city !== "" && service_type_id !== "") {
+    if (city !== '' && service_type_id !== '') {
       try {
         const go = await axios.get(
-          config.SERVER_URL + `/api/users/${city}/${service_type_id}`
+          config.SERVER_URL + `/api/users/${city}/${service_type_id}`,
         );
-        console.log("120", go.data.data.data);
+        console.log('120', go.data.data.data);
         let serviceProviderData = go.data.data?.data?.map((user) => {
           const userImage =
             user.image === null
               ? `${config.SERVER_URL}/images/users/user_placeholder.png`
               : `${config.SERVER_URL}/${user.image}`;
           // const currency = (user.service_price.currency.name.toLowerCase() === 'pkr') ? 'Rs.' : '$'
-          const currency = "CAD";
+          const currency = 'CAD';
           return {
             id: user?.service_provider_id,
             icon: userImage,
@@ -193,27 +193,27 @@ class Content extends Component {
             prize: `${user.price_per_hour}{/hr}`,
             desc: user?.description,
             rating: user?.rating,
-            anitchion: "",
+            anitchion: '',
           };
         });
 
-        console.log("go api", go.data.data);
-        console.log("Service provider data: ", serviceProviderData);
+        console.log('go api', go.data.data);
+        console.log('Service provider data: ', serviceProviderData);
         if (go.data.data.data.length > 0) {
           this.setState({ serviceblock: serviceProviderData, showSteps: 0 });
           window.scrollTo(0, 1500);
           //   swal("Result Found!", "Your Result has been found!", "success");
         } else
           swal(
-            "No Service Provider Found ",
-            "We are rapidly expanding to new cities, please try and search for a provider in a neighboring city until then. Our service providers don’t mind driving  You May also Search Service Providers Near You, from the Map Search Option Below!",
-            "warning"
+            'No Service Provider Found ',
+            'We are rapidly expanding to new cities, please try and search for a provider in a neighboring city until then. Our service providers don’t mind driving  You May also Search Service Providers Near You, from the Map Search Option Below!',
+            'warning',
           );
       } catch (err) {
         console.log(err);
       }
     } else {
-      alert("Please select city first");
+      alert('Please select city first');
     }
   };
   // Callback function to update marker state
@@ -231,10 +231,10 @@ class Content extends Component {
   };
   apiIsLoaded = (map, maps) => {
     circle = new maps.Circle({
-      strokeColor: "#FF0000",
+      strokeColor: '#FF0000',
       strokeOpacity: 0.8,
       strokeWeight: 2,
-      fillColor: "#FF0000",
+      fillColor: '#FF0000',
       fillOpacity: 0.3,
       map,
       center: this.props.center,
@@ -277,8 +277,8 @@ class Content extends Component {
         <About />
         <Cta />
         <Whyus />
-        <section className="hw-it-wrks bg-dot-full pt-95 pb-75 pb-sm-35">
-          {this.state.currentUser?.role?.name == "service_provider" ? (
+        <section className='hw-it-wrks bg-dot-full pt-95 pb-75 pb-sm-35'>
+          {this.state.currentUser?.role?.name == 'service_provider' ? (
             <Gomaidzwork />
           ) : (
             <Howitwork />
@@ -286,10 +286,10 @@ class Content extends Component {
         </section>
         {/* <IntroVideos /> */}
 
-        <section className="service pt-30 pb-10 bg-light-white">
-          <div className="container">
-            <div className="row">
-              <div className="col-lg-12">
+        <section className='service pt-30 pb-10 bg-light-white'>
+          <div className='container'>
+            <div className='row'>
+              <div className='col-lg-12'>
                 <YouTubeCarousel />
               </div>
             </div>

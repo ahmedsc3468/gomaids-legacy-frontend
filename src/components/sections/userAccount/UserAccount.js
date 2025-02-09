@@ -1,8 +1,8 @@
-import * as React from "react";
-import { useHistory } from "react-router-dom";
-import AuthService from "../../../services/auth.service";
-import axios from "axios";
-import config from "../../../config.json";
+import * as React from 'react';
+import { useHistory } from 'react-router-dom';
+import AuthService from '../../../services/auth.service';
+import axios from 'axios';
+import config from '../../../config.json';
 import {
   Box,
   Tooltip,
@@ -13,11 +13,11 @@ import {
   Divider,
   ListItemIcon,
   Typography,
-} from "@mui/material";
-import Logout from "@mui/icons-material/Logout";
-import OrdersIcon from "@mui/icons-material/ShoppingCart"; // Appropriate icon for "Orders"
-import DashboardIcon from "@mui/icons-material/Dashboard"; // Appropriate icon for "Dashboard"
-import { deepPurple } from "@mui/material/colors";
+} from '@mui/material';
+import Logout from '@mui/icons-material/Logout';
+import OrdersIcon from '@mui/icons-material/ShoppingCart'; // Appropriate icon for "Orders"
+import DashboardIcon from '@mui/icons-material/Dashboard'; // Appropriate icon for "Dashboard"
+import { deepPurple } from '@mui/material/colors';
 
 export default function PopoverPopupState(props) {
   const history = useHistory();
@@ -38,19 +38,19 @@ export default function PopoverPopupState(props) {
 
   return (
     <React.Fragment>
-      <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
-        <Tooltip title="Account settings">
+      <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+        <Tooltip title='Account settings'>
           <IconButton
             onClick={handleClick}
-            size="small"
+            size='small'
             sx={{ ml: 2 }}
-            aria-controls={open ? "account-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
+            aria-controls={open ? 'account-menu' : undefined}
+            aria-haspopup='true'
+            aria-expanded={open ? 'true' : undefined}
           >
             <Avatar
               sx={{ width: 45, height: 45 }}
-              src={config.SERVER_URL + "/" + avatar || ""}
+              src={config.SERVER_URL + '/' + avatar || ''}
             >
               {!avatar && userObj?.fullName[0]}
             </Avatar>
@@ -59,79 +59,79 @@ export default function PopoverPopupState(props) {
       </Box>
       <Menu
         anchorEl={anchorEl}
-        id="account-menu"
+        id='account-menu'
         open={open}
         onClose={handleClose}
         onClick={handleClose}
         sx={{
-          width: 250, // Increase width directly on Menu component
-          "& .MuiPaper-root": {
-            overflow: "visible",
-            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+          minWidth: 250, // Increase width directly on Menu component
+          '& .MuiPaper-root': {
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
             mt: 1.5,
-            "& .MuiAvatar-root": {
+            '& .MuiAvatar-root': {
               width: 32,
               height: 32,
               ml: -0.5,
               mr: 1,
             },
-            "&::before": {
+            '&::before': {
               content: '""',
-              display: "block",
-              position: "absolute",
+              display: 'block',
+              position: 'absolute',
               top: 0,
               right: 14,
               width: 10,
               height: 10,
-              bgcolor: "background.paper",
-              transform: "translateY(-50%) rotate(45deg)",
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
               zIndex: 0,
             },
           },
         }}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         {/* User info header */}
         <MenuItem
           onClick={handleClose}
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
             paddingY: 2,
             paddingX: 2,
           }}
         >
-          <Box display="flex" alignItems="center">
+          <Box display='flex' alignItems='center'>
             <Avatar sx={{ bgcolor: deepPurple[500] }}>
-              {username ? username[0].toUpperCase() : "U"}
+              {username ? username[0].toUpperCase() : 'U'}
             </Avatar>
             <Box>
-              <Typography variant="body1" fontWeight="bold">
-                {fullName || "Username"}
+              <Typography variant='body1' fontWeight='bold'>
+                {fullName || 'Username'}
               </Typography>
-              <Typography variant="body2" color="textSecondary">
-                {email || "user@example.com"}
+              <Typography variant='body2' color='textSecondary'>
+                {email || 'user@example.com'}
               </Typography>
             </Box>
           </Box>
         </MenuItem>
         <Divider />
-        <MenuItem onClick={() => handleItemClick("Userdashboard")}>
+        <MenuItem onClick={() => handleItemClick('/Userdashboard')}>
           <ListItemIcon>
-            <DashboardIcon fontSize="small" />
+            <DashboardIcon fontSize='small' />
           </ListItemIcon>
           Dashboard
         </MenuItem>
         <MenuItem
           onClick={() => {
             AuthService.logout();
-            history.push("/login");
+            history.push('/login');
           }}
         >
           <ListItemIcon>
-            <Logout fontSize="small" />
+            <Logout fontSize='small' />
           </ListItemIcon>
           Logout
         </MenuItem>

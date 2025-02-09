@@ -830,7 +830,7 @@ input[type="number"]::-webkit-outer-spin-button {
   border-radius: 8px;
   width: 50px;
   height: 40px;
-  position: absolute;
+ 
   right: 0;
   top: 32px;
   cursor: pointer;
@@ -1081,14 +1081,29 @@ input[type="number"]::-webkit-outer-spin-button {
   flex-direction: row-reverse;
   width: 100%;
 }
+.mobile-right-menu {
+  display: none;
+}
+#notification-popover .MuiPaper-root.MuiPaper-elevation{
+  width: 400px;
+}
 /* Asif changes 21 feb */
 @media only screen and (min-width: 992px) {
   .main-menu-1 > div > ul > li > .mobileonly,
-  .login-register {
+ .login-register {
     display: none !important;
   }
 }
 @media only screen and (max-width: 991px) {
+  .main-menu-1.menu-2 .notification-panel {
+    display: none;
+  }
+  .mobile-right-menu {
+    display: flex !important;
+  }
+  .main-menu-1 > div > ul > li > a{
+    color: #000;
+  }
   .special_link a {
     /* width: fit-content !important; */
     width: 80% !important;
@@ -2030,6 +2045,8 @@ input[type="number"]::-webkit-outer-spin-button {
   position: absolute;
   left: 0;
   top: 6px;
+  left:12px;
+  width:20px;
 }
 .check-list2.half-list li {
   width: 49%;
@@ -5139,6 +5156,9 @@ button.ui.button.add_feedback {
   top: 0px;
   padding-left: 10px;
 }
+.nav-pills .nav-link{
+  border-radius: 0;
+}
 .nav-pills .nav-link.active {
   color: #fff;
   background-color: #036905;
@@ -5204,7 +5224,11 @@ ul.service_providers_list {
   font-weight: 500;
   font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
 }
-
+.logo-class img{
+ width: 120px;
+ margin:0 10px;
+ padding: 10px;
+}
 /* Asif Header Changes for responsiveness */
 @media (max-width: 1288px) {
   .main-menu-1 ul li:last-child a {
@@ -5222,7 +5246,18 @@ ul.service_providers_list {
     padding: 5px;
   }
 }
-
+.logo {
+  width: 75px;
+  padding: 8px;
+  background: #028006;
+  margin: 10px;
+  border-radius: 10px;
+}
+.mobile-right-menu {
+  display: none;
+  justify-content: flex-end;
+  align-items: center;
+}
 @media only screen and (max-width: 992px) {
   .logo-class {
     justify-content: space-between;

@@ -1,65 +1,65 @@
-import { Container, Row, Col, Form } from "react-bootstrap";
-import { Component } from "react";
+import { Container, Row, Col, Form } from 'react-bootstrap';
+import { Component } from 'react';
 
-import * as React from "react";
-import Box from "@mui/material/Box";
-import ButtonM from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
-import authHeader from "../../../services/auth-header";
-import { Dropdown } from "semantic-ui-react";
-import config from "../../../config.json";
-import AuthService from "../../../services/auth.service";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import ButtonM from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import authHeader from '../../../services/auth-header';
+import { Dropdown } from 'semantic-ui-react';
+import config from '../../../config.json';
+import AuthService from '../../../services/auth.service';
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
-} from "use-places-autocomplete";
-import { UncontrolledAlert, Button } from "reactstrap";
-import ZeeshanMap from "../Hire/HireDetails";
-import Geocode from "react-geocode";
-import { Link } from "react-router-dom";
-import Header from "../../layouts/Headerinner";
-import Footer from "../../layouts/Footer";
-import { MapPin, ThumbsDown } from "react-feather";
-import Select from "react-select";
-import Joi, { isRef } from "joi-browser";
-import axios from "axios";
-import moment from "moment";
-import Address from "./AddressAutoComplete";
-import { ToastContainer, toast } from "react-toastify";
-import swal from "sweetalert";
+} from 'use-places-autocomplete';
+import { UncontrolledAlert, Button } from 'reactstrap';
+import ZeeshanMap from '../Hire/HireDetails';
+import Geocode from 'react-geocode';
+import { Link } from 'react-router-dom';
+import Header from '../../layouts/Headerinner';
+import Footer from '../../layouts/Footer';
+import { MapPin, ThumbsDown } from 'react-feather';
+import Select from 'react-select';
+import Joi, { isRef } from 'joi-browser';
+import axios from 'axios';
+import moment from 'moment';
+import Address from './AddressAutoComplete';
+import { ToastContainer, toast } from 'react-toastify';
+import swal from 'sweetalert';
 
-import authService from "../../../services/auth.service";
-import Breadcrumb from "../../layouts/Breadcrumb";
-import MetaTags from "react-meta-tags";
-import PaymentCheckout from "../Payment/PaymentCheckout";
+import authService from '../../../services/auth.service';
+import Breadcrumb from '../../layouts/Breadcrumb';
+import MetaTags from 'react-meta-tags';
+import PaymentCheckout from '../Payment/PaymentCheckout';
 
-import { Dimmer, Loader } from "semantic-ui-react";
+import { Dimmer, Loader } from 'semantic-ui-react';
 
-import Payment from "../StripePayment/StripeContainer";
-import { loadStripe } from "@stripe/stripe-js";
-import Paypal from "../Payment/PayPal";
+import Payment from '../StripePayment/StripeContainer';
+import { loadStripe } from '@stripe/stripe-js';
+import Paypal from '../Payment/PayPal';
 
 class HireDetails extends React.Component {
   constructor(props) {
     super(props);
 
-    let user = JSON.parse(localStorage.getItem("user"));
+    let user = JSON.parse(localStorage.getItem('user'));
 
-    if (user && user.role.name === "service_provider")
-      this.props.history.push("/");
+    if (user && user.role.name === 'service_provider')
+      this.props.history.push('/');
 
     let startTime = moment(
       this.props.location.state.slot_start_time,
-      "hh:mm A"
-    ).format("H");
+      'hh:mm A',
+    ).format('H');
 
     let endTime = moment(
       this.props.location.state.slot_end_time,
-      "hh:mm A"
-    ).format("H");
+      'hh:mm A',
+    ).format('H');
 
-    let totalHours = "";
+    let totalHours = '';
     let startDate = new Date(2020, 5, 5, startTime, 0, 0);
     let endDate = new Date(
       2020,
@@ -68,10 +68,10 @@ class HireDetails extends React.Component {
 
       endTime,
       0,
-      0
+      0,
     );
-    if (endTime === "0") endTime = "24";
-    if (startTime === "0") startTime = "24";
+    if (endTime === '0') endTime = '24';
+    if (startTime === '0') startTime = '24';
 
     let diff = parseInt(endTime) - parseInt(startTime);
 
@@ -102,27 +102,28 @@ class HireDetails extends React.Component {
         this.props.location.state.currentServiceProvider.user.service_price
           .price_per_hour,
       costAccumulation: costFound,
-      email: user ? user.email : "",
+      email: user ? user.email : '',
       open: false,
-      address: "",
-      user: user ? user.username : "",
+      address: '',
+      user: user ? user.username : '',
       sameAsBillingAddress: false,
-      billingAddress: "",
-      billingAddressError: "",
-      service_address: "",
-      city: "",
-      state: "",
-      country: "",
+      billingAddress: '',
+      billingAddressError: '',
+      service_address: '',
+      city: '',
+      state: '',
+      country: '',
       CheckOut: true,
       payWithPayNpw: false,
       payWithPayPal: false,
       payWithStripe: false,
       getConfigr: false,
       isPaymentCompleted: false,
-      cityError: "",
-      stateError: "",
-      service_addressError: "",
-      countryError: "",
+      cityError: '',
+      stateError: '',
+      service_addressError: '',
+      countryError: '',
+      isPending: false,
     };
   }
 
@@ -132,59 +133,66 @@ class HireDetails extends React.Component {
   };
 
   checkOut = async () => {
-    this.setState({ isPending: true });
-    const user = authService.getCurrentUser();
-   // Parse the order_date string into a Date object
-const dateObject = new Date(this.state.date);
+    if (this.state.isPending === false) {
+      this.setState({ isPending: true });
+      const user = authService.getCurrentUser();
+      // Parse the order_date string into a Date object
+      const dateObject = new Date(this.state.date);
 
-// Extract year, month, and date components
-const year = dateObject.getFullYear();
-// JavaScript months are 0-based, so we add 1 to get the correct month
-const month = dateObject.getMonth() + 1;
-const date = dateObject.getDate();
-const parsedDate=`${year}/${month}/${date}`;
-    const obj = {
-      service_taker_id: user.id,
-      service_provider_id: this.props.location.state.currentServiceProvider.id,
-      order_date: parsedDate,
-      slot_start_time: this.state.slot_start_time,
-      slot_end_time: this.state.slot_end_time,
-      cost: this.state.costAccumulation,
-      status: "1",
-      service_address: this.state.service_address,
-      billing_address:
-        this.state.sameAsBillingAddress === true
-          ? this.state.service_address
-          : this.state.billingAddress,
-      state: this.state.state,
-      country: this.state.country,
-      city: this.state.city,
-      service: this.state.service_availed,
-      per_hour_rate: this.props.location.state.servicePrice,
-      additionalNotes: this.state.additionalNotes
-    };
+      // Extract year, month, and date components
+      const year = dateObject.getFullYear();
+      // JavaScript months are 0-based, so we add 1 to get the correct month
+      const month = dateObject.getMonth() + 1;
+      const date = dateObject.getDate();
+      const parsedDate = `${year}/${month}/${date}`;
+      const obj = {
+        service_taker_id: user.id,
+        service_provider_id:
+          this.props.location.state.currentServiceProvider.id,
+        order_date: parsedDate,
+        slot_start_time: this.state.slot_start_time,
+        slot_end_time: this.state.slot_end_time,
+        cost: this.state.costAccumulation,
+        status: '1',
+        service_address: this.state.service_address,
+        billing_address:
+          this.state.sameAsBillingAddress === true
+            ? this.state.service_address
+            : this.state.billingAddress,
+        state: this.state.state,
+        country: this.state.country,
+        city: this.state.city,
+        service: this.state.service_availed,
+        per_hour_rate: this.props.location.state.servicePrice,
+        additionalNotes: this.state.additionalNotes,
+      };
 
-    try {
-      const { data } = await axios.post(config.SERVER_URL + "/api/order", obj, {
-        headers: authHeader(),
-      });
+      try {
+        const { data } = await axios.post(
+          config.SERVER_URL + '/api/order',
+          obj,
+          {
+            headers: authHeader(),
+          },
+        );
+        //this.setState({ isPending: false });
+        //   // let notification = {
+        //   //   type: "order",
+        //   //   status: "0",
+        //   //   description: `You have been booked from ${this.state.slot_start_time}
+        //   //    to ${this.state.slot_end_time} at ${order_date}`,
 
-      //   // let notification = {
-      //   //   type: "order",
-      //   //   status: "0",
-      //   //   description: `You have been booked from ${this.state.slot_start_time}
-      //   //    to ${this.state.slot_end_time} at ${order_date}`,
+        //   //   sender_id: user.id,
+        //   //   user_id: this.props.location.state.currentServiceProvider.user.id
 
-      //   //   sender_id: user.id,
-      //   //   user_id: this.props.location.state.currentServiceProvider.user.id
+        //   // }
+        //   // await axios.post(config.SERVER_URL + "/api/notification", notification, {
+        //   //   headers: authHeader()
+        //   // })
 
-      //   // }
-      //   // await axios.post(config.SERVER_URL + "/api/notification", notification, {
-      //   //   headers: authHeader()
-      //   // })
-
-      this.props.history.replace("/order/thankyou");
-    } catch (ex) {}
+        this.props.history.replace('/order/thankyou');
+      } catch (ex) {}
+    }
   };
 
   // myInterval = setInterval(() => {
@@ -223,41 +231,37 @@ const parsedDate=`${year}/${month}/${date}`;
 
   async componentDidMount() {
     toast.success(
-      "Your service has been booked temporarily will get unbooked If you don't confirm payment within 10 minutes"
+      "Your service has been booked temporarily will get unbooked If you don't confirm payment within 10 minutes",
     );
     const stripePromise = await loadStripe(
-      "pk_test_51NiH9YEKvKY3WrKz1TnxITwiI9FQDsGht8IRFjxlwNYRu3N0CMfMBclQ09XxM1rjX1NfgV453L7UFCpervgCEctv00aLdDMpiv"
+      'pk_test_51NiH9YEKvKY3WrKz1TnxITwiI9FQDsGht8IRFjxlwNYRu3N0CMfMBclQ09XxM1rjX1NfgV453L7UFCpervgCEctv00aLdDMpiv',
     );
     this.setState({ stripePromise });
     // console.log("stripePromise", stripePromise)
-    console.log(this.state.getConfigr);
     try {
       const getConfig = await axios.get(
-        config.SERVER_URL + "/api/getconfigurations",
+        config.SERVER_URL + '/api/getconfigurations',
         {
           headers: authHeader(),
-        }
+        },
       );
-      console.log("::::LINE 248", getConfig);
-      console.log("::::LINE 249", getConfig.data.message);
 
-      if (getConfig.data.message === "Record found ") {
+      if (getConfig.data.message === 'Record found ') {
         this.setState({ getConfigr: true });
       }
-      console.log(this.state.getConfigr);
     } catch (errors) {
       console.log(errors);
     }
   }
 
   style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
     width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
     boxShadow: 24,
     p: 4,
   };
@@ -275,10 +279,10 @@ const parsedDate=`${year}/${month}/${date}`;
   checkBoxCheck = (e) => {
     if (e.currentTarget.checked) {
       this.setState({ sameAsBillingAddress: true });
-      this.setState({billingAddress: this.state.service_address});
+      this.setState({ billingAddress: this.state.service_address });
     } else {
       this.setState({ sameAsBillingAddress: false });
-      this.setState({billingAddress: ""});
+      this.setState({ billingAddress: '' });
     }
   };
 
@@ -290,58 +294,52 @@ const parsedDate=`${year}/${month}/${date}`;
 
   updateCity = (value) => {
     this.setState({ city: value });
-  }
+  };
   updateState = (value) => {
     this.setState({ state: value });
-  }
+  };
   updateCountry = (value) => {
     this.setState({ country: value });
-  }
+  };
   updateServiceAddress = (value) => {
     this.setState({ service_address: value });
-  }
+  };
 
   validateFields = () => {
-    if (this.state.city == "") {
-    
-      this.setState({ cityError: "This field is required" });
+    if (this.state.city == '') {
+      this.setState({ cityError: 'This field is required' });
     } else {
-      this.setState({ cityError: "" });
+      this.setState({ cityError: '' });
     }
-     if (this.state.state == "") {
-      
-       this.setState({ stateError: "This field is required" });
-     } else {
-             this.setState({ stateError: "" });
-    }
-    if (this.state.country == "") {
-    
-      this.setState({ countryError: "This field is required" });
-    }else {
-             this.setState({ countryError: "" });
-    }
-    if (this.state.service_address == "") {
-    
-      this.setState({ service_addressError: "This field is required" });
-    }else {
-             this.setState({ service_addressError: "" });
-    }
-    if (this.state.billingAddress == "") {
-          
-      this.setState({ billingAddressError: "This field is required" });
+    if (this.state.state == '') {
+      this.setState({ stateError: 'This field is required' });
     } else {
-      this.setState({ billingAddressError: "" });
+      this.setState({ stateError: '' });
     }
-  }
+    if (this.state.country == '') {
+      this.setState({ countryError: 'This field is required' });
+    } else {
+      this.setState({ countryError: '' });
+    }
+    if (this.state.service_address == '') {
+      this.setState({ service_addressError: 'This field is required' });
+    } else {
+      this.setState({ service_addressError: '' });
+    }
+    if (this.state.billingAddress == '') {
+      this.setState({ billingAddressError: 'This field is required' });
+    } else {
+      this.setState({ billingAddressError: '' });
+    }
+  };
   // payWithPayNow = async (e) => {
   //   e.preventDefault();
   //   await this.validateFields();
-    
-  //   if (this.state.cityError !== "" && this.state.countryError !== "" && this.state.stateError !== "" && this.state.service_addressError !== "" && this.state.billingAddressError == "") { 
+
+  //   if (this.state.cityError !== "" && this.state.countryError !== "" && this.state.stateError !== "" && this.state.service_addressError !== "" && this.state.billingAddressError == "") {
   //     console.log("all are empties");
   //     return;
   //   }
-
 
   //   // this.setState({ isPending: true })
   //   console.log("::::LINE 286", this.state.costAccumulation);
@@ -409,117 +407,106 @@ const parsedDate=`${year}/${month}/${date}`;
   //   }
   //   this.setState({ payWithPayNow: true })
   //   console.log("::::::: 288 ::::::: ", this.setState({ payWithPayNow: true }))
-    
 
   // };
-  
-  
+
   payWithPayNow = async (e) => {
-  e.preventDefault();
-  await this.validateFields();
-  
-  // Check if any field has errors
-  if (
-    this.state.cityError !== "" ||
-    this.state.countryError !== "" ||
-    this.state.stateError !== "" ||
-    this.state.service_addressError !== "" ||
-    this.state.billingAddressError !== ""
-  ) { 
-    console.log("All fields are not filled.");
-    return;
-  }
+    e.preventDefault();
+    await this.validateFields();
 
-  // this.setState({ isPending: true })
-  console.log("::::LINE 286", this.state.costAccumulation);
-  const currentuser = authService.getCurrentUser();
-  const obj1 = {
-    amount: this.state.costAccumulation,
-    user_id: currentuser.id,
-  };
-  console.log("obj1 ", obj1);
-
-  // Function to handle API call
-  const handlePayment = async () => {
-    try {
-      const payment = await axios.post(config.SERVER_URL + "/api/pay", obj1, {
-        headers: authHeader(),
-      });
-
-      console.log(" :::::: 295 ::::: ", payment.data.success);
-
-      if (payment.data.success === true) {
-        swal({
-          icon: "success",
-          title: "Payment Successful!",
-          text: "Your order will be automatically placed in 5 seconds. If not, please click 'Place Order'",
-          timer: 4000,
-        });
-        this.checkOutBtnEnable();
-        console.log(" :::::: 302 ::::: ", payment);
-      } else {
-        swal(
-          "Payment Unsuccessful",
-          "Please use the credit card section for payment as no saved card details were found.",
-          "warning"
-        );
-      }
-
-      // const user = authService.getCurrentUser()
-      // const date_ = this.state.date.split("-");
-      // const order_date = date_[2] + "-" + date_[1] + "-" + date_[0];
-      // const obj = {
-      //   service_taker_id: user.id,
-      //   service_provider_id: this.props.location.state.currentServiceProvider.id,
-      //   order_date: order_date,
-      //   slot_start_time: this.state.slot_start_time,
-      //   slot_end_time: this.state.slot_end_time,
-      //   cost: this.state.costAccumulation,
-      //   status: "1",
-      //   service_address: this.state.service_address,
-      //   billing_address: this.state.sameAsBillingAddress === true ? this.state.service_address : this.state.billingAddress,
-      //   state: this.state.state,
-      //   country: this.state.country,
-      //   city: this.state.city,
-      //   service: this.state.service_availed
-      // };
-
-      // console.log( " :::::: 324 ::::: ",obj)
-      // const { data } = await axios.post(config.SERVER_URL + "/api/order", obj, {
-      //   headers: authHeader(),
-      // })
-      // console.log( " :::::: 328 ::::: ",data)
-    } catch (errors) {
-      swal(
-        "Sorry Payment Failed",
-        "Your payment couldn't be processed please try again.",
-        "danger"
-      );
-      console.log(errors);
-    }
-  };
-
-  // Function to handle subsequent checks and API call
-  const handleSubsequentChecks = () => {
+    // Check if any field has errors
     if (
-      this.state.cityError !== "" ||
-      this.state.countryError !== "" ||
-      this.state.stateError !== "" ||
-      this.state.service_addressError !== "" ||
-      this.state.billingAddressError !== ""
-    ) { 
-      console.log("All fields are not filled.");
+      this.state.cityError !== '' ||
+      this.state.countryError !== '' ||
+      this.state.stateError !== '' ||
+      this.state.service_addressError !== '' ||
+      this.state.billingAddressError !== ''
+    ) {
       return;
     }
-    
-    // Call the function to handle payment
-    handlePayment();
+
+    const currentuser = authService.getCurrentUser();
+    const obj1 = {
+      amount: this.state.costAccumulation,
+      user_id: currentuser.id,
+    };
+
+    // Function to handle API call
+    const handlePayment = async () => {
+      try {
+        const payment = await axios.post(config.SERVER_URL + '/api/pay', obj1, {
+          headers: authHeader(),
+        });
+
+        if (payment.data.success === true) {
+          swal({
+            icon: 'success',
+            title: 'Payment Successful!',
+            text: "Your order will be automatically placed in 5 seconds. If not, please click 'Place Order'",
+            timer: 4000,
+          });
+          this.checkOutBtnEnable();
+        } else {
+          swal(
+            'Payment Unsuccessful',
+            'Please use the credit card section for payment as no saved card details were found.',
+            'warning',
+          );
+        }
+
+        // const user = authService.getCurrentUser()
+        // const date_ = this.state.date.split("-");
+        // const order_date = date_[2] + "-" + date_[1] + "-" + date_[0];
+        // const obj = {
+        //   service_taker_id: user.id,
+        //   service_provider_id: this.props.location.state.currentServiceProvider.id,
+        //   order_date: order_date,
+        //   slot_start_time: this.state.slot_start_time,
+        //   slot_end_time: this.state.slot_end_time,
+        //   cost: this.state.costAccumulation,
+        //   status: "1",
+        //   service_address: this.state.service_address,
+        //   billing_address: this.state.sameAsBillingAddress === true ? this.state.service_address : this.state.billingAddress,
+        //   state: this.state.state,
+        //   country: this.state.country,
+        //   city: this.state.city,
+        //   service: this.state.service_availed
+        // };
+
+        // console.log( " :::::: 324 ::::: ",obj)
+        // const { data } = await axios.post(config.SERVER_URL + "/api/order", obj, {
+        //   headers: authHeader(),
+        // })
+        // console.log( " :::::: 328 ::::: ",data)
+      } catch (errors) {
+        swal(
+          'Sorry Payment Failed',
+          "Your payment couldn't be processed please try again.",
+          'danger',
+        );
+        console.log(errors);
+      }
+    };
+
+    // Function to handle subsequent checks and API call
+    const handleSubsequentChecks = () => {
+      if (
+        this.state.cityError !== '' ||
+        this.state.countryError !== '' ||
+        this.state.stateError !== '' ||
+        this.state.service_addressError !== '' ||
+        this.state.billingAddressError !== ''
+      ) {
+        return;
+      }
+
+      // Call the function to handle payment
+      handlePayment();
+    };
+
+    // Check again for errors after a small delay
+    setTimeout(handleSubsequentChecks, 100);
   };
-
-  // Check again for errors after a small delay
-  setTimeout(handleSubsequentChecks, 100);
-};
-
 
   payWithPayPal = (e) => {
     e.preventDefault();
@@ -531,14 +518,12 @@ const parsedDate=`${year}/${month}/${date}`;
     this.setState({ payWithStripe: true });
   };
   render() {
-    let user = JSON.parse(localStorage.getItem("user"));
-    // console.log(":: 294 ::", user.username)
-    // console.log(":: 295 ::", user.email)
+    let user = JSON.parse(localStorage.getItem('user'));
     return (
       <React.Fragment>
         {this.state.isPending ? (
           <Dimmer active inverted>
-            <Loader size="large" indeterminate>
+            <Loader size='large' indeterminate>
               Loading
             </Loader>
           </Dimmer>
@@ -546,25 +531,25 @@ const parsedDate=`${year}/${month}/${date}`;
           <>
             <MetaTags>
               <title> GoMaids | CheckOut</title>
-              <meta name="description" content="#" />
+              <meta name='description' content='#' />
             </MetaTags>
             <Header />
-            <Breadcrumb breadcrumb={{ pagename: "CheckOut" }} />
+            <Breadcrumb breadcrumb={{ pagename: 'CheckOut' }} />
             <ToastContainer autoClose={10000} />
             <Form>
-              <Container className="order-container">
-                <h2 className="text-center mb-5" style={{ color: "#1020432" }}>
+              <Container className='order-container'>
+                <h2 className='text-center mb-5' style={{ color: '#1020432' }}>
                   CheckOut
                 </h2>
-                <Row className="row-hireDetails">
+                <Row className='row-hireDetails'>
                   <Col xs={0} md={3}></Col>
                   <Col xs={6} md={4}>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                      <Form.Label className="label-order">Full Name</Form.Label>
+                    <Form.Group className='mb-3' controlId='formBasicEmail'>
+                      <Form.Label className='label-order'>Full Name</Form.Label>
                       <Form.Control
-                        type="text"
-                        placeholder="FullName"
-                        className="textFields-Order"
+                        type='text'
+                        placeholder='FullName'
+                        className='textFields-Order'
                         value={this.state.user.username ?? user.username}
                         readOnly
                       />
@@ -574,17 +559,17 @@ const parsedDate=`${year}/${month}/${date}`;
                   <Col
                     xs={6}
                     md={3}
-                    className="p-l-0"
-                    style={{ paddingLeft: "0" }}
+                    className='p-l-0'
+                    style={{ paddingLeft: '0' }}
                   >
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                      <Form.Label className="label-order">Email</Form.Label>
+                    <Form.Group className='mb-3' controlId='formBasicEmail'>
+                      <Form.Label className='label-order'>Email</Form.Label>
                       <Form.Control
-                        type="email"
-                        placeholder="Email"
+                        type='email'
+                        placeholder='Email'
                         readOnly
                         value={this.state.user.email ?? user.email}
-                        className="textFields-Order"
+                        className='textFields-Order'
                       />
                     </Form.Group>
                   </Col>
@@ -592,90 +577,90 @@ const parsedDate=`${year}/${month}/${date}`;
                   <Col xs={0} md={2}></Col>
                 </Row>
 
-                <Row className="row-hireDetails">
+                <Row className='row-hireDetails'>
                   <Col xs={0} md={3}></Col>
 
                   <Col xs={6} md={4}>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                      <Form.Label className="label-order">
+                    <Form.Group className='mb-3' controlId='formBasicEmail'>
+                      <Form.Label className='label-order'>
                         Service Availed
                       </Form.Label>
                       <Form.Control
-                        type="text"
-                        placeholder="Service Availed"
+                        type='text'
+                        placeholder='Service Availed'
                         value={this.state.service_availed}
                         readOnly
                       />
                     </Form.Group>
                   </Col>
 
-                  <Col xs={6} md={3} style={{ paddingLeft: "0" }}>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                      <Form.Label className="label-order">Date</Form.Label>
+                  <Col xs={6} md={3} style={{ paddingLeft: '0' }}>
+                    <Form.Group className='mb-3' controlId='formBasicEmail'>
+                      <Form.Label className='label-order'>Date</Form.Label>
                       <Form.Control
-                        type="text"
-                        placeholder="Date"
+                        type='text'
+                        placeholder='Date'
                         value={this.state.date}
-                        className="textFields-Order"
+                        className='textFields-Order'
                         readOnly
                       />
                     </Form.Group>
                   </Col>
                 </Row>
 
-                <Row className="row-hireDetails">
+                <Row className='row-hireDetails'>
                   <Col xs={0} md={3}></Col>
                   <Col xs={6} md={4}>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                      <Form.Label className="label-order">Slot</Form.Label>
+                    <Form.Group className='mb-3' controlId='formBasicEmail'>
+                      <Form.Label className='label-order'>Slot</Form.Label>
                       <Form.Control
-                        type="text"
-                        placeholder="Slot"
+                        type='text'
+                        placeholder='Slot'
                         readOnly
                         value={
                           this.state.slot_start_time +
-                          " to " +
+                          ' to ' +
                           this.state.slot_end_time
                         }
-                        className="textFields-Order"
+                        className='textFields-Order'
                       />
                     </Form.Group>
                   </Col>
-                  <Col xs={6} md={3} style={{ paddingLeft: "0" }}>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                      <Form.Label className="label-order">
+                  <Col xs={6} md={3} style={{ paddingLeft: '0' }}>
+                    <Form.Group className='mb-3' controlId='formBasicEmail'>
+                      <Form.Label className='label-order'>
                         Service Cost
                       </Form.Label>
                       <Form.Control
-                        type="text"
-                        placeholder="Service Cost"
+                        type='text'
+                        placeholder='Service Cost'
                         readOnly
-                        value={"$" + this.state.costAccumulation}
-                        className="textFields-Order"
+                        value={'$' + this.state.costAccumulation}
+                        className='textFields-Order'
                       />
                     </Form.Group>
                   </Col>
                 </Row>
 
-                <Row className="row-hireDetails">
+                <Row className='row-hireDetails'>
                   <Col xs={0} md={3}></Col>
                   <Col xs={6} md={4}>
-                    <Form.Label className="label-order">
+                    <Form.Label className='label-order'>
                       Service Address
                     </Form.Label>
                     <Address
-                      name="service_address"
+                      name='service_address'
                       value={this.state.service_address}
                       updateCity={this.updateCity}
                       updateState={this.updateState}
                       updateCountry={this.updateCountry}
                       updateServiceAddress={this.updateServiceAddress}
-                      />
-                   {this.state.service_addressError && (
-                  <span className="text-danger">
-                    {this.state.service_addressError}
-                  </span>
-                )}
+                    />
+                    {this.state.service_addressError && (
+                      <span className='text-danger'>
+                        {this.state.service_addressError}
+                      </span>
+                    )}
                     {/* <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label  className="label-order"
 
@@ -695,32 +680,33 @@ const parsedDate=`${year}/${month}/${date}`;
 
                     {/* </Form.Group> */}
                   </Col>
-                  <Col xs={6} md={3} style={{ paddingLeft: "0" }}>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                      <Form.Label className="label-order">
+                  <Col xs={6} md={3} style={{ paddingLeft: '0' }}>
+                    <Form.Group className='mb-3' controlId='formBasicEmail'>
+                      <Form.Label className='label-order'>
                         Billing Address
                       </Form.Label>
                       <Form.Control
-                        type="text"
-                        placeholder="Billing Address"
+                        type='text'
+                        placeholder='Billing Address'
                         value={
                           this.state.sameAsBillingAddress === true
                             ? this.state.service_address
                             : this.state.billingAddress
                         }
                         onChange={this.onChangeTextFields}
-                        name="billingAddress"
-                        className="textFields-Order"
-                        />
-                                                                   {this.state.billingAddressError && (
-                  <span className="text-danger">
-                    {this.state.billingAddressError}
-                  </span>
-                )}
+                        name='billingAddress'
+                        className='textFields-Order'
+                      />
+                      {this.state.billingAddressError && (
+                        <span className='text-danger'>
+                          {this.state.billingAddressError}
+                        </span>
+                      )}
                       <Form.Check
                         onChange={this.checkBoxCheck}
-                        type="checkbox"
-                        label="Same as service address ?"
+                        type='checkbox'
+                        id={`default-address`}
+                        label='Same as service address ?'
                       />
                     </Form.Group>
                   </Col>
@@ -729,75 +715,75 @@ const parsedDate=`${year}/${month}/${date}`;
                 <Row>
                   <Col md={3}></Col>
                   <Col md={7}>
-                    <Form.Group className="mb-0" controlId="formBasicEmail">
-                      <Form.Label className="label-order">Country</Form.Label>
+                    <Form.Group className='mb-0' controlId='formBasicEmail'>
+                      <Form.Label className='label-order'>Country</Form.Label>
                       <Form.Control
-                        type="text"
-                        placeholder="Country"
+                        type='text'
+                        placeholder='Country'
                         value={this.state.country}
-                        className="textFields-Order"
-                        name="country"
+                        className='textFields-Order'
+                        name='country'
                         onChange={this.onChangeTextFields}
-                        />
-                                           {this.state.countryError && (
-                  <span className="text-danger">
-                    {this.state.countryError}
-                  </span>
-                )}
+                      />
+                      {this.state.countryError && (
+                        <span className='text-danger'>
+                          {this.state.countryError}
+                        </span>
+                      )}
                     </Form.Group>
                   </Col>
                 </Row>
 
-                <Row className="row-hireDetails">
+                <Row className='row-hireDetails'>
                   <Col xs={0} md={3}></Col>
                   <Col xs={6} md={4}>
-                    <Form.Group className="mb-0" controlId="formBasicEmail">
-                      <Form.Label className="label-order">State</Form.Label>
+                    <Form.Group className='mb-0' controlId='formBasicEmail'>
+                      <Form.Label className='label-order'>State</Form.Label>
                       <Form.Control
-                        type="text"
-                        placeholder="State"
+                        type='text'
+                        placeholder='State'
                         onChange={this.onChangeTextFields}
-                        name="state"
-                        className="textFields-Order"
+                        name='state'
+                        className='textFields-Order'
                         value={this.state.state}
-                        />
-                                                                  {this.state.stateError && (
-                  <span className="text-danger">
-                    {this.state.stateError}
-                  </span>
-                )}
+                      />
+                      {this.state.stateError && (
+                        <span className='text-danger'>
+                          {this.state.stateError}
+                        </span>
+                      )}
                     </Form.Group>
                   </Col>
-                  <Col xs={6} md={3} style={{ paddingLeft: "0" }}>
-                    <Form.Group className="mb-0" controlId="formBasicEmail">
-                      <Form.Label className="label-order">City</Form.Label>
+                  <Col xs={6} md={3} style={{ paddingLeft: '0' }}>
+                    <Form.Group className='mb-0' controlId='formBasicEmail'>
+                      <Form.Label className='label-order'>City</Form.Label>
                       <Form.Control
-                        type="text"
-                        placeholder="City"
+                        type='text'
+                        placeholder='City'
                         onChange={this.onChangeTextFields}
-                        name="city"
-                        className="textFields-Order"
+                        name='city'
+                        className='textFields-Order'
                         value={this.state.city}
-                        />
-                                                                                          {this.state.cityError && (
-                  <span className="text-danger">
-                    {this.state.cityError}
-                  </span>
-                )}
+                      />
+                      {this.state.cityError && (
+                        <span className='text-danger'>
+                          {this.state.cityError}
+                        </span>
+                      )}
                     </Form.Group>
                   </Col>
                 </Row>
-                <Row className="row-hireDetails mt-2">
+                <Row className='row-hireDetails mt-2'>
                   <Col xs={0} md={3}></Col>
                   <Col xs={12} md={7}>
-                    <div className="">
-                      <div style={{ width: "100%" }}>
-                        <p className="mt-0 text-center">
+                    <div className=''>
+                      <div style={{ width: '100%' }}>
+                        <p className='mt-0 text-center'>
                           <label
                             style={{
-                              color: "gray",
-                              fontSize: "1.3rem",
-                              textAlign: "center",
+                              color: 'gray',
+                              fontSize: '1.3rem',
+                              textAlign: 'center',
                             }}
                           >
                             Payment from wallet/using saved card
@@ -807,13 +793,13 @@ const parsedDate=`${year}/${month}/${date}`;
                               onClick={this.payWithPayNow}
                               hidden={user.customer_id === null}
                               style={{
-                                background: "#34B3F1",
-                                border: "0",
-                                fontSize: "1.3rem",
-                                color: "#fff",
-                                padding: "6.5px 4rem",
-                                borderRadius: "25px",
-                                fontWeight: "550",
+                                background: '#34B3F1',
+                                border: '0',
+                                fontSize: '1.3rem',
+                                color: '#fff',
+                                padding: '6.5px 4rem',
+                                borderRadius: '25px',
+                                fontWeight: '550',
                               }}
                             >
                               PAY NOW
@@ -831,29 +817,29 @@ const parsedDate=`${year}/${month}/${date}`;
                         />} */}
                       </div>
                     </div>
-                    <div className="">
-                      <div style={{ width: "100%" }}>
-                        <p className="mt-0 text-center">
+                    <div className=''>
+                      <div style={{ width: '100%' }}>
+                        <p className='mt-0 text-center'>
                           <label
                             style={{
-                              color: "gray",
-                              fontSize: "1.3rem",
-                              textAlign: "center",
+                              color: 'gray',
+                              fontSize: '1.3rem',
+                              textAlign: 'center',
                             }}
                           >
-                            Pay With{" "}
+                            Pay With{' '}
                           </label>
                           <div>
                             <button
                               onClick={this.payWithStripe}
                               style={{
-                                background: "#34B3F1",
-                                border: "0",
-                                fontSize: "1.3rem",
-                                color: "#fff",
-                                padding: "6.5px 4rem",
-                                borderRadius: "25px",
-                                fontWeight: "550",
+                                background: '#34B3F1',
+                                border: '0',
+                                fontSize: '1.3rem',
+                                color: '#fff',
+                                padding: '6.5px 4rem',
+                                borderRadius: '25px',
+                                fontWeight: '550',
                               }}
                             >
                               Another Credit Card
@@ -875,12 +861,12 @@ const parsedDate=`${year}/${month}/${date}`;
                         )}
                       </div>
                     </div>
-                    <p className="mt-1 text-center">
+                    <p className='mt-1 text-center'>
                       <label
                         style={{
-                          color: "gray",
-                          fontSize: "1.3rem",
-                          textAlign: "center",
+                          color: 'gray',
+                          fontSize: '1.3rem',
+                          textAlign: 'center',
                         }}
                       >
                         Or Pay With
@@ -889,13 +875,13 @@ const parsedDate=`${year}/${month}/${date}`;
                         <button
                           onClick={this.payWithPayPal}
                           style={{
-                            background: "#1F4690",
-                            border: "0",
-                            fontSize: "1.3rem",
-                            color: "#fff",
-                            padding: "6.5px 4rem",
-                            borderRadius: "25px",
-                            fontWeight: "550",
+                            background: '#1F4690',
+                            border: '0',
+                            fontSize: '1.3rem',
+                            color: '#fff',
+                            padding: '6.5px 4rem',
+                            borderRadius: '25px',
+                            fontWeight: '550',
                           }}
                         >
                           PayPal
@@ -904,7 +890,7 @@ const parsedDate=`${year}/${month}/${date}`;
                     </p>
                     <Row>
                       {this.state.payWithPayPal === true && (
-                        <Col md={12} className="mt-4">
+                        <Col md={12} className='mt-4'>
                           <Paypal
                             cost={this.state.costAccumulation}
                             checkOutBtnEnable={this.checkOutBtnEnable}
@@ -912,13 +898,15 @@ const parsedDate=`${year}/${month}/${date}`;
                         </Col>
                       )}
                     </Row>
-                    <button
-                      className="HireDetails-btn mb-5 mt-0 btn-disable-style"
-                      onClick={this.formCheckOut}
-                      disabled={this.state.CheckOut}
-                    >
-                      Place Order
-                    </button>
+                    {!this.state.isPending && (
+                      <button
+                        className='HireDetails-btn mb-5 mt-0 btn-disable-style'
+                        onClick={this.formCheckOut}
+                        disabled={this.state.CheckOut}
+                      >
+                        Place Order
+                      </button>
+                    )}
                   </Col>
 
                   <Col></Col>

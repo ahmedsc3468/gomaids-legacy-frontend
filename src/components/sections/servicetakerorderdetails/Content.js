@@ -337,18 +337,14 @@ class ServiceTakerOrderDetails extends Component {
         });
 
         try {
-          console.log("LINE 132", data);
-
           const response = await axios.put(
             config.SERVER_URL + `/api/order/${order_id}`,
             data,
             { headers: authHeader() }
           );
-          // console.log(response)
           this.setState({
             feedbackStatus: { body: "FeedBack Sent", color: "success" },
           });
-          console.log("LINE 139", response);
         } catch (error) {
           this.setState({
             feedbackStatus: {
@@ -372,8 +368,6 @@ class ServiceTakerOrderDetails extends Component {
           });
 
           try {
-            console.log("LINE 160", data);
-
             const response = await axios.put(
               config.SERVER_URL + `/api/order/${order_id}`,
               data,
@@ -383,7 +377,6 @@ class ServiceTakerOrderDetails extends Component {
             this.setState({
               feedbackStatus: { body: "FeedBack Sent", color: "success" },
             });
-            // console.log("LINE 167", data)
           } catch (error) {
             this.setState({
               feedbackStatus: {
@@ -455,7 +448,7 @@ class ServiceTakerOrderDetails extends Component {
 
     return (
       <>
-        {this.state.loader && (
+        {this.state.loader || this.state.order === null ? (
           <div
             style={{
               position: "fixed",
@@ -469,13 +462,6 @@ class ServiceTakerOrderDetails extends Component {
               <CircularProgress color="success" />{" "}
             </div>
           </div>
-        )}
-        {this.state.order === null ? (
-          <Dimmer active inverted>
-            <Loader size="large" indeterminate>
-              Loading
-            </Loader>
-          </Dimmer>
         ) : (
           <Row
             style={{
@@ -554,16 +540,13 @@ class ServiceTakerOrderDetails extends Component {
                             <Col sm="12" md="4">
                               <div className="font-weight-bold">Start Time</div>
                               <div className="font-weight-light">
-                                {this.state.order.slot_start_time.substring(
-                                  0,
-                                  5
-                                )}
+                                {this.state.order.slot_start_time}
                               </div>
                             </Col>
                             <Col sm="12" md="4">
                               <div className="font-weight-bold">End Time</div>
                               <div className="font-weight-light">
-                                {this.state.order.slot_end_time.substring(0, 5)}
+                                {this.state.order.slot_end_time}
                               </div>
                             </Col>
                           </Row>
@@ -882,7 +865,7 @@ class ServiceTakerOrderDetails extends Component {
           </Row>
         )}
         <Modal className="modal-center" show={this.state.show}>
-          {this.state.convochat === undefined ? (
+          {this.state.order?.conversation === null ? (
             <>
               <Modal.Header>
                 <Modal.Title>Start A Conversation</Modal.Title>
@@ -939,13 +922,11 @@ class ServiceTakerOrderDetails extends Component {
                 <Button
                   className="ui button order_SendMessage_button"
                   onClick={(e) => {
-                    console.log(this.state.order);
                     localStorage.setItem("currenttab", "chatbox");
                     localStorage.setItem(
                       "order_id",
                       this.state.order.conversation.id
                     );
-
                     this.props.history.push("/userdashboard");
                   }}
                 >

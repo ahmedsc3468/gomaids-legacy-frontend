@@ -841,6 +841,7 @@
   .logo-footer {
     display: flex;
     justify-content: center;
+    margin-left: 0;
   }
   .contact-footer {
     display: flex;

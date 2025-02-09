@@ -35,10 +35,7 @@
   .MuiAvatar-root {
     justify-content: left !important;
   }
-  .MuiAvatar-img {
-    width: 50% !important;
-    height: 50% !important;
-  }
+ 
   .MuiListItem-gutters {
     padding-left: 0px !important;
     padding-right: 0px !important;

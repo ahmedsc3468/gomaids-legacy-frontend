@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import classNames from "classnames";
 import Menu from "./Menu";
 
-import logo from "../../assets/img/logo/logo.jpeg";
+import logo from "../../assets/img/logo/gomaids-logo.png";
 
 class Headerthree extends Component {
   constructor(props) {

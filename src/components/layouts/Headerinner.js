@@ -3,7 +3,7 @@ import config from "../../config.json";
 import UserAccount from "../sections/userAccount/UserAccount";
 import Notification from "../sections/Notification/Content";
 import AuthService from "../../services/auth.service";
-import logo from "../../assets/img/logo/logo.png";
+import logo from "../../assets/img/logo/gomaids-logo.png";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
@@ -131,21 +131,32 @@ class Headerinner extends Component {
         <div className="container-fluid">
           <div className="row align-items-center no-gutters">
             <div className="col-lg-2">
-              <div className="d-flex align-self-stretch logo-class">
-                <div className="logo">
-                  <Link to="/">
-                    <img src={logo} alt="" />
-                  </Link>
+              <div className="row">
+                <div className="col-4">
+                  <div className="logo">
+                    <Link to="/">
+                      <img src={logo} alt="" />
+                    </Link>
+                  </div>
                 </div>
-                <div
-                  className={classNames("mobile-trigger", {
-                    active: this.state.navmethod,
-                  })}
-                  onClick={this.toggleNav}
-                >
-                  <span />
-                  <span />
-                  <span />
+                <div className="col-8 mobile-right-menu">
+                  {this.state.userDetials && (
+                    <Notification
+                      Notifications={this.state.Notifications}
+                      readAllMsgs={this.readAllMsgs}
+                    />
+                  )}
+                  {this.state.userDetials && <UserAccount />}
+                  <div
+                    className={classNames("mobile-trigger", {
+                      active: this.state.navmethod,
+                    })}
+                    onClick={this.toggleNav}
+                  >
+                    <span />
+                    <span />
+                    <span />
+                  </div>
                 </div>
               </div>
             </div>
@@ -186,20 +197,20 @@ class Headerinner extends Component {
                               <span></span>
                             )}
                           </span>
-                          <span className="ml-4 notificationsphone ">
+
+                          <span className="ml-4 notification-panel">
                             {this.state.userDetials && (
                               <Notification
-                                Notifications={this.state.Notifications}
-                                readAllMsgs={this.readAllMsgs}
+                                count={this.state.NotificationsUnread}
+                                getNotificationsCount={this.getNotifications}
+                                className="MuiPaper-elevation8"
                               />
                             )}
-                            <div className="hd-inner-notification MuiPaper-elevation8">
-                              {this.state.userDetials && (
-                                <NotificationCount
-                                  count={this.state.NotificationsUnread}
-                                />
-                              )}
-                            </div>
+                            {this.state.userDetials && (
+                              <NotificationCount
+                                count={this.state.NotificationsUnread}
+                              />
+                            )}
                           </span>
                         </div>
                       </nav>

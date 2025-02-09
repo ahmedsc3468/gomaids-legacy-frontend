@@ -1,27 +1,27 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
-import config from "../../../config.json";
-import OwlCarousel from "react-owl-carousel2";
-import authHeader from "../../../services/auth-header";
-import icon9 from "../../../assets/img/service/star-rating.png";
-import { tag } from "react-feather";
-import Rating from "@mui/material/Rating";
-import authService from "../../../services/auth.service";
-import GoogleMapReact from "google-map-react";
-import AuthService from "../../../services/auth.service";
-import img_src from "../../../assets/img/lcoation.png";
-import swal from "sweetalert";
-import { withRouter } from "react-router-dom";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import config from '../../../config.json';
+import OwlCarousel from 'react-owl-carousel2';
+import authHeader from '../../../services/auth-header';
+import icon9 from '../../../assets/img/service/star-rating.png';
+import { tag } from 'react-feather';
+import Rating from '@mui/material/Rating';
+import authService from '../../../services/auth.service';
+import GoogleMapReact from 'google-map-react';
+import AuthService from '../../../services/auth.service';
+import img_src from '../../../assets/img/lcoation.png';
+import swal from 'sweetalert';
+import { withRouter } from 'react-router-dom';
 
 let circle;
 
 const AnyReactComponent = ({ img_src }) => (
-  <div id="locationicons">
+  <div id='locationicons'>
     <img
-      src={config.SERVER_URL + "/images/das.jpg"}
-      className="YOUR-CLASS-NAME"
-      style={{ width: "10px" }}
+      src={config.SERVER_URL + '/images/das.jpg'}
+      className='YOUR-CLASS-NAME'
+      style={{ width: '10px' }}
     />
   </div>
 );
@@ -125,7 +125,7 @@ class Service extends Component {
         config.SERVER_URL + `/api/serviceprovider`,
         {
           headers: authHeader(),
-        }
+        },
       );
       this.setState({ serviceProviders: serviceProviders.data.data.data });
     } catch (err) {
@@ -137,7 +137,7 @@ class Service extends Component {
         apiCalldata,
         {
           headers: authHeader(),
-        }
+        },
       );
 
       this.setState({
@@ -157,7 +157,7 @@ class Service extends Component {
   changeRadius = async () => {
     let that = this;
     circle.setRadius(Number(this.state.inputRad));
-    this.props.history.push("/find-a-services", {
+    this.props.history.push('/find-a-services', {
       radius: this.state.inputRad / 1000,
     });
     // const apiCaldata = {
@@ -207,7 +207,7 @@ class Service extends Component {
     }
   }
   render() {
-    var pDoc = document.getElementById("locationicons");
+    var pDoc = document.getElementById('locationicons');
     var pagrent = pDoc?.parentNode;
     let owlLength1000 = 4;
     let owlLength700 = 3;
@@ -217,10 +217,10 @@ class Service extends Component {
 
     const apiIsLoaded = (map, maps) => {
       circle = new maps.Circle({
-        strokeColor: "#FF0000",
+        strokeColor: '#FF0000',
         strokeOpacity: 0.8,
         strokeWeight: 2,
-        fillColor: "#FF0000",
+        fillColor: '#FF0000',
         fillOpacity: 0.3,
         map,
         center: this.props.center,
@@ -265,56 +265,56 @@ class Service extends Component {
       <React.Fragment>
         {(this.state.currentUser === null ||
           (this.state.currentUser &&
-            this.state.currentUser.role.name === "service_taker")) &&
+            this.state.currentUser.role.name === 'service_taker')) &&
           this.state.serviceProviders.length > 0 && (
             <>
-              <section className="service pt-30 pb-10 bg-white">
-                <section className="service pt-30 pb-10 bg-white">
-                  <div className="container">
-                    <div className="row mb-40 align-items-end justify-content-center">
-                      <div className="col-lg-9 col-md-12 text-center text-lg-center custom-service-provider">
+              <section className='service pt-30 pb-10 bg-white'>
+                <section className='service pt-30 pb-10 bg-white'>
+                  <div className='container'>
+                    <div className='row mb-40 align-items-end justify-content-center'>
+                      <div className='col-lg-9 col-md-12 text-center text-lg-center custom-service-provider'>
                         <h1>Service Providers Near You</h1>
                       </div>
                     </div>
-                    <div className="col-lg-9 col-md-12 justify-content-center row text-center text-lg-center custom-service-provider">
+                    <div className='col-lg-9 col-md-12 justify-content-center row text-center text-lg-center custom-service-provider'>
                       <h5>
                         Enter the Searchable Area Radius in the Box and Press
                         Change Distance
                       </h5>
                     </div>
                     <div
-                      className="row justify-content-center"
-                      style={{ margin: "10px" }}
+                      className='row justify-content-center'
+                      style={{ margin: '10px' }}
                     >
-                      <div className="col-lg-2 mb-3">
+                      <div className='col-lg-2 mb-3'>
                         <input
-                          placeholder="Enter radius"
-                          type="number"
-                          min="1"
+                          placeholder='Enter radius'
+                          type='number'
+                          min='1'
                           value={this.state.inputRad / 1000}
-                          name="inputRad"
-                          className="form-control"
+                          name='inputRad'
+                          className='form-control'
                           onChange={this.onChangeradius}
                         />
-                        <span className="transform-v-center homeradius">
+                        <span className='transform-v-center homeradius'>
                           Km
                         </span>
                       </div>
-                      <div className="col-lg-2">
+                      <div className='col-lg-2'>
                         <input
-                          value="Change Distance"
-                          type="submit"
-                          className="btn btn-primary btn-block custom_login_btn"
+                          value='Change Distance'
+                          type='submit'
+                          className='btn btn-primary btn-block custom_login_btn'
                           onClick={this.changeRadius}
                         />
                       </div>
                     </div>
-                    <div className="row">
-                      <div className="col-lg-12" style={{ height: "500px" }}>
+                    <div className='row'>
+                      <div className='col-lg-12' style={{ height: '500px' }}>
                         <GoogleMapReact
                           bootstrapURLKeys={{
-                            key: "AIzaSyCBl-mGeYwZqQcE3oZbnbDKBe0bqIaf9lM",
-                            libraries: ["places"],
+                            key: 'AIzaSyCDNkZ-OdVb0rc-rJImSM9fZ1oONuoih4o',
+                            libraries: ['places'],
                           }}
                           defaultZoom={10}
                           center={this.props.center}
@@ -348,51 +348,51 @@ class Service extends Component {
                     </div>
                   </div>
                 </section>
-                <section className="service pt-30 pb-10 bg-blue-light">
-                  <div className="container">
-                    <div className="row mb-40 mt-40 align-items-end">
-                      <div className="col-lg-9 col-md-12 text-center text-lg-left">
+                <section className='service pt-30 pb-10 bg-blue-light'>
+                  <div className='container'>
+                    <div className='row mb-40 mt-40 align-items-end'>
+                      <div className='col-lg-9 col-md-12 text-center text-lg-left'>
                         <h3>Available Providers in Your Area</h3>
                       </div>
                     </div>
                     <div>
                       <OwlCarousel
-                        ref="serviceslider"
+                        ref='serviceslider'
                         options={options}
-                        className="owl-carousel service-slider"
-                        style={{ marginTop: "20px" }}
+                        className='owl-carousel service-slider'
+                        style={{ marginTop: '20px' }}
                       >
                         {this?.state?.nearserviceProviders?.length > 0 ? (
                           this?.state?.nearserviceProviders?.map((item, i) => (
-                            <div className="service-2-each shadow-2" key={i}>
-                              <div className="service-each shadow-2 transition-4 text-center">
+                            <div className='service-2-each shadow-2' key={i}>
+                              <div className='service-each shadow-2 transition-4 text-center'>
                                 <Link
                                   to={`/service-details/${item.service_provider_id}`}
-                                  className="black"
+                                  className='black'
                                 >
-                                  <div className="service-icn bg-light-white flex-center">
+                                  <div className='service-icn bg-light-white flex-center'>
                                     <img
                                       src={`${config.SERVER_URL}/${item.image}`}
-                                      alt=""
+                                      alt=''
                                     />
                                   </div>
 
-                                  <div className="service-text">
-                                    <h5 className="provider-name">
+                                  <div className='service-text'>
+                                    <h5 className='provider-name'>
                                       {item.fname} {item.lname}
                                     </h5>
                                     <div>
-                                      <h5 className="main-price">
+                                      <h5 className='main-price'>
                                         <span>$</span>
                                         {parseFloat(
-                                          item.price_per_hour
+                                          item.price_per_hour,
                                         ).toFixed(2)}
-                                        <span className="sub">/ per hour</span>
+                                        <span className='sub'>/ per hour</span>
                                       </h5>
                                     </div>
                                     {item.city?.length > 0 &&
                                       item?.state?.length > 0 && (
-                                        <ul className="service_providers_list">
+                                        <ul className='service_providers_list'>
                                           <li>
                                             {item.city},{item.state}
                                           </li>
@@ -401,10 +401,10 @@ class Service extends Component {
                                           </li>
                                         </ul>
                                       )}
-                                    <div className="mt-2">
+                                    <div className='mt-2'>
                                       <Rating
                                         value={parseInt(item.rating)}
-                                        size="medium"
+                                        size='medium'
                                         precision={0.5}
                                         readOnly
                                       />
@@ -416,45 +416,45 @@ class Service extends Component {
                           ))
                         ) : this.props.serviceblock.length > 0 ? (
                           this.props.serviceblock.map((item, i) => (
-                            <div className="service-2-each shadow-2 " key={i}>
-                              <div className="service-each shadow-2  transition-4 text-center">
+                            <div className='service-2-each shadow-2 ' key={i}>
+                              <div className='service-each shadow-2  transition-4 text-center'>
                                 <Link
                                   to={`/service-details/${item.id}`}
-                                  className="black"
+                                  className='black'
                                 >
-                                  <div className="service-icn bg-light-white flex-center">
-                                    <img src={`${item.icon}`} alt="" />
+                                  <div className='service-icn bg-light-white flex-center'>
+                                    <img src={`${item.icon}`} alt='' />
                                   </div>
 
-                                  <div className="service-text">
-                                    <h5 className="provider-name">
+                                  <div className='service-text'>
+                                    <h5 className='provider-name'>
                                       {item.title}
                                     </h5>
                                     <div>
-                                      <h5 className="main-price">
+                                      <h5 className='main-price'>
                                         <span>$</span>
                                         {parseFloat(
-                                          item.price_per_hour
+                                          item.price_per_hour,
                                         ).toFixed(2)}
-                                        <span className="sub">/ per hour</span>
+                                        <span className='sub'>/ per hour</span>
                                       </h5>
                                     </div>
-                                    <span className="mb-0 mt-5">
+                                    <span className='mb-0 mt-5'>
                                       {item.text}
                                       <i
-                                        className="fa fa-solid fa-tags"
+                                        className='fa fa-solid fa-tags'
                                         style={{
-                                          marginLeft: "5px",
-                                          marginRight: "5px",
-                                          color: "#102043",
+                                          marginLeft: '5px',
+                                          marginRight: '5px',
+                                          color: '#102043',
                                         }}
                                       ></i>
                                     </span>
 
-                                    <div className="mt-2">
+                                    <div className='mt-2'>
                                       <Rating
                                         value={parseInt(item.rating)}
-                                        size="medium"
+                                        size='medium'
                                         precision={0.5}
                                         readOnly
                                       />
@@ -471,63 +471,63 @@ class Service extends Component {
                     </div>
                   </div>
                 </section>
-                <section className="service pt-30 pb-80 bg-blue-light">
-                  <div className="container">
-                    <div className="row mb-40 align-items-end">
-                      <div className="col-lg-9 col-md-12 text-center text-lg-left">
+                <section className='service pt-30 pb-80 bg-blue-light'>
+                  <div className='container'>
+                    <div className='row mb-40 align-items-end'>
+                      <div className='col-lg-9 col-md-12 text-center text-lg-left'>
                         <h3>Top Rated Service Providers</h3>
                       </div>
                     </div>
-                    <div className="row">
-                      <div className="col-lg-12">
+                    <div className='row'>
+                      <div className='col-lg-12'>
                         <OwlCarousel
-                          ref="serviceslider"
+                          ref='serviceslider'
                           options={options}
-                          className="owl-carousel service-slider"
+                          className='owl-carousel service-slider'
                         >
                           {this.props.serviceblock.length > 0
                             ? this.props.serviceblock.map((item, i) => (
                                 <div
                                   key={i}
-                                  className="service-2-each shadow-2"
+                                  className='service-2-each shadow-2'
                                 >
-                                  <div className="service-each shadow-2 transition-4 text-center">
+                                  <div className='service-each shadow-2 transition-4 text-center'>
                                     <Link
                                       to={`/service-details/${item.id}`}
-                                      className="black"
+                                      className='black'
                                     >
-                                      <div className="service-icn bg-light-white flex-center">
-                                        <img src={`${item.icon}`} alt="" />
+                                      <div className='service-icn bg-light-white flex-center'>
+                                        <img src={`${item.icon}`} alt='' />
                                       </div>
 
-                                      <div className="service-text">
-                                        <h5 className="provider-name">
+                                      <div className='service-text'>
+                                        <h5 className='provider-name'>
                                           {item.title}
                                         </h5>
-                                        <span className="mb-0 mt-5">
+                                        <span className='mb-0 mt-5'>
                                           {item.text}
                                           <i
-                                            className="fa fa-solid fa-tags"
+                                            className='fa fa-solid fa-tags'
                                             style={{
-                                              marginLeft: "5px",
-                                              marginRight: "5px",
-                                              color: "#102043",
+                                              marginLeft: '5px',
+                                              marginRight: '5px',
+                                              color: '#102043',
                                             }}
                                           ></i>
                                         </span>
                                         <div>
-                                          <h5 className="main-price">
+                                          <h5 className='main-price'>
                                             <span>$</span>
                                             {parseFloat(item.prize).toFixed(2)}
-                                            <span className="sub">
+                                            <span className='sub'>
                                               / per hour
                                             </span>
                                           </h5>
                                         </div>
-                                        <div className="mt-2">
+                                        <div className='mt-2'>
                                           <Rating
                                             value={parseInt(item.rating)}
-                                            size="medium"
+                                            size='medium'
                                             precision={0.5}
                                             readOnly
                                           />
@@ -540,38 +540,38 @@ class Service extends Component {
                             : this.state.serviceProviders.map((item, i) => (
                                 <div
                                   key={i}
-                                  className="service-2-each shadow-2"
+                                  className='service-2-each shadow-2'
                                 >
-                                  <div className="service-each shadow-2 transition-4 text-center">
+                                  <div className='service-each shadow-2 transition-4 text-center'>
                                     <Link
                                       to={`/service-details/${item.service_provider_id}`}
-                                      className="black"
+                                      className='black'
                                     >
-                                      <div className="service-icn bg-light-white flex-center">
+                                      <div className='service-icn bg-light-white flex-center'>
                                         <img
                                           src={`${config.SERVER_URL}/${item.image}`}
-                                          alt=""
+                                          alt=''
                                         />
                                       </div>
 
-                                      <div className="service-text">
-                                        <h5 className="provider-name">
+                                      <div className='service-text'>
+                                        <h5 className='provider-name'>
                                           {item.fname} {item.lname}
                                         </h5>
                                         <div>
-                                          <h5 className="main-price">
+                                          <h5 className='main-price'>
                                             <span>$</span>
                                             {parseFloat(
-                                              item.price_per_hour
+                                              item.price_per_hour,
                                             ).toFixed(2)}
-                                            <span className="sub">
+                                            <span className='sub'>
                                               / per hour
                                             </span>
                                           </h5>
                                         </div>
                                         {item.city?.length > 0 &&
                                           item?.state?.length > 0 && (
-                                            <ul className="service_providers_list">
+                                            <ul className='service_providers_list'>
                                               <li>
                                                 {item.city},{item.state}
                                               </li>
@@ -580,10 +580,10 @@ class Service extends Component {
                                               </li>
                                             </ul>
                                           )}
-                                        <div className="mt-2">
+                                        <div className='mt-2'>
                                           <Rating
                                             value={parseInt(item.rating)}
-                                            size="medium"
+                                            size='medium'
                                             precision={0.5}
                                             readOnly
                                           />

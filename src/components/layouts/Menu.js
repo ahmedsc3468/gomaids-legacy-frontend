@@ -389,23 +389,7 @@ class Menu extends Component {
               </li>
             ))
           : null}
-        <li>
-          <span className="mobileonly" hidden={userObj == null}>
-            <Link to="/Userdashboard">Dashboard</Link>
-          </span>
-        </li>
-        <li>
-          <span className="mobileonly" href="" hidden={userObj == null}>
-            <Link
-              to="/login"
-              onClick={() => {
-                AuthService.logout();
-              }}
-            >
-              Logout
-            </Link>
-          </span>
-        </li>
+
         <li>
           <span className="mobileonly  custom-login" hidden={userObj != null}>
             <Link to="/login" className="text-light">

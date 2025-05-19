@@ -1,19 +1,19 @@
-import axios from "axios";
-import { withRouter } from "react-router-dom";
-import React, { Component } from "react";
-import AuthService from "../../../services/auth.service";
-import { Button, Dimmer, Loader } from "semantic-ui-react";
-import Rating from "@mui/material/Rating";
-import config from "../../../config.json";
-import { Alert, Card, CardBody, Col, Row } from "reactstrap";
-import { Modal, Form } from "react-bootstrap";
-import authHeader from "../../../services/auth-header";
-import "../../../assets/css/style.css";
-import "../../../assets/css/custom-style.css";
-import Rate from "../userdashboard/RateUs";
-import swal from "sweetalert";
-import { useHistory, useParams } from "react-router-dom";
-import CircularProgress from "@mui/material/CircularProgress";
+import axios from 'axios';
+import { withRouter } from 'react-router-dom';
+import React, { Component } from 'react';
+import AuthService from '../../../services/auth.service';
+import { Button, Dimmer, Loader } from 'semantic-ui-react';
+import Rating from '@mui/material/Rating';
+import config from '../../../config.json';
+import { Alert, Card, CardBody, Col, Row } from 'reactstrap';
+import { Modal, Form } from 'react-bootstrap';
+import authHeader from '../../../services/auth-header';
+import '../../../assets/css/style.css';
+import '../../../assets/css/custom-style.css';
+import Rate from '../userdashboard/RateUs';
+import swal from 'sweetalert';
+import { useHistory, useParams } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
 
 class ServiceTakerOrderDetails extends Component {
   constructor(props) {
@@ -26,11 +26,11 @@ class ServiceTakerOrderDetails extends Component {
       convoTargeted: null,
       spFeedbackTargeted: null,
       stFeedbackTargeted: null,
-      feedbackMessage: "",
+      feedbackMessage: '',
       feedbackStatus: null,
       showFeedBack: false,
       show: false,
-      message: "",
+      message: '',
       messageStatus: null,
       rating: null,
       order_status: null,
@@ -38,8 +38,8 @@ class ServiceTakerOrderDetails extends Component {
       updateStatus: false,
       currentTab: null,
       convochat: [],
-      service_taker_feedback: "",
-      service_provider_feedback: "",
+      service_taker_feedback: '',
+      service_provider_feedback: '',
       total: null,
       loader: false,
     };
@@ -60,7 +60,7 @@ class ServiceTakerOrderDetails extends Component {
       config.SERVER_URL + `/api/order/${order_id}`,
       {
         headers: authHeader(),
-      }
+      },
     );
 
     this.setState({
@@ -68,7 +68,7 @@ class ServiceTakerOrderDetails extends Component {
       //  convoTargeted: order.data.data?.conversation,
       //  convochat:order.data.data?.conversation?.chat,
       order_status: order.data.data.status,
-      currentTab: "userprofile",
+      currentTab: 'userprofile',
       rating: parseInt(order.data.data.rating),
       total:
         parseInt(order.data.data.cost) +
@@ -84,7 +84,7 @@ class ServiceTakerOrderDetails extends Component {
       config.SERVER_URL + `/api/order/${order_id}`,
       {
         headers: authHeader(),
-      }
+      },
     );
     this.setState({
       order: order.data.data,
@@ -126,36 +126,36 @@ class ServiceTakerOrderDetails extends Component {
       config.SERVER_URL + `/api/order/${order_id}`,
       {
         headers: authHeader(),
-      }
+      },
     );
     if (order.data.data.status == 3 && a == 1) {
-      if (user.role.name === "service_provider") {
+      if (user.role.name === 'service_provider') {
         swal(
-          "Something went wrong",
-          "Order is already cancelled by the Customer!",
-          "warning"
+          'Something went wrong',
+          'Order is already cancelled by the Customer!',
+          'warning',
         );
         this.componentDidMount();
       } else {
         swal(
-          "Something went wrong",
-          "Order is already cancelled by the Service Provider!",
-          "warning"
+          'Something went wrong',
+          'Order is already cancelled by the Service Provider!',
+          'warning',
         );
         this.componentDidMount();
       }
     } else {
-      if (user.role.name === "service_provider") {
-        const status = a === 2 ? "complete" : a === 1 ? "accept" : "cancel";
+      if (user.role.name === 'service_provider') {
+        const status = a === 2 ? 'complete' : a === 1 ? 'accept' : 'cancel';
 
         const order_id = this.props.match.params.order_id;
         const that = this;
 
         swal({
-          title: "Are you sure?",
+          title: 'Are you sure?',
           text: `Do you want to ${status} the order? You will not be able to revert this action.`,
-          icon: "warning",
-          buttons: ["No", "Yes, I am sure!"],
+          icon: 'warning',
+          buttons: ['No', 'Yes, I am sure!'],
           dangerMode: true,
         }).then(async function (isConfirm) {
           if (isConfirm) {
@@ -165,20 +165,20 @@ class ServiceTakerOrderDetails extends Component {
 
             const { data } = await axios.put(
               config.SERVER_URL + `/api/changeorderstatus/${order_id}`,
-              { status: a, sp_status: a, role: "service_provider" },
+              { status: a, sp_status: a, role: 'service_provider' },
               {
                 headers: authHeader(),
-              }
+              },
             );
 
-            localStorage.setItem("orderstate", "complete");
+            localStorage.setItem('orderstate', 'complete');
 
             try {
               const order = await axios.get(
                 config.SERVER_URL + `/api/order/${order_id}`,
                 {
                   headers: authHeader(),
-                }
+                },
               );
 
               that.setState({
@@ -191,16 +191,16 @@ class ServiceTakerOrderDetails extends Component {
               });
 
               swal(
-                "Order Updated!",
-                "Action successfully completed.",
-                "success"
+                'Order Updated!',
+                'Action successfully completed.',
+                'success',
               );
             } catch (e) {
-              console.log("error", e);
+              console.log('error', e);
               swal(
-                "Something went wrong",
-                "Please try again later.",
-                "warning"
+                'Something went wrong',
+                'Please try again later.',
+                'warning',
               );
             }
 
@@ -211,13 +211,13 @@ class ServiceTakerOrderDetails extends Component {
         });
       } else {
         const order_id = this.props.match.params.order_id;
-        const status = a == "2" ? "complete" : "cancel";
+        const status = a == '2' ? 'complete' : 'cancel';
         const that = this;
         swal({
-          title: "Are you sure?",
+          title: 'Are you sure?',
           text: `Do you want to ${status} the order? You will not be able to revert this action.`,
-          icon: "warning",
-          buttons: ["No", "Yes, I am sure!"],
+          icon: 'warning',
+          buttons: ['No', 'Yes, I am sure!'],
           dangerMode: true,
         }).then(async function (isConfirm) {
           if (isConfirm) {
@@ -225,21 +225,21 @@ class ServiceTakerOrderDetails extends Component {
 
             const { data } = await axios.put(
               config.SERVER_URL + `/api/changeorderstatus/${order_id}`,
-              { status: a, st_status: a, role: "service_taker" },
+              { status: a, st_status: a, role: 'service_taker' },
               {
                 headers: authHeader(),
-              }
+              },
             );
             that.setState({
               loader: false,
             });
-            swal("Updated!", "Your Status Has Been Change!", "success");
+            swal('Updated!', 'Your Status Has Been Change!', 'success');
 
             const order = await axios.get(
               config.SERVER_URL + `/api/order/${order_id}`,
               {
                 headers: authHeader(),
-              }
+              },
             );
 
             that.setState({
@@ -261,15 +261,15 @@ class ServiceTakerOrderDetails extends Component {
   orderStatusText() {
     switch (parseInt(this.state.orderStatus)) {
       case 0:
-        return "Pending";
+        return 'Pending';
       case 1:
-        return "Assigned";
+        return 'Assigned';
       case 2:
-        return "Completed";
+        return 'Completed';
       case 3:
-        return "Cancelled";
+        return 'Cancelled';
       case 5:
-        return "Paid";
+        return 'Paid';
       default:
         return false;
     }
@@ -296,7 +296,7 @@ class ServiceTakerOrderDetails extends Component {
   // }
   getOrderDifference = (orderDate, orderTime) => {
     // Sample order date in ISO format
-    var orderDateTimeString = orderDate + "T" + orderTime;
+    var orderDateTimeString = orderDate + 'T' + orderTime;
     // Create orderDate in local time zone
     var orderDate = new Date(orderDateTimeString);
 
@@ -318,21 +318,21 @@ class ServiceTakerOrderDetails extends Component {
 
   feedbackSentTo = async (event, errors, values) => {
     event.preventDefault();
-    console.log("FeedBack Call");
+    console.log('FeedBack Call');
 
     const user = AuthService.getCurrentUser();
     const order_id = this.props.match.params.order_id;
-    if (this.state.feedbackMessage.trim() !== "") {
-      if (user.role.name === "service_provider") {
+    if (this.state.feedbackMessage.trim() !== '') {
+      if (user.role.name === 'service_provider') {
         const data = {
           service_provider_feedback: this.state.feedbackMessage,
         };
 
         this.setState({
-          feedbackMessage: "",
+          feedbackMessage: '',
           feedbackStatus: {
-            body: "Your FeedBack is being sent...",
-            color: "primary",
+            body: 'Your FeedBack is being sent...',
+            color: 'primary',
           },
         });
 
@@ -340,30 +340,30 @@ class ServiceTakerOrderDetails extends Component {
           const response = await axios.put(
             config.SERVER_URL + `/api/order/${order_id}`,
             data,
-            { headers: authHeader() }
+            { headers: authHeader() },
           );
           this.setState({
-            feedbackStatus: { body: "FeedBack Sent", color: "success" },
+            feedbackStatus: { body: 'FeedBack Sent', color: 'success' },
           });
         } catch (error) {
           this.setState({
             feedbackStatus: {
-              body: "FeedBack could not be sent",
-              color: "danger",
+              body: 'FeedBack could not be sent',
+              color: 'danger',
             },
           });
         }
       } else {
-        if (user.role.name === "service_taker") {
+        if (user.role.name === 'service_taker') {
           const data = {
             service_taker_feedback: this.state.feedbackMessage,
           };
 
           this.setState({
-            feedbackMessage: "",
+            feedbackMessage: '',
             feedbackStatus: {
-              body: "Your FeedBack is being sent...",
-              color: "primary",
+              body: 'Your FeedBack is being sent...',
+              color: 'primary',
             },
           });
 
@@ -371,17 +371,17 @@ class ServiceTakerOrderDetails extends Component {
             const response = await axios.put(
               config.SERVER_URL + `/api/order/${order_id}`,
               data,
-              { headers: authHeader() }
+              { headers: authHeader() },
             );
 
             this.setState({
-              feedbackStatus: { body: "FeedBack Sent", color: "success" },
+              feedbackStatus: { body: 'FeedBack Sent', color: 'success' },
             });
           } catch (error) {
             this.setState({
               feedbackStatus: {
-                body: "FeedBack could not be sent",
-                color: "danger",
+                body: 'FeedBack could not be sent',
+                color: 'danger',
               },
             });
           }
@@ -392,7 +392,7 @@ class ServiceTakerOrderDetails extends Component {
       config.SERVER_URL + `/api/order/${order_id}`,
       {
         headers: authHeader(),
-      }
+      },
     );
     this.setState({
       order: order.data.data,
@@ -405,9 +405,9 @@ class ServiceTakerOrderDetails extends Component {
   sentTo = async (event, errors, values) => {
     event.preventDefault();
     const user = AuthService.getCurrentUser();
-    if (this.state.message.trim() !== "") {
+    if (this.state.message.trim() !== '') {
       const reciever_id =
-        user.role.name === "service_provider"
+        user.role.name === 'service_provider'
           ? this.state.order.service_taker.user_id
           : this.state.order.service_provider.user_id;
       const data = {
@@ -416,10 +416,10 @@ class ServiceTakerOrderDetails extends Component {
       };
 
       this.setState({
-        message: "",
+        message: '',
         messageStatus: {
-          body: "Your message is being sent...",
-          color: "primary",
+          body: 'Your message is being sent...',
+          color: 'primary',
         },
       });
 
@@ -427,17 +427,17 @@ class ServiceTakerOrderDetails extends Component {
         const response = await axios.post(
           config.SERVER_URL + `/api/chat`,
           data,
-          { headers: authHeader() }
+          { headers: authHeader() },
         );
 
         this.setState({
-          messageStatus: { body: "Message Sent", color: "success" },
+          messageStatus: { body: 'Message Sent', color: 'success' },
           convochat: response.data.data,
           convoTargeted: response.data.data.reciever_id,
         });
       } catch (error) {
         this.setState({
-          messageStatus: { body: "Message could not be sent", color: "danger" },
+          messageStatus: { body: 'Message could not be sent', color: 'danger' },
         });
       }
     }
@@ -451,15 +451,15 @@ class ServiceTakerOrderDetails extends Component {
         {this.state.loader || this.state.order === null ? (
           <div
             style={{
-              position: "fixed",
-              top: "40%",
-              right: "50%",
+              position: 'fixed',
+              top: '40%',
+              right: '50%',
               zIndex: 9999,
             }}
           >
-            <div id="CustomAllorders" className="text-center">
-              {" "}
-              <CircularProgress color="success" />{" "}
+            <div id='CustomAllorders' className='text-center'>
+              {' '}
+              <CircularProgress color='success' />{' '}
             </div>
           </div>
         ) : (
@@ -469,29 +469,29 @@ class ServiceTakerOrderDetails extends Component {
               paddingBottom: 30,
             }}
           >
-            <Col sm="10" md="8" lg="6" className="mx-auto">
+            <Col sm='10' md='8' lg='6' className='mx-auto'>
               <Row>
-                <Col sm="12">
-                  <Card className="border border-dark">
+                <Col sm='12'>
+                  <Card className='border border-dark'>
                     <CardBody>
-                      <Col sm="12">
-                        <h5 className="mb-5 text-center">
+                      <Col sm='12'>
+                        <h5 className='mb-5 text-center'>
                           <span>Order # </span>
                           <span> {this.state.order.order_key}</span>
                         </h5>
                       </Col>
 
-                      <Col className="align-self-center mb-1" sm="12">
+                      <Col className='align-self-center mb-1' sm='12'>
                         <Row>
-                          <Col sm="12" md="6">
-                            <div className="custom-card-title">Provider</div>
+                          <Col sm='12' md='6'>
+                            <div className='custom-card-title'>Provider</div>
                             <img
                               src={
                                 config.SERVER_URL +
-                                "/" +
+                                '/' +
                                 this.state.order.service_provider.user.image
                               }
-                              className="circle-image my-2"
+                              className='circle-image my-2'
                             />
                             <div>{`${this.state.order.service_provider.user.fname} ${this.state.order.service_provider.user.lname}`}</div>
                             <div>
@@ -502,18 +502,18 @@ class ServiceTakerOrderDetails extends Component {
                               {this.state.order.service_provider.user.mobile_no}
                             </div>
                           </Col>
-                          <Col sm="12" md="6">
-                            <div className="custom-card-title">Customer</div>
+                          <Col sm='12' md='6'>
+                            <div className='custom-card-title'>Customer</div>
                             <img
                               src={
                                 config.SERVER_URL +
-                                "/" +
+                                '/' +
                                 this.state.order.service_taker.user.image
                               }
-                              className="circle-image my-2"
+                              className='circle-image my-2'
                             />
                             <div>
-                              {" "}
+                              {' '}
                               {`${this.state.order.service_taker.user.fname} ${this.state.order.service_taker.user.lname}`}
                               <div>
                                 {this.state.order.service_taker.user.email}
@@ -526,26 +526,26 @@ class ServiceTakerOrderDetails extends Component {
                         </Row>
                       </Col>
 
-                      <hr style={{ borderTop: "2px solid gray" }} />
+                      <hr style={{ borderTop: '2px solid gray' }} />
 
                       <Row>
-                        <Col className="align-self-center mb-1" sm="12">
+                        <Col className='align-self-center mb-1' sm='12'>
                           <Row>
-                            <Col sm="12" md="4">
-                              <div className="font-weight-bold">Date</div>
-                              <div className="font-weight-light">
+                            <Col sm='12' md='4'>
+                              <div className='font-weight-bold'>Date</div>
+                              <div className='font-weight-light'>
                                 {this.state.order.order_date}
                               </div>
                             </Col>
-                            <Col sm="12" md="4">
-                              <div className="font-weight-bold">Start Time</div>
-                              <div className="font-weight-light">
+                            <Col sm='12' md='4'>
+                              <div className='font-weight-bold'>Start Time</div>
+                              <div className='font-weight-light'>
                                 {this.state.order.slot_start_time}
                               </div>
                             </Col>
-                            <Col sm="12" md="4">
-                              <div className="font-weight-bold">End Time</div>
-                              <div className="font-weight-light">
+                            <Col sm='12' md='4'>
+                              <div className='font-weight-bold'>End Time</div>
+                              <div className='font-weight-light'>
                                 {this.state.order.slot_end_time}
                               </div>
                             </Col>
@@ -553,34 +553,34 @@ class ServiceTakerOrderDetails extends Component {
                         </Col>
                       </Row>
                       <Row>
-                        <Col className="align-self-center mb-1" sm="12">
+                        <Col className='align-self-center mb-1' sm='12'>
                           <Row>
-                            <Col sm="12" md="4">
-                              <div className="font-weight-bold">
+                            <Col sm='12' md='4'>
+                              <div className='font-weight-bold'>
                                 Serivce Name
                               </div>
-                              <div className="font-weight-light">
+                              <div className='font-weight-light'>
                                 {this.state.order.selected_service}
                               </div>
                             </Col>
-                            <Col sm="12" md="4">
-                              <div className="font-weight-bold">
+                            <Col sm='12' md='4'>
+                              <div className='font-weight-bold'>
                                 Service Address
                               </div>
                               <div
-                                className="font-weight-light"
-                                style={{ maxWidth: "10rem" }}
+                                className='font-weight-light'
+                                style={{ maxWidth: '10rem' }}
                               >
                                 {this.state.order.service_address}
                               </div>
                             </Col>
-                            <Col sm="12" md="4">
-                              <div className="font-weight-bold">
+                            <Col sm='12' md='4'>
+                              <div className='font-weight-bold'>
                                 Billing Address
                               </div>
                               <div
-                                className="font-weight-light"
-                                style={{ maxWidth: "10rem" }}
+                                className='font-weight-light'
+                                style={{ maxWidth: '10rem' }}
                               >
                                 {this.state.order.billing_address}
                               </div>
@@ -589,38 +589,38 @@ class ServiceTakerOrderDetails extends Component {
                         </Col>
                       </Row>
                       <Row>
-                        <Col className="align-self-center mb-1" sm="12">
+                        <Col className='align-self-center mb-1' sm='12'>
                           <Row>
-                            <Col sm="12" md="4">
-                              <div className="font-weight-bold">
+                            <Col sm='12' md='4'>
+                              <div className='font-weight-bold'>
                                 Customer FeedBack
                               </div>
                               <div
-                                className="font-weight-light"
-                                style={{ maxWidth: "10rem" }}
+                                className='font-weight-light'
+                                style={{ maxWidth: '10rem' }}
                               >
                                 {this.state.order.service_taker_feedback}
                               </div>
                               <Rating
                                 value={parseInt(this.state.order.rating)}
-                                size="small"
+                                size='small'
                                 precision={0.5}
                                 readOnly
                               />
                             </Col>
-                            <Col sm="12" md="4">
-                              <div className="font-weight-bold">
+                            <Col sm='12' md='4'>
+                              <div className='font-weight-bold'>
                                 Service Provider FeedBack
                               </div>
                               <div
-                                className="font-weight-light"
-                                style={{ maxWidth: "10rem" }}
+                                className='font-weight-light'
+                                style={{ maxWidth: '10rem' }}
                               >
                                 {this.state.order.service_provider_feedback}
                               </div>
                               <Rating
                                 value={parseInt(this.state.order.sp_rating)}
-                                size="small"
+                                size='small'
                                 precision={0.5}
                                 readOnly
                               />
@@ -633,15 +633,15 @@ class ServiceTakerOrderDetails extends Component {
                         </Col>
                       </Row>
                       <Row>
-                        <Col className="align-self-center mb-1" sm="12">
+                        <Col className='align-self-center mb-1' sm='12'>
                           <Row>
-                            <Col sm="12" md="4">
-                              <div className="font-weight-bold">
+                            <Col sm='12' md='4'>
+                              <div className='font-weight-bold'>
                                 Additional Notes
                               </div>
                               <div
-                                className="font-weight-light"
-                                style={{ maxWidth: "10rem" }}
+                                className='font-weight-light'
+                                style={{ maxWidth: '10rem' }}
                               >
                                 {this.state.order.additional_notes}
                               </div>
@@ -649,23 +649,23 @@ class ServiceTakerOrderDetails extends Component {
                           </Row>
                         </Col>
                       </Row>
-                      <Row className="mt-5">
-                        <Col className="align-self-center mb-1" sm="12">
+                      <Row className='mt-5'>
+                        <Col className='align-self-center mb-1' sm='12'>
                           <Row>
-                            <Col sm="12" md="5" className="ml-auto">
-                              <div className="text-secondary">
+                            <Col sm='12' md='5' className='ml-auto'>
+                              <div className='text-secondary'>
                                 <Row>
-                                  <Col sm="5">Per Hour Rate</Col>
-                                  <Col sm="3" className="text-right">
-                                    {this.state.order.per_hour_rate + "$"}
+                                  <Col sm='5'>Per Hour Rate</Col>
+                                  <Col sm='3' className='text-right'>
+                                    {this.state.order.per_hour_rate + '$'}
                                   </Col>
                                 </Row>
                                 <Row
                                   hidden={this.state.order.tipamount == null}
                                 >
-                                  <Col sm="5">Tip Amount</Col>
-                                  <Col sm="3" className="text-right">
-                                    {this.state.order.tipamount + "$"}
+                                  <Col sm='5'>Tip Amount</Col>
+                                  <Col sm='3' className='text-right'>
+                                    {this.state.order.tipamount + '$'}
                                   </Col>
                                 </Row>
                               </div>
@@ -675,22 +675,22 @@ class ServiceTakerOrderDetails extends Component {
             <Col sm='3' className="text-right">1</Col>
             </Row>
         </div> */}
-                              <div className="font-weight-bold text-dark">
+                              <div className='font-weight-bold text-dark'>
                                 <Row>
-                                  <Col sm="9">
+                                  <Col sm='9'>
                                     <hr
-                                      style={{ borderTop: "2px solid gray" }}
-                                      className=""
+                                      style={{ borderTop: '2px solid gray' }}
+                                      className=''
                                     />
                                   </Col>
                                 </Row>
                               </div>
 
-                              <div className="font-weight-bold text-dark">
+                              <div className='font-weight-bold text-dark'>
                                 <Row>
-                                  <Col sm="5">Total</Col>
-                                  <Col sm="3" className="text-right">
-                                    {this.state.total + "$"}
+                                  <Col sm='5'>Total</Col>
+                                  <Col sm='3' className='text-right'>
+                                    {this.state.total + '$'}
                                   </Col>
                                 </Row>
                               </div>
@@ -702,17 +702,17 @@ class ServiceTakerOrderDetails extends Component {
                   </Card>
                 </Col>
               </Row>
-              <Row className="custom-row">
-                <Col md="5">
-                  {/* <Button className="ui button order_print_button"> <Link className="text-light" to={`order_details_${this.state.order.id}`}> Print </Link></Button> */}
+              <Row className='custom-row'>
+                <Col md='5'>
+                  {/* <Button className="ui button order_print_button"> <Link className="text-light" to={`order/details/${this.state.order.id}`}> Print </Link></Button> */}
                   <Button
-                    className="ui button order_back_button"
+                    className='ui button order_back_button'
                     onClick={() => {
-                      localStorage.setItem("currenttab", "AllOrder");
+                      localStorage.setItem('currenttab', 'AllOrder');
                       this.props.history.goBack();
                     }}
                   >
-                    {" "}
+                    {' '}
                     Back
                   </Button>
                   {/* {user.role.name === 'service_taker' && (<>
@@ -721,118 +721,114 @@ class ServiceTakerOrderDetails extends Component {
             {user.role.name === 'service_provider'&& (<>
                 <Button className="ui button order_back_button" hidden={this.state.order.service_provider_feedback!=null || this.state.order.status!=2 }  onClick={this.handleFeedBackShow}> FeedBack</Button>
             </>)} */}
-                  {this.state.order.status === "2" && (
+                  {this.state.order.status === '2' && (
                     <>
-                      {user.role.name === "service_taker" &&
+                      {user.role.name === 'service_taker' &&
                         this.state.order.rating === null && (
                           <>
-                            <Rate disabled={this.state.order.rating != "null"}>
-                              {" "}
-                              FeedBack{" "}
+                            <Rate disabled={this.state.order.rating != 'null'}>
+                              {' '}
+                              FeedBack{' '}
                             </Rate>
                           </>
                         )}
                     </>
                   )}
-                  {this.state.order.status === "2" && (
+                  {this.state.order.status === '2' && (
                     <>
-                      {user.role.name === "service_provider" &&
+                      {user.role.name === 'service_provider' &&
                         this.state.order.sp_rating === null && (
                           <>
                             <Rate
-                              disabled={this.state.order.sp_rating != "null"}
+                              disabled={this.state.order.sp_rating != 'null'}
                             >
-                              {" "}
-                              FeedBack{" "}
+                              {' '}
+                              FeedBack{' '}
                             </Rate>
                           </>
                         )}
                     </>
                   )}
                 </Col>
-                <Col md="7" className="ml-auto">
+                <Col md='7' className='ml-auto'>
                   <Button
-                    className="ui button order_SendMessage_button"
+                    className='ui button order_SendMessage_button'
                     onClick={this.handleShow}
-                    hidden={this.state.order.status != "1"}
+                    hidden={this.state.order.status != '1'}
                   >
-                    {" "}
+                    {' '}
                     Send Message
                   </Button>
                   {/* {user.role.name === 'service_taker' && ( <>
                                 <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(2)} disabled={this.state.order.st_status =="2" || this.state.order.status =="3"  }> Complete</Button>
                                 <Button className="ui button order_SendMessage_button" onClick={() => this.statusChange(3)} disabled={this.state.order.status =="3" || this.state.order.st_status =="2" || this.state.order.status =="1"}> Cancel</Button>
                             </>)}  */}
-                  {user.role.name === "service_provider" &&
-                    this.getOrderDifference(
-                      this.state.order?.order_date,
-                      this.state.order?.slot_end_time
-                    ) && (
-                      <>
-                        <Button
-                          className="ui button order_SendMessage_button"
-                          onClick={() => this.statusChange(2)}
-                          hidden={
-                            this.state.order.sp_status == "2" ||
-                            this.state.order.status != "1" ||
-                            this.state.order.status == "5"
-                          }
-                        >
-                          {" "}
-                          Complete
-                        </Button>
-                      </>
-                    )}
-
-                  {user.role.name === "service_provider" && (
+                  {user.role.name === 'service_provider' && (
                     <>
                       <Button
-                        className="ui button order_SendMessage_button"
-                        onClick={() => this.statusChange(3)}
+                        className='ui button order_SendMessage_button'
+                        onClick={() => this.statusChange(2)}
                         hidden={
-                          this.state.order.status == "2" ||
-                          this.state.order.sp_status == "2" ||
-                          this.state.order.status == "3" ||
-                          this.state.order.status == "5"
+                          this.state.order.sp_status == '2' ||
+                          this.state.order.status != '1' ||
+                          this.state.order.status == '5'
                         }
                       >
-                        {" "}
+                        {' '}
+                        Complete
+                      </Button>
+                    </>
+                  )}
+
+                  {user.role.name === 'service_provider' && (
+                    <>
+                      <Button
+                        className='ui button order_SendMessage_button'
+                        onClick={() => this.statusChange(3)}
+                        hidden={
+                          this.state.order.status == '2' ||
+                          this.state.order.sp_status == '2' ||
+                          this.state.order.status == '3' ||
+                          this.state.order.status == '5'
+                        }
+                      >
+                        {' '}
                         Cancel
                       </Button>
                     </>
                   )}
-                  {user.role.name === "service_provider" && (
+                  {user.role.name === 'service_provider' && (
                     <>
                       <Button
-                        className="ui button order_SendMessage_button"
+                        className='ui button order_SendMessage_button'
                         onClick={() => this.statusChange(1)}
                         hidden={
-                          this.state.order.status == "2" ||
-                          this.state.order.status == "1" ||
-                          this.state.order.sp_status == "2" ||
-                          this.state.order.status == "3" ||
-                          this.state.order.status == "5"
+                          this.state.order.status == '2' ||
+                          this.state.order.status == '1' ||
+                          this.state.order.sp_status == '2' ||
+                          this.state.order.status == '3' ||
+                          this.state.order.status == '5'
                         }
                       >
-                        {" "}
+                        {' '}
                         Accept
                       </Button>
                     </>
                   )}
 
-                  {user.role.name === "service_taker" && (
+                  {user.role.name === 'service_taker' && (
                     <>
                       <Button
-                        className="ui button order_SendMessage_button"
+                        className='ui button order_SendMessage_button'
                         onClick={() => this.statusChange(3)}
                         hidden={
-                          this.state.order.status == "2" ||
-                          this.state.order.sp_status == "2" ||
-                          this.state.order.status == "3" ||
-                          this.state.order.status == "5"
+                          this.state.order.status == '2' ||
+                          this.state.order.sp_status == '2' ||
+                          this.state.order.status == '3' ||
+                          this.state.order.status == '5'
                         }
                       >
-                        {" "}
+                        {' '}
                         Cancel
                       </Button>
                     </>
@@ -864,7 +860,7 @@ class ServiceTakerOrderDetails extends Component {
             </Col>
           </Row>
         )}
-        <Modal className="modal-center" show={this.state.show}>
+        <Modal className='modal-center' show={this.state.show}>
           {this.state.order?.conversation === null ? (
             <>
               <Modal.Header>
@@ -873,12 +869,12 @@ class ServiceTakerOrderDetails extends Component {
               <Modal.Body>
                 <Form>
                   <Form.Group
-                    className="mb-3"
-                    controlId="exampleForm.ControlTextarea1"
+                    className='mb-3'
+                    controlId='exampleForm.ControlTextarea1'
                   >
                     <Form.Label>Type a Message</Form.Label>
                     <Form.Control
-                      as="textarea"
+                      as='textarea'
                       rows={3}
                       value={this.state.message}
                       onChange={(e) => {
@@ -891,67 +887,67 @@ class ServiceTakerOrderDetails extends Component {
               <Modal.Footer>
                 {this.state.messageStatus && (
                   <Alert
-                    className="d-inline py-75 px-2 mr-1"
+                    className='d-inline py-75 px-2 mr-1'
                     color={this.state.messageStatus.color}
                   >
                     {this.state.messageStatus.body}
                   </Alert>
                 )}
-                <Button variant="secondary" onClick={this.handleClose}>
+                <Button variant='secondary' onClick={this.handleClose}>
                   Close
                 </Button>
-                <Button variant="primary" onClick={this.sentTo}>
+                <Button variant='primary' onClick={this.sentTo}>
                   Send
                 </Button>
               </Modal.Footer>
             </>
           ) : (
             <>
-              <Modal.Header className="justify-content-center">
+              <Modal.Header className='justify-content-center'>
                 <Modal.Title>Please Open the Chat Panel</Modal.Title>
               </Modal.Header>
-              <Modal.Body className="text-right py-2">
+              <Modal.Body className='text-right py-2'>
                 {this.state.messageStatus && (
                   <Alert
-                    className="d-inline py-75 px-2 mr-1"
+                    className='d-inline py-75 px-2 mr-1'
                     color={this.state.messageStatus.color}
                   >
                     {this.state.messageStatus.body}
                   </Alert>
                 )}
                 <Button
-                  className="ui button order_SendMessage_button"
+                  className='ui button order_SendMessage_button'
                   onClick={(e) => {
-                    localStorage.setItem("currenttab", "chatbox");
+                    localStorage.setItem('currenttab', 'chatbox');
                     localStorage.setItem(
-                      "order_id",
-                      this.state.order.conversation.id
+                      'order_id',
+                      this.state.order.conversation.id,
                     );
-                    this.props.history.push("/userdashboard");
+                    this.props.history.push('/userdashboard');
                   }}
                 >
                   Click Here
                 </Button>
-                <Button className="btn-secondary" onClick={this.handleClose}>
+                <Button className='btn-secondary' onClick={this.handleClose}>
                   Close
                 </Button>
               </Modal.Body>
             </>
           )}
         </Modal>
-        <Modal className="modal-center" show={this.state.showFeedBack}>
+        <Modal className='modal-center' show={this.state.showFeedBack}>
           <Modal.Header>
             <Modal.Title>FeedBack</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
               <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlTextarea2"
+                className='mb-3'
+                controlId='exampleForm.ControlTextarea2'
               >
                 <Form.Label>Write Your FeedBack</Form.Label>
                 <Form.Control
-                  as="textarea"
+                  as='textarea'
                   rows={3}
                   value={this.state.feedbackMessage}
                   onChange={(e) => {
@@ -964,17 +960,17 @@ class ServiceTakerOrderDetails extends Component {
           <Modal.Footer>
             {this.state.feedbackStatus && (
               <Alert
-                className="d-inline py-75 px-2 mr-1"
+                className='d-inline py-75 px-2 mr-1'
                 color={this.state.feedbackStatus.color}
               >
                 {this.state.feedbackStatus.body}
               </Alert>
             )}
-            <Button variant="secondary" onClick={this.handleFeedBackClose}>
+            <Button variant='secondary' onClick={this.handleFeedBackClose}>
               Close
             </Button>
             <Button
-              className="ui button send_button"
+              className='ui button send_button'
               onClick={this.feedbackSentTo}
             >
               Send

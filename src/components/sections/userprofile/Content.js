@@ -1,184 +1,256 @@
-import axios from "axios";
-import React, { Component } from "react";
-import AuthService from "../../../services/auth.service";
-import { Grid, Form } from "semantic-ui-react";
-import config from "../../../config.json";
-import authHeader from "../../../services/auth-header";
-import Joi from "joi-browser";
-import swal from "sweetalert";
-import "../../../assets/MyCSS/userdashboard.css";
-import CircularProgress from "@mui/material/CircularProgress";
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import AuthService from '../../../services/auth.service';
+import config from '../../../config.json';
+import authHeader from '../../../services/auth-header';
+import Joi from 'joi-browser';
+import swal from 'sweetalert';
+import CircularProgress from '@mui/material/CircularProgress';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateAdapter from '@mui/lab/AdapterDateFns'; // You can also use other date adapters
-import TextField from '@mui/material/TextField'; 
-import { Modal } from "react-bootstrap";
-import { Button } from "semantic-ui-react";
-import Progress from "./progress";
-import Address from "../Hire/AddressAutoComplete";
-import Loader from "../Loader/Loader";
-// import "../../../assets/MyCSS/progress.css"
+import { Modal } from 'react-bootstrap';
+import Progress from './progress';
+import Loader from '../Loader/Loader';
+import Address from '../Hire/AddressAutoComplete';
+import {
+  Box,
+  Grid,
+  Container,
+  Button,
+  TextField,
+  Typography,
+  Paper,
+  Avatar,
+  LinearProgress,
+  InputAdornment,
+  Autocomplete,
+  Card,
+  CardContent,
+  Divider,
+} from '@mui/material';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import CheckIcon from '@mui/icons-material/Check';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import PhoneIcon from '@mui/icons-material/Phone';
+import UploadIcon from '@mui/icons-material/Upload';
 
-// import { checkPropTypes } from "prop-types";
+const schema = {
+  username: Joi.string().required().label('User  Name'),
+  image: Joi.string().required().label('image'),
+  fname: Joi.string().required().label('First name'),
+  lname: Joi.string().required().label('Last Name'),
+  email: Joi.string().required().label('Email'),
+  password: Joi.string().required().label('Password'),
+  dob: Joi.string().required().label('date of Birth'),
+  mobile_no: Joi.string().required().label('Mobile Number'),
+  street_address: Joi.string().required().label('Street Address'),
+  country: Joi.string().required().label('Country Name'),
+  state: Joi.string().required().label('State Name'),
+  city: Joi.string().required().label('City Name'),
+  default_address: Joi.string().required().label('Default Address'),
+  postal_code: Joi.string().required().label('Postal Code'),
+  role_id: Joi.string().required().label('Chose Service Type'),
+  name: Joi.string().required().label('Service Name'),
+  description: Joi.string().required().label('Service Description'),
+  isLoading: false,
+};
 
-class UserDetails extends Component {
-  schema = {
-    username: Joi.string().required().label("User Name"),
-    image: Joi.string().required().label("image"),
-    fname: Joi.string().required().label("First name"),
-    lname: Joi.string().required().label("Last Name"),
-    email: Joi.string().required().label("Email"),
-    password: Joi.string().required().label("Password"),
-    dob: Joi.string().required().label("date of Birth"),
-    mobile_no: Joi.string().required().label("Mobile Number"),
-    street_address: Joi.string().required().label("Street Address"),
-    country: Joi.string().required().label("Country Name"),
-    state: Joi.string().required().label("State Name"),
-    city: Joi.string().required().label("City Name"),
-    default_address: Joi.string().required().label("Default Address"),
-    postal_code: Joi.string().required().label("Postal Code"),
-    role_id: Joi.string().required().label("Chose Service Type"),
-    name: Joi.string().required().label("Service Name"),
-    description: Joi.string().required().label("Service Description"),
-    isLoading: false,
+const UserDetails = () => {
+  const [userDet, setUserDet] = useState(AuthService.getCurrentUser());
+  const [profileImage, setProfileImage] = useState('');
+  const [identityImage, setIdentityImage] = useState('');
+  const [state, setState] = useState({
+    role: userDet.role[0],
+    user_id: userDet.id,
+    username: userDet.username,
+    fname: userDet.fname,
+    lname: userDet.lname,
+    email: '',
+    password: '',
+    c_password: '',
+    dob: '',
+    identity: '',
+    mobile_no: '',
+    image: userDet.avatar,
+    street_address: '',
+    country: '',
+    state: '',
+    city: '',
+    default_address: '',
+    role_id: '',
+    postal_code: '',
+    isPending: true,
+    confrm: '',
+    isOpen: false,
+    isClose: false,
+    otpError: '',
+    is_verified: userDet.is_verified,
+    profile_completion: '',
+    profile_completion_message: [],
+  });
+
+  const handleInputChange = (event) => {
+    const value = event.currentTarget.value;
+    const name = event.currentTarget.name;
+    setState({ ...state, [name]: value });
   };
 
-  constructor(props) {
-    super(props);
+  const handleDateChange = (date) => {
+    const newDate = new Date(date);
+    const year = newDate.getFullYear();
+    const month = String(newDate.getMonth() + 1).padStart(2, '0');
+    const day = String(newDate.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+    setState({ ...state, dob: formattedDate });
+  };
 
-    this.userDet = React.createRef();
-    this.userDet = AuthService.getCurrentUser();
-    let user = AuthService.getCurrentUser();
-    this.handleInputChange = this.handleInputChange.bind(this);
+  const onChangeModal = (e) => {
+    const value = e.currentTarget.value;
+    const name = e.currentTarget.name;
+    setState({ ...state, [name]: value });
+  };
 
-    this.state = {
-      role: user.role[0],
-      user_id: user.id,
-      username: user.username,
-      fname: user.fname,
-      lname: user.lname,
-      email: "",
-      password: "",
-      c_password: "",
-      dob: "",
-      identity: "",
-      mobile_no: "",
-      image: user.avatar,
-      street_address: "",
-      country: "",
-      state: "",
-      city: "",
-      default_address: "",
-      role_id: "",
-      postal_code: "",
-      isPending: true,
-      confrm: "",
-      isOpen: false,
-      isClose: false,
-      otpError: "",
-      is_verified: user.is_verified,
-      profile_completion: "",
-      profile_completion_message: [],
-    };
-    this.source = axios.CancelToken.source();
-  }
-
-  validate = () => {
-    const { error } = Joi.validate(
-      {
-        image: this.state.image,
-        username: this.state.username,
-        fname: this.state.fname,
-        name: this.state.name,
-        lname: this.state.lname,
-        email: this.state.email,
-        password: this.state.password,
-        c_password: this.state.c_password,
-        dob: this.state.dob,
-        mobile_no: this.state.mobile_no,
-        street_address: this.state.street_address,
-        country: this.state.country,
-        state: this.state.state,
-        city: this.state.city,
-        // default_address: this.state.default_address,
-        postal_code: this.state.postal_code,
-        role_id: this.state.role_id,
-        description: this.state.description,
-      },
-      this.schema,
-      {
-        abortEarly: false,
-      }
-    );
-    if (!error) return null;
-    let errors = {};
-    // if(this.state.password!==this.state.c_password){
-    //     errors['password'] = "password and confirm password doesn't match";
-    // }
-    if (error) {
-      for (let item of error.details) {
-        errors[item.path] = item.message;
-      }
+  const handleImageUpload = (event) => {
+    const name = event.target.name;
+    if (event.target.files[0]) {
+      console.log('image file', event.target.files[0]);
+      const reader = new FileReader();
+      reader.addEventListener('load', () => {
+        if (name === 'image') {
+          const imageUrl = URL.createObjectURL(event.target.files[0]);
+          setProfileImage(imageUrl);
+          setState({ ...state, image: reader.result });
+        } else if (name === 'identity') {
+          const identityUrl = URL.createObjectURL(event.target.files[0]);
+          setIdentityImage(identityUrl);
+          setState({ ...state, identity: reader.result });
+        }
+      });
+      reader.readAsDataURL(event.target.files[0]);
     }
-
-    return Object.keys(errors).length === 0 ? null : errors;
   };
 
-  openModal = async () => {
+  const optp = async (event) => {
+    event.preventDefault();
+    const ob = {
+      otp: state.verifyCode,
+      mobile_no: state.mobile_no,
+    };
+    try {
+      const result = await axios.post(
+        config.SERVER_URL + `/api/verifymobile`,
+        ob,
+        {
+          headers: authHeader(),
+        },
+      );
+      if (result.data.success === false) {
+        setState({ ...state, otpError: result.data.message });
+      } else {
+        swal('success!', ' Your mobile number has been verified!', 'success');
+        closeModal();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const resetForm = async () => {
+    setState({ ...state, verifyCode: '' });
+  };
+
+  const submit = async (event) => {
+    event.preventDefault();
+    swal({
+      title: 'Are you sure?',
+      icon: 'warning',
+      buttons: ['No', 'Yes, I am sure!'],
+      dangerMode: true,
+    }).then(async function (isConfirm) {
+      if (isConfirm) {
+        setState({
+          ...state,
+          // image: state.image.replace(config.SERVER_URL + '/', ''),
+          // identity: state.identity.replace(config.SERVER_URL + '/', ''),
+          isLoading: true,
+        });
+        const update = await axios.put(
+          config.SERVER_URL + `/api/user/${userDet.id}/profile`,
+          state,
+        );
+        setState({
+          ...state,
+          // image: config.SERVER_URL + '/' + update.data.data.image,
+          // identity: config.SERVER_URL + '/' + update.data.data.identity,
+          isLoading: false,
+        });
+        swal('Updated!', 'Your Profile Has Been Update!', 'success');
+        localStorage.removeItem('DD');
+      }
+    });
+  };
+
+  const handleAddress = (address, city, Countystate, country, postal_code) => {
+    setState({
+      ...state,
+      city: city,
+      country: country,
+      state: Countystate,
+      postal_code: postal_code,
+      street_address: address,
+      default_address: address,
+    });
+  };
+
+  const openModal = async () => {
     await axios.put(
-      config.SERVER_URL + `/api/user/${this.state.user_id}`,
-      { mobile_no: this.state.mobile_no },
+      config.SERVER_URL + `/api/user/${state.user_id}`,
+      { mobile_no: state.mobile_no },
       {
         headers: authHeader(),
-      }
+      },
     );
     const requestBody = {
-      email: this.state.email,
-      mobile_no: this.state.mobile_no,
+      email: state.email,
+      mobile_no: state.mobile_no,
     };
     const { data } = await axios.post(
       config.SERVER_URL + `/api/verifyphone`,
       requestBody,
       {
         headers: authHeader(),
-      }
+      },
     );
     if (data.success === false) {
-      swal("Error!", "Something went wrong.", "danger");
+      swal('Error!', 'Something went wrong.', 'danger');
     }
-    this.setState({ isOpen: true });
+    setState({ ...state, isOpen: true });
   };
 
-  closeModal = () => {
-    this.setState({ isOpen: false });
-    this.setState({ otpError: false });
-    this.resetForm();
+  const closeModal = () => {
+    setState({ ...state, isOpen: false, otpError: false });
+    resetForm();
   };
 
-  async componentDidMount() {
+  useEffect(() => {
     window.scrollTo(0, 0);
-
-    try {
-      let user = AuthService.getCurrentUser();
-
-      const fetchUserData = axios.get(
-        config.SERVER_URL + `/api/user/${user.id}`,
-        {
-          headers: authHeader(),
-          cancelToken: this.source.token,
-        }
-      );
-      const { data } = await fetchUserData;
-
-      const UserDetails = data.data;
-      // console.log(":::: 145 :::::",UserDetails)
+    const fetchUserData = axios.get(
+      config.SERVER_URL + `/api/user/${userDet.id}`,
+      {
+        headers: authHeader(),
+      },
+    );
+    fetchUserData.then((response) => {
+      const UserDetails = response.data.data;
       let temp_profile_completion =
         parseInt(UserDetails.profile_completion) > 100
-          ? "100"
+          ? '100'
           : UserDetails.profile_completion;
-      console.log(temp_profile_completion);
-      this.setState({
-        user: user,
+      setProfileImage(config.SERVER_URL + '/' + UserDetails.image);
+      setIdentityImage(config.SERVER_URL + '/' + UserDetails.identity);
+      setState({
+        ...state,
         country: UserDetails.location?.country,
         state: UserDetails.location?.state,
         city: UserDetails.location?.city,
@@ -191,743 +263,532 @@ class UserDetails extends Component {
         email: UserDetails.email,
         password: UserDetails.password,
         dob: UserDetails.dob,
-        identity: config.SERVER_URL + "/" + UserDetails.identity,
+        identity: config.SERVER_URL + '/' + UserDetails.identity,
         mobile_no: UserDetails.mobile_no,
-        image: config.SERVER_URL + "/" + UserDetails.image,
-        // roleData,
+        image: config.SERVER_URL + '/' + UserDetails.image,
         isPending: false,
         is_verified: UserDetails.is_verified,
         profile_completion: temp_profile_completion,
         profile_completion_message: UserDetails.profile_completion_message,
       });
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  componentWillUnmount() {
-    window.scrollTo(0, 0);
-    if (this.source) this.source.cancel("User Profile component unmounted");
-  }
-
-  handleInputChange(event) {
-    const value = event.currentTarget.value;
-    const name = event.currentTarget.name;
-    this.setState({
-      [name]: value,
     });
-  }
-handleDateChange=(date)=>{
-  // You can create a Date object by passing the date string
-const newDate = new Date(date);
+  }, []);
 
-
-// Extract year, month, and day
-const year = newDate.getFullYear();
-const month = String(newDate.getMonth() + 1).padStart(2, '0'); // Month is zero-based, so we add 1
-const day = String(newDate.getDate()).padStart(2, '0');
-
-// Create the required format: yyyy-MM-dd
-const formattedDate = `${year}-${month}-${day}`;
-  this.setState({
-    ["dob"]: formattedDate,
-  });
-  };
-  onChangeModal = (e) => {
-    const value = e.currentTarget.value;
-    const name = e.currentTarget.name;
-    this.setState({
-      [name]: value,
-    });
-  };
-
-  handleImageUpload = (event) => {
-    // const that=this
-    const name = event.target.name;
-    if (event.target.files[0]) {
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        if (name === "image") {
-          this.setState({ image: reader.result });
-        } else if (name === "identity") {
-          this.setState({ identity: reader.result });
-        }
-      });
-      reader.readAsDataURL(event.target.files[0]);
-    }
-  };
-
-  optp = async (event) => {
-    event.preventDefault();
-
-    const ob = {
-      otp: this.state.verifyCode,
-      mobile_no: this.state.mobile_no,
-    };
-
-    try {
-      const result = await axios.post(
-        config.SERVER_URL + `/api/verifymobile`,
-        ob,
-        {
-          headers: authHeader(),
-        }
-      );
-      console.log("result", result.data.message);
-
-      if (result.data.success === false) {
-        this.setState({ otpError: result.data.message });
-        this.resetForm();
-      } else {
-        swal("success!", " Your mobile number has been verified!", "success");
-        this.closeModal();
-        this.componentDidMount();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  resetForm = async () => {
-    this.setState({
-      verifyCode: "",
-    });
-  };
-
-  async submit(event, errors, values) {
-    // if(this.state.password!==this.state.c_password){
-    //     window.confirm("Password and confirm password not match")
-    // }else{
-    let that = this;
-    swal({
-      title: "Are you sure?",
-      // text: "You will not be able to recover this imaginary file!",
-      icon: "warning",
-      buttons: ["No", "Yes, I am sure!"],
-      dangerMode: true,
-    }).then(async function (isConfirm) {
-      if (isConfirm) {
-        that.setState({
-          image: that.state.image.replace(config.SERVER_URL + "/", ""),
-          identity: that.state.identity.replace(config.SERVER_URL + "/", ""),
-          isLoading:true,
-        });
-     
-        const update = await axios.put(
-          config.SERVER_URL + `/api/user/${that.userDet.id}/profile`,
-          that.state
-        );
-
-        that.setState({
-          image: config.SERVER_URL + "/" + update.data.data.image,
-          identity: config.SERVER_URL + "/" + update.data.data.identity,
-          isLoading:false,
-        });
-        // console.log("::::::: After Upload ::::::", update)
-        swal("Updated!", "Your Profile Has Been Update!", "success");
-        localStorage.removeItem("DD");
-        that.componentDidMount();
-      }
-    });
-  }
-
-  handleAddress = (address, city, state, country, postal_code) => {
-    this.setState({
-      city: city,
-      country: country,
-      state: state,
-      postal_code: postal_code,
-      street_address: address,
-      default_address: address,
-    });
-  };
-
-  // myInterval = setInterval(() => {
-  //   if (
-  //     localStorage.getItem("streetAddress") !== "" &&
-  //     this.state.street_address !== "" &&
-  //     this.state.city != "" &&
-  //     this.state.state != "" &&
-  //     this.state.country != "" &&
-  //     this.state.postal_code != ""
-  //   ) {
-  //     const city = localStorage.getItem("city");
-  //     const country = localStorage.getItem("country");
-  //     //       console.log("country:",localStorage.getItem("country"))
-  //     const state = localStorage.getItem("state");
-  //     const postal_code = localStorage.getItem("postal_code");
-  //     if (city && country && state && postal_code) {
-  //       this.setState({
-  //         city: city,
-  //         country: localStorage.getItem("country"),
-  //         state: state,
-  //         postal_code: postal_code,
-  //         street_address: localStorage.getItem("streetAddress"),
-  //         default_address: localStorage.getItem("streetAddress"),
-  //       });
-  //     }
-  //   } else {
-  //     this.setState({
-  //       city: "",
-  //       country: "",
-  //       state: "",
-  //       postal_code: "",
-  //       street_address: "",
-  //       default_address: "",
-  //     });
-  //   }
-  // }, 1000);
-
-  render() {
-    // console.log(this.state.is_verified)
-
-    return (
-      <>
-        {this.state.isLoading && <Loader />}
-        {this.state.isPending ? (
-          <div className="text-center">
-            <CircularProgress color="success" />
-          </div>
-        ) : (
-          <Grid.Column className="cust-userprofile-container">
-         
-            <Form>
-          
-              <div className="form-row">
-                <div className="form-group col cust-barProg">
-                  <h4> Profile Status </h4>
-                  <Progress
-                    profile_completion={this.state.profile_completion}
-                  />
-
-                  {/* <Form.Field>
-                                <input
-                                    name="progress"
-                                    type="text"
-                                    readOnly
-                                    value={"your profile is " + this.state.profile_completion + "% complete"}
-                                    // onChange={this.handleInputChange}
-                                    style={{
-                                        backgroundColor: 'aquamarine',
-                                        textAlign: 'center'
-                                    }}
-                                />
-                            </Form.Field> */}
-                </div>
-              </div>
-              {this.state.profile_completion_message?.length > 0 && (
-                <div>
-                  <p>
-                    <b>
-                      Complete Your Profile: You need to fulfill the following
-                      details to complete your profile.
-                    </b>
-                  </p>
-                </div>
-              )}
-              {this.state.profile_completion_message.map((message) => {
-                return <div className="text-danger">{message}</div>;
-              })}
-              <span className="text-danger">{this.state.error}</span>
-              <div className="form-row ">
-                <div
-                  className="form-group col "
-                  style={{ textAlign: "center" }}
+  return (
+    <div>
+      {state.isLoading && <Loader />}
+      {state.isPending ? (
+        <div className='text-center'>
+          <CircularProgress color='success' />
+        </div>
+      ) : (
+        <Container maxWidth='md'>
+          <Paper
+            elevation={3}
+            sx={{
+              p: 3,
+              borderRadius: 2,
+              border: '1px solid #e0e0e0',
+            }}
+          >
+            <form>
+              {/* Profile Status */}
+              <Box sx={{ mb: 4 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    mb: 1,
+                  }}
                 >
-                  <Form.Field>
-                    <span style={{ position: "relative" }}>
-                      <img
-                        src={this.state.image}
-                        className="circle-image my-2"
-                        style={{
-                          width: "75px",
-                          height: "75px",
-                          objectFit: "contain",
-                          borderRadius: "50%",
-                        }}
-                        alt="user_image"
-                      />
-                      <span
-                        style={{
-                          position: "absolute",
-                          top: "30px",
-                          right: "0",
-                        }}
-                      >
-                        <i
-                          className="fa fa-plus-circle"
-                          aria-hidden="true"
-                          onClick={() => {
-                            document.getElementById("image").click();
-                          }}
-                          style={{
-                            boxShadow: "0px 0px 3px #454545",
-                            borderRadius: "50%",
-                            fontSize: "1.2rem",
-                            cursor: "pointer",
-                            color: "#007bff",
-                          }}
-                        ></i>
-
-                        <input
-                          type="file"
-                          name="image"
-                          id="image"
-                          accept=".jpg,.png,.pdf"
-                          onChange={this.handleImageUpload}
-                          style={{ display: "none" }}
-                        />
-                      </span>
-                    </span>
-                  </Form.Field>
-                </div>
-              </div>
-              <div className="form-row">
-                <div className="form-group col">
-                  <Form.Field>
-                    <label>Username</label>
-                    <input
-                      name="username"
-                      type="text"
-                      placeholder="User Name"
-                      value={this.state.username}
-                      onChange={this.handleInputChange}
-                    />
-                    {this.state.errors && this.state.errors.username && (
-                      <div
-                        style={{
-                          color: "#DA1212",
-                          fontWeight: "500",
-                          fontSize: "0.95rem",
-                        }}
-                      >
-                        {this.state.errors.username}
-                      </div>
-                    )}
-                  </Form.Field>
-                </div>
-              </div>
-              <div className="form-row">
-                <div className="form-group col-md-6">
-                  <Form.Field>
-                    <label>First Name</label>
-                    <input
-                      name="fname"
-                      type="text"
-                      placeholder="First Name"
-                      value={this.state.fname}
-                      onChange={this.handleInputChange}
-                    />
-                    {this.state.errors && this.state.errors.fname && (
-                      <div
-                        style={{
-                          color: "#DA1212",
-                          fontWeight: "500",
-                          fontSize: "0.95rem",
-                        }}
-                      >
-                        {this.state.errors.fname}
-                      </div>
-                    )}
-                  </Form.Field>
-                </div>
-                <div className="form-group col-md-6">
-                  <Form.Field>
-                    <label>Last Name</label>
-                    <input
-                      name="lname"
-                      type="text"
-                      placeholder="Last Name"
-                      value={this.state.lname}
-                      onChange={this.handleInputChange}
-                    />
-                    {this.state.errors && this.state.errors.lname && (
-                      <div
-                        style={{
-                          color: "#DA1212",
-                          fontWeight: "500",
-                          fontSize: "0.95rem",
-                        }}
-                      >
-                        {this.state.errors.lname}
-                      </div>
-                    )}
-                  </Form.Field>
-                </div>
-              </div>
-              <div className="form-row">
-                <div className="form-group col-md-6">
-                  <Form.Field>
-                    <label>Email</label>
-                    <input
-                      name="email"
-                      type="text"
-                      placeholder="Email"
-                      value={this.state.email}
-                      onChange={this.handleInputChange}
-                      readOnly
-                    />
-                    {this.state.errors && this.state.errors.email && (
-                      <div
-                        style={{
-                          color: "#DA1212",
-                          fontWeight: "500",
-                          fontSize: "0.95rem",
-                        }}
-                      >
-                        {this.state.errors.email}
-                      </div>
-                    )}
-                  </Form.Field>
-                </div>
-
-                <div className="form-group col-md-6 dob-field">
-                  <Form.Field>
-                    <label>Date Of Birth</label>
-
-                   
-                     <LocalizationProvider dateAdapter={DateAdapter}>
-      <MobileDatePicker
-      mode="legacy" 
-       name="dob"
-        label=""
-        value={this.state.dob}
-        onChange={this.handleDateChange}
-        maxDate={new Date()} 
-        renderInput={(params) => <TextField {...params} />} // Use TextField for the input
-      />
-    </LocalizationProvider>
-                    {this.state.errors && this.state.errors.dob && (
-                      <div
-                        style={{
-                          color: "#DA1212",
-                          fontWeight: "500",
-                          fontSize: "0.95rem",
-                        }}
-                      >
-                        {this.state.errors.dob}
-                      </div>
-                    )}
-                  </Form.Field>
-                </div>
-              </div>
-              <div className="form-row">
-                {/* <div className="form-group col-md-6">
-                            <Form.Field>
-                                <label>New Password</label>
-                                <input
-                                    name="password"
-                                    type="password"
-                                    placeholder="Password"
-                                    value={this.state.password}
-                                    onChange={this.handleInputChange}
-                                    
-                                />
-                                {this.state.errors &&
-                                    this.state.errors.password && (
-                                        <div
-                                            style={{
-                                                color: "#DA1212",
-                                                fontWeight: "500",
-                                                fontSize: "0.95rem",
-                                            }}
-                                        >
-                                            {this.state.errors.password}
-                                        </div>
-                                    )}
-                            </Form.Field>
-                        </div> */}
-                {/* <div className="form-group col-md-6">
-                             <Form.Field>
-                                <label>Confirm New Password</label>
-                                <input
-                                    name="c_password"
-                                    type="password"
-                                    placeholder="Password"
-                                    value={this.state.c_password}
-                                    onChange={this.handleInputChange}
-                                 
-                                />
-                                {this.state.errors &&
-                                    this.state.errors.password && (
-                                        <div
-                                            style={{
-                                                color: "#DA1212",
-                                                fontWeight: "500",
-                                                fontSize: "0.95rem",
-                                            }}
-                                        >
-                                            {this.state.errors.password}
-                                        </div>
-                                    )}
-                            </Form.Field> 
-                        </div>*/}
-              </div>
-              <div className="form-row">
-                <div className="form-group col-md-6">
-                  <Form.Field>
-                    <label>Mobile Number</label>
-                    <input
-                      name="mobile_no"
-                      type="tel"
-                      placeholder="Mobile Number"
-                      value={this.state.mobile_no}
-                      onChange={this.handleInputChange}
-                    />
-                    {this.state.errors && this.state.errors.mobile_no && (
-                      <div
-                        style={{
-                          color: "#DA1212",
-                          fontWeight: "500",
-                          fontSize: "0.95rem",
-                        }}
-                      >
-                        {this.state.errors.mobile_no}
-                      </div>
-                    )}
-                  </Form.Field>
-                </div>
-                {/* <div className="form-group verifybuton col-md-6">
-                  <button
-                    hidden={
-                      this.state.is_verified === "2" ||
-                      this.state.mobile_no === null
-                    }
-                    type="submit"
-                    className="btn btn-black btn-small cust-verify-button"
-                    onClick={this.openModal}
-                  >
-                    verify
-                  </button>
-                </div> */}
-              </div>
-              <Form.Field>
-                <label>Address</label>
-
-                <div className="form-row">
-                  <div className="form-group col-md-12">
-                    <Address
-                      page="userdetail streetAddress"
-                      handleAddress={this.handleAddress}
-                      currentAddress={this.state?.street_address}
-                    />
-                    {/* <input
-                      name="street_address"
-                      type="text"
-                      placeholder="Street Address"
-                      value={this.state.street_address}
-                      onChange={this.handleInputChange}
-                    /> */}
-
-                    {this.state.errors && this.state.errors.street_address && (
-                      <div
-                        style={{
-                          color: "#DA1212",
-                          fontWeight: "500",
-                          fontSize: "0.95rem",
-                        }}
-                      >
-                        {this.state.errors.street_address}
-                      </div>
-                    )}
-                  </div>
-                  <div className="form-group col-md-4">
-                    <input
-                      name="country"
-                      type="text"
-                      placeholder="Country"
-                      value={this.state.country}
-                      onChange={this.handleInputChange}
-                    />
-                    {this.state.errors && this.state.errors.country && (
-                      <div
-                        style={{
-                          color: "#DA1212",
-                          fontWeight: "500",
-                          fontSize: "0.95rem",
-                        }}
-                      >
-                        {this.state.errors.country}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="form-group col-md-4">
-                    <input
-                      name="state"
-                      type="text"
-                      placeholder="State"
-                      value={this.state.state}
-                      onChange={this.handleInputChange}
-                    />
-                    {this.state.errors && this.state.errors.state && (
-                      <div
-                        style={{
-                          color: "#DA1212",
-                          fontWeight: "500",
-                          fontSize: "0.95rem",
-                        }}
-                      >
-                        {this.state.errors.state}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="form-group col-md-4">
-                    <input
-                      name="city"
-                      type="text"
-                      placeholder="city"
-                      value={this.state.city}
-                      onChange={this.handleInputChange}
-                    />
-                    {this.state.errors && this.state.errors.city && (
-                      <div
-                        style={{
-                          color: "#DA1212",
-                          fontWeight: "500",
-                          fontSize: "0.95rem",
-                        }}
-                      >
-                        {this.state.errors.city}
-                      </div>
-                    )}
-                  </div>
-                  {/* <div className="form-group col-md-12">
-                    <input
-                      name="default_address"
-                      type="text"
-                      placeholder="Default Address"
-                      value={this.state.default_address}
-                      onChange={this.handleInputChange}
-                    />
-                    {this.state.errors && this.state.errors.default_address && (
-                      <div
-                        style={{
-                          color: "#DA1212",
-                          fontWeight: "500",
-                          fontSize: "0.95rem",
-                        }}
-                      >
-                        {this.state.errors.default_address}
-                      </div>
-                    )}
-                  </div> */}
-
-                  <div className="form-group col-md-6">
-                    <input
-                      name="postal_code"
-                      type="text"
-                      placeholder="Postal Code"
-                      value={this.state.postal_code}
-                      onChange={this.handleInputChange}
-                    />
-                    {this.state.errors && this.state.errors.postal_code && (
-                      <div
-                        style={{
-                          color: "#DA1212",
-                          fontWeight: "500",
-                          fontSize: "0.95rem",
-                        }}
-                      >
-                        {this.state.errors.postal_code}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </Form.Field>
-              <Form.Field>
-                <label>Identity Verification</label>
-              </Form.Field>
-              <div className="form-row">
-                <div className="form-group col-md-12">
-                  <Form.Field>
-                    <div className="form-row">
-                      <div
-                        className="form-group col "
-                        style={{ textAlign: "center" }}
-                      >
-                        <Form.Field>
-                          <span>
-                            <img
-                              src={this.state.identity}
-                              alt=""
-                              style={{
-                                width: "75px",
-                                height: "75px",
-                                objectFit: "contain",
-                              }}
-                            />
-                          </span>
-                        </Form.Field>
-                      </div>
-                    </div>
-                    <span>Change Driver's License / Passport Image</span>
-                    <input
-                      type="file"
-                      name="identity"
-                      id="identity"
-                      accept=".jpg,.png,.pdf"
-                      onChange={this.handleImageUpload}
-                    />
-                  </Form.Field>
-                </div>
-              </div>
-              <button
-                type="submit"
-                className="btn btn-black btn-block mt-20"
-                onClick={(event) => this.submit(event)}
-              >
-                Update Profile
-              </button>
-            </Form>
-          </Grid.Column>
-        )}
-        <Modal show={this.state.isOpen} onHide={this.closeModal}>
-          <Modal.Header>
-            <Modal.Title>Verification Code</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Field>
-                <label>Enter Verification Code</label>
-                <input
-                  name="verifyCode"
-                  type="text"
-                  // onKeyDown={this.state.otpError = ""}
-                  maxLength={4}
-                  placeholder="Verification Code"
-                  value={this.state.verifyCode}
-                  onChange={this.onChangeModal}
-                />
-
-                {this.state.otpError && (
-                  <div
-                    style={{
-                      color: "#DA1212",
-                      fontWeight: "500",
-                      fontSize: "0.95rem",
-                    }}
-                  >
-                    {this.state.otpError}
+                  <Typography variant='h6' fontWeight='medium'>
+                    Profile Status
+                  </Typography>
+                </Box>
+                <Progress profile_completion={state.profile_completion} />
+                {state.profile_completion_message?.length > 0 && (
+                  <div>
+                    <p>
+                      <b>
+                        Complete Your Profile: You need to fulfill the following
+                        details to complete your profile.
+                      </b>
+                    </p>
                   </div>
                 )}
-              </Form.Field>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.closeModal}>
-              Cancel
-            </Button>
-            <Button
-              className="ui inverted green button another_service_btn"
-              onClick={this.optp}
-            >
-              Submit
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </>
-    );
-  }
-}
+                {state?.profile_completion_message?.map((message) => {
+                  return <div className='text-danger'>{message}</div>;
+                })}
+                <span className='text-danger'>{state.error}</span>
+              </Box>
+
+              {/* Profile Image */}
+              <Box sx={{ display: 'flex', justifyContent: 'center', mb: 4 }}>
+                <Box sx={{ position: 'relative' }}>
+                  <Avatar
+                    src={profileImage}
+                    alt='Profile Picture'
+                    sx={{
+                      width: 100,
+                      height: 100,
+                      border: '4px solid #e9f5eb',
+                    }}
+                  />
+
+                  <Box
+                    component='label'
+                    htmlFor='profile-image-upload'
+                    sx={{
+                      position: 'absolute',
+                      bottom: 0,
+                      right: 0,
+                      backgroundColor: '#0b6818',
+                      borderRadius: '50%',
+                      width: 32,
+                      height: 32,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      boxShadow: '0px 2px 4px rgba(0,0,0,0.2)',
+                      '&:hover': {
+                        backgroundColor: '#0a5714',
+                      },
+                    }}
+                  >
+                    <CameraAltIcon sx={{ color: 'white', fontSize: 18 }} />
+                  </Box>
+                  <input
+                    id='profile-image-upload'
+                    type='file'
+                    accept='image/*'
+                    name='image'
+                    onChange={handleImageUpload}
+                    style={{ display: 'none' }}
+                  />
+                </Box>
+              </Box>
+
+              <Grid container spacing={3}>
+                {/* Username */}
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label='Username'
+                    name='username'
+                    value={state.username}
+                    onChange={handleInputChange}
+                    variant='outlined'
+                    InputLabelProps={{ shrink: true }}
+                  />
+                  {state.errors && state.errors.username && (
+                    <div
+                      style={{
+                        color: '#DA1212',
+                        fontWeight: '500',
+                        fontSize: '0.95rem',
+                      }}
+                    >
+                      {state.errors.username}
+                    </div>
+                  )}
+                </Grid>
+
+                {/* First Name and Last Name */}
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    name='fname'
+                    label='First Name'
+                    value={state.fname}
+                    onChange={handleInputChange}
+                    variant='outlined'
+                    InputLabelProps={{ shrink: true }}
+                  />
+                  {state.errors && state.errors.fname && (
+                    <div
+                      style={{
+                        color: '#DA1212',
+                        fontWeight: '500',
+                        fontSize: '0.95rem',
+                      }}
+                    >
+                      {state.errors.fname}
+                    </div>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    name='lname'
+                    label='Last Name'
+                    value={state.lname}
+                    onChange={handleInputChange}
+                    variant='outlined'
+                    InputLabelProps={{ shrink: true }}
+                  />
+                  {state.errors && state.errors.lname && (
+                    <div
+                      style={{
+                        color: '#DA1212',
+                        fontWeight: '500',
+                        fontSize: '0.95rem',
+                      }}
+                    >
+                      {state.errors.lname}
+                    </div>
+                  )}
+                </Grid>
+
+                {/* Email and Date of Birth */}
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    name='email'
+                    label='Email'
+                    value={state.email}
+                    onChange={handleInputChange}
+                    InputProps={{ readOnly: true }}
+                    variant='outlined'
+                    InputLabelProps={{ shrink: true }}
+                  />
+                  {state.errors && state.errors.email && (
+                    <div
+                      style={{
+                        color: '#DA1212',
+                        fontWeight: '500',
+                        fontSize: '0.95rem',
+                      }}
+                    >
+                      {state.errors.email}
+                    </div>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <LocalizationProvider dateAdapter={DateAdapter}>
+                    <MobileDatePicker
+                      label='Date of Birth'
+                      mode='legacy'
+                      name='dob'
+                      value={state.dob}
+                      onChange={handleDateChange}
+                      maxDate={new Date()}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </LocalizationProvider>
+                  {state.errors && state.errors.dob && (
+                    <div
+                      style={{
+                        color: '#DA1212',
+                        fontWeight: '500',
+                        fontSize: '0.95rem',
+                      }}
+                    >
+                      {state.errors.dob}
+                    </div>
+                  )}
+                </Grid>
+
+                <Grid item xs={12} sm={6}></Grid>
+
+                {/* Mobile Number */}
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    name='mobile_no'
+                    label='Mobile Number'
+                    value={state.mobile_no}
+                    onChange={handleInputChange}
+                    variant='outlined'
+                    InputLabelProps={{ shrink: true }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position='start'>
+                          <PhoneIcon color='primary' fontSize='small' />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                  {state.errors && state.errors.mobile_no && (
+                    <div
+                      style={{
+                        color: '#DA1212',
+                        fontWeight: '500',
+                        fontSize: '0.95rem',
+                      }}
+                    >
+                      {state.errors.mobile_no}
+                    </div>
+                  )}
+                </Grid>
+
+                {/* Address Section */}
+                <Grid item xs={12}>
+                  <Typography
+                    variant='subtitle1'
+                    fontWeight='medium'
+                    sx={{ mb: 2 }}
+                  >
+                    Address
+                  </Typography>
+                  <Divider sx={{ mb: 2 }} />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Address
+                    page='userdetail streetAddress'
+                    handleAddress={handleAddress}
+                    currentAddress={state?.street_address}
+                  />
+                  {/* <Autocomplete
+                    freeSolo
+                    options={[]}
+                    value={state?.street_address}
+                    name='street_address'
+                    onChange={handleInputChange}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label='Service Address'
+                        variant='outlined'
+                        fullWidth
+                        InputLabelProps={{ shrink: true }}
+                        InputProps={{
+                          ...params.InputProps,
+                          startAdornment: (
+                            <InputAdornment position='start'>
+                              <LocationOnIcon
+                                color='primary'
+                                fontSize='small'
+                              />
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    )}
+                  /> */}
+                  {state.errors && state.errors.street_address && (
+                    <div
+                      style={{
+                        color: '#DA1212',
+                        fontWeight: '500',
+                        fontSize: '0.95rem',
+                      }}
+                    >
+                      {state.errors.street_address}
+                    </div>
+                  )}
+                </Grid>
+
+                <Grid item xs={12} sm={4}>
+                  <TextField
+                    fullWidth
+                    label='Country'
+                    name='country'
+                    value={state.country}
+                    onChange={handleInputChange}
+                    variant='outlined'
+                    InputLabelProps={{ shrink: true }}
+                  />
+                  {state.errors && state.errors.country && (
+                    <div
+                      style={{
+                        color: '#DA1212',
+                        fontWeight: '500',
+                        fontSize: '0.95rem',
+                      }}
+                    >
+                      {state.errors.country}
+                    </div>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <TextField
+                    fullWidth
+                    label='State'
+                    name='state'
+                    value={state.state}
+                    onChange={handleInputChange}
+                    variant='outlined'
+                    InputLabelProps={{ shrink: true }}
+                  />
+                  {state.errors && state.errors.state && (
+                    <div
+                      style={{
+                        color: '#DA1212',
+                        fontWeight: '500',
+                        fontSize: '0.95rem',
+                      }}
+                    >
+                      {state.errors.state}
+                    </div>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <TextField
+                    fullWidth
+                    label='City'
+                    name='city'
+                    value={state.city}
+                    onChange={handleInputChange}
+                    variant='outlined'
+                    InputLabelProps={{ shrink: true }}
+                  />
+                  {state.errors && state.errors.city && (
+                    <div
+                      style={{
+                        color: '#DA1212',
+                        fontWeight: '500',
+                        fontSize: '0.95rem',
+                      }}
+                    >
+                      {state.errors.city}
+                    </div>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label='Postal Code'
+                    name='postal_code'
+                    value={state.postal_code}
+                    onChange={handleInputChange}
+                    variant='outlined'
+                    InputLabelProps={{ shrink: true }}
+                  />
+                  {state.errors && state.errors.postal_code && (
+                    <div
+                      style={{
+                        color: '#DA1212',
+                        fontWeight: '500',
+                        fontSize: '0.95rem',
+                      }}
+                    >
+                      {state.errors.postal_code}
+                    </div>
+                  )}
+                </Grid>
+
+                {/* Identity Verification */}
+                <Grid item xs={12}>
+                  <Typography
+                    variant='subtitle1'
+                    fontWeight='medium'
+                    sx={{ mb: 2 }}
+                  >
+                    Identity Verification
+                  </Typography>
+                  <Divider sx={{ mb: 2 }} />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Card variant='outlined' sx={{ mb: 2 }}>
+                    <CardContent
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Box sx={{ mb: 2 }}>
+                        <img
+                          src={identityImage}
+                          alt='Identity Document'
+                          style={{
+                            maxWidth: '100%',
+                            height: 'auto',
+                            maxHeight: 150,
+                            borderRadius: 8,
+                          }}
+                        />
+                      </Box>
+                      <Button
+                        component='label'
+                        variant='outlined'
+                        startIcon={<UploadIcon />}
+                        sx={{
+                          color: '#0b6818',
+                          borderColor: '#0b6818',
+                          '&:hover': {
+                            borderColor: '#0a5714',
+                            backgroundColor: 'rgba(11, 104, 24, 0.04)',
+                          },
+                        }}
+                      >
+                        Change Driver's License / Passport
+                        <input
+                          type='file'
+                          accept='image/*,.pdf'
+                          onChange={handleImageUpload}
+                          name='identity'
+                          style={{ display: 'none' }}
+                        />
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Grid>
+
+                {/* Submit Button */}
+                <Grid item xs={12}>
+                  <button
+                    type='submit'
+                    className='btn btn-black btn-block mt-20'
+                    onClick={(event) => submit(event)}
+                  >
+                    Update Profile
+                  </button>
+                </Grid>
+              </Grid>
+            </form>
+          </Paper>
+        </Container>
+      )}
+      <Modal show={state.isOpen} onHide={closeModal}>
+        <Modal.Header>
+          <Modal.Title>Verification Code</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form>
+            <Box sx={{ mb: 2 }}>
+              <label>Enter Verification Code</label>
+              <input
+                name='verifyCode'
+                type='text'
+                maxLength={4}
+                placeholder='Verification Code'
+                value={state.verifyCode}
+                onChange={onChangeModal}
+              />
+
+              {state.otpError && (
+                <div
+                  style={{
+                    color: '#DA1212',
+                    fontWeight: '500',
+                    fontSize: '0.95rem',
+                  }}
+                >
+                  {state.otpError}
+                </div>
+              )}
+            </Box>
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant='secondary' onClick={closeModal}>
+            Cancel
+          </Button>
+          <Button
+            className='ui inverted green button another_service_btn'
+            onClick={optp}
+          >
+            Submit
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
+  );
+};
+
 export default UserDetails;

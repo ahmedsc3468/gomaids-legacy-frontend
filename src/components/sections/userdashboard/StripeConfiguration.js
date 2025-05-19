@@ -1,94 +1,164 @@
-import { Form } from "semantic-ui-react";
-import React, { Component } from "react";
-import { Row, Col, Button } from "react-bootstrap";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
-import axios from "axios";
-import "../../../assets/MyCSS/userdashboard.css";
-import config from "../../../config.json";
-import swal from "sweetalert";
-import authHeader from "../../../services/auth-header";
-import AuthService from "../../../services/auth.service";
-import CircularProgress from "@mui/material/CircularProgress";
+import React, { useState, useEffect } from 'react';
+import { Row, Col } from 'react-bootstrap';
+import CircularProgress from '@mui/material/CircularProgress';
+import axios from 'axios';
+import swal from 'sweetalert';
+import authHeader from '../../../services/auth-header';
+import AuthService from '../../../services/auth.service';
+import config from '../../../config.json';
+import { styled } from '@mui/material/styles';
+import CreditCardIcon from '@material-ui/icons/CreditCard';
+import StripeConnectButton from '../StripePayment/StripeConnectButton';
+import { CssBaseline, Box, Snackbar, Alert, Button } from '@mui/material';
 
-class StripeConfiguration extends Component {
-  constructor(props) {
-    super(props);
-    let user = AuthService.getCurrentUser();
-    this.state = {
-      user_id: user.id,
-      paymentConfigShow: "stripe",
-      stripe_publishable_key: "",
-      stripe_secret: "",
-      paypal_client_id: "",
-      paypal_client_secret: "",
-      isPending: true,
-    };
-  }
+// Create a styled button with Stripe's branding colors
+const StripeButton = styled(Button)(({ theme }) => ({
+  background: 'linear-gradient(45deg, #6772e5 30%, #9e89fa 90%)',
+  color: 'white',
+  padding: '8px 16px',
+  boxShadow: '0 3px 5px 2px rgba(103, 114, 229, .3)',
+  '&:hover': {
+    background: 'linear-gradient(45deg, #5469d4 30%, #8879e0 90%)',
+  },
+}));
 
-  paymentConfig = (e) => {
-    if (e.target.name === "stripe")
-      this.setState({ [e.target.name]: e.target.value });
+const StripeConfiguration = () => {
+  const [user, setUser] = useState({});
+  const [isLoading, setLoading] = useState(false);
+  const [hasErrors, setHasErrors] = useState(false);
+  const [errorData, setErrorData] = useState([]);
+  const [stripeConfig, setStripeConfig] = useState({
+    paymentConfigShow: 'stripe',
+    stripe_publishable_key: '',
+    stripe_secret: '',
+    paypal_client_id: '',
+    paypal_client_secret: '',
+    isPending: true,
+  });
+  const [isConnected, setIsConnected] = useState(false);
+  const [accountInfo, setAccountInfo] = useState({
+    name: 'Stripe Business Account',
+    id: 'acct_1N2j3k4L5m6N7o8P',
+  });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success',
+  });
+
+  /**
+   * used to check stripe connection
+   */
+  const checkStripeConnection = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        config.SERVER_URL + '/api/stripe/check-connection',
+        {
+          method: 'GET',
+          headers: authHeader(),
+        },
+      );
+      const data = await response.json();
+      if (data.connected) {
+        if (data?.errors?.length > 0) {
+          setHasErrors(true);
+          setErrorData(data);
+        }
+
+        setIsConnected(true);
+      } else {
+        setIsConnected(false);
+      }
+      setAccountInfo(data);
+
+      setLoading(false);
+    } catch (error) {
+      console.log('Error checking Stripe connection:', error);
+    }
   };
 
-  // handleChange = (event) => {
-
-  // }
-
-  async componentDidMount() {
+  /**
+   * used to remove stripe connection
+   */
+  const handleDisconnect = async () => {
     try {
-      let user = AuthService.getCurrentUser();
-      const getConfig = await axios.get(
-        config.SERVER_URL + `/api/userconfiguration`,
+      const response = await fetch(
+        config.SERVER_URL + '/api/stripe/remove-account',
         {
+          method: 'POST',
           headers: authHeader(),
-          // cancelToken: this.source.token
-        }
+        },
       );
+      const data = await response.json();
 
-      const getUser = await axios.get(
-        config.SERVER_URL + `/api/user/${user.id}`,
-        {
-          headers: authHeader(),
-          // cancelToken: this.source.token
-        }
-      );
-
-      const getSpecificUser = getUser.data.data;
-
-      const UserDetails = getConfig.data.data;
-
-      this.setState({
-        SpecificUser: getSpecificUser,
-        user: user,
-        stripe_publishable_key: UserDetails.stripe_publishable_key,
-        stripe_secret: UserDetails.stripe_secret,
-        paypal_client_id: UserDetails.paypal_client_id,
-        paypal_client_secret: UserDetails.paypal_client_secret,
-        isPending: false,
-        routing_number: "",
-        account_number: "",
-        account_type: "individual",
-        fname: getSpecificUser.fname,
-        lname: getSpecificUser.lname,
-        email: getSpecificUser.email,
-        phone: getSpecificUser.mobile_no,
-        dob: getSpecificUser.dob,
-        addres: getSpecificUser.location.street_address,
-        city: getSpecificUser.location.city,
-        state: getSpecificUser.location.state,
-        country: getSpecificUser.location.country,
-        postal_code: getSpecificUser.location.postal_code,
-      });
-    } catch (e) {
-      console.log(e);
+      if (data.success) {
+        setSnackbar({
+          open: true,
+          message: 'Stripe account disconnected successfully',
+          severity: 'info',
+        });
+        setIsConnected(false);
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.log('Error removing Stripe account:', error);
     }
-  }
+  };
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        let currentUser = AuthService.getCurrentUser();
+        setUser(currentUser);
 
-  handleSubmit = async (e) => {
+        const [configResponse, userResponse] = await Promise.all([
+          axios.get(config.SERVER_URL + `/api/userconfiguration`, {
+            headers: authHeader(),
+          }),
+          axios.get(config.SERVER_URL + `/api/user/${currentUser.id}`, {
+            headers: authHeader(),
+          }),
+        ]);
+
+        const userDetails = userResponse.data.data;
+        const userConfig = configResponse.data.data;
+
+        setStripeConfig({
+          ...stripeConfig,
+          SpecificUser: userDetails,
+          stripe_publishable_key: userConfig.stripe_publishable_key,
+          stripe_secret: userConfig.stripe_secret,
+          paypal_client_id: userConfig.paypal_client_id,
+          paypal_client_secret: userConfig.paypal_client_secret,
+          isPending: false,
+          routing_number: '',
+          account_number: '',
+          account_type: 'individual',
+          fname: userDetails.fname,
+          lname: userDetails.lname,
+          email: userDetails.email,
+          phone: userDetails.mobile_no,
+          dob: userDetails.dob,
+          addres: userDetails.location.street_address,
+          city: userDetails.location.city,
+          state: userDetails.location.state,
+          country: userDetails.location.country,
+          postal_code: userDetails.location.postal_code,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    //fetchData();
+    checkStripeConnection();
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const {
@@ -109,58 +179,43 @@ class StripeConfiguration extends Component {
       state,
       country,
       postal_code,
-    } = this.state;
+      paymentConfigShow,
+    } = stripeConfig;
 
-    if (
-      this.state.paymentConfigShow === "stripe" &&
-      stripe_publishable_key &&
-      stripe_secret
-    ) {
-      //http://127.0.0.1:8000/api/configurepayment
-
-      try {
+    try {
+      if (
+        paymentConfigShow === 'stripe' &&
+        stripe_publishable_key &&
+        stripe_secret
+      ) {
         await axios.put(
-          config.SERVER_URL + "/api/configurepayment",
-          {
-            stripe_publishable_key,
-            stripe_secret,
-          },
-          {
-            headers: authHeader(),
-          }
+          config.SERVER_URL + '/api/configurepayment',
+          { stripe_publishable_key, stripe_secret },
+          { headers: authHeader() },
         );
         swal(
-          "Successful!",
-          "Stripe Configration Added Successfully!",
-          "success"
+          'Successful!',
+          'Stripe Configuration Added Successfully!',
+          'success',
         );
-      } catch (ex) {}
-    } else if (
-      this.state.paymentConfigShow === "paypal" &&
-      paypal_client_id &&
-      paypal_client_secret
-    ) {
-      try {
+      } else if (
+        paymentConfigShow === 'paypal' &&
+        paypal_client_id &&
+        paypal_client_secret
+      ) {
         await axios.put(
-          config.SERVER_URL + "/api/configurepayment",
-          {
-            paypal_client_id,
-            paypal_client_secret,
-          },
-          {
-            headers: authHeader(),
-          }
+          config.SERVER_URL + '/api/configurepayment',
+          { paypal_client_id, paypal_client_secret },
+          { headers: authHeader() },
         );
         swal(
-          "Successful!",
-          "Paypal Configration Added Successfully!",
-          "success"
+          'Successful!',
+          'Paypal Configuration Added Successfully!',
+          'success',
         );
-      } catch (ex) {}
-    } else if (this.state.paymentConfigShow === "bank") {
-      try {
+      } else if (paymentConfigShow === 'bank') {
         const bank = await axios.post(
-          config.SERVER_URL + "/api/add-bank",
+          config.SERVER_URL + '/api/add-bank',
           {
             routing_number,
             account_number,
@@ -176,393 +231,114 @@ class StripeConfiguration extends Component {
             country,
             postal_code,
           },
-          {
-            headers: authHeader(),
-          }
+          { headers: authHeader() },
         );
+
         if (bank.data?.success === false) {
-          swal("Error!", bank.data.message, "warning");
+          swal('Error!', bank.data.message, 'warning');
         } else {
-          swal("Successful!", bank.data?.message, "success");
+          swal('Successful!', bank.data?.message, 'success');
         }
-      } catch (ex) {}
-    } else {
-      swal("Error!", "please enter values in the input fields.", "warning");
+      } else {
+        swal('Error!', 'Please enter values in the input fields.', 'warning');
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
-  handleInputChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+
+  const handleInputChange = (e) => {
+    setStripeConfig({ ...stripeConfig, [e.target.name]: e.target.value });
   };
-  handleSelectChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+
+  const handleSelectChange = (e) => {
+    setStripeConfig({ ...stripeConfig, [e.target.name]: e.target.value });
   };
-  render() {
-    return (
-      <>
-        {this.state.isPending ? (
-          <div className="text-center">
-            {" "}
-            <CircularProgress color="success" />
-          </div>
-        ) : (
-          <Form
-          // onSubmit={this.handleSubmit}
+
+  const handleConnect = async () => {
+    try {
+      const response = await fetch(config.SERVER_URL + '/api/stripe/account', {
+        method: 'POST',
+        headers: authHeader(),
+      });
+      const data = await response.json();
+      window.location.href = data.url; // Redirect user to Stripe onboarding
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <>
+      {isLoading ? (
+        <div className='text-center'>
+          <CircularProgress color='success' />
+        </div>
+      ) : (
+        <form>
+          <Row className='mb-4 cust-payment-container'>
+            <Col md={5} style={{ marginTop: '40px' }}>
+              <h2 className='text-center cust-payment-h'>
+                Payment Configuration
+              </h2>
+            </Col>
+          </Row>
+
+          <Row className='mb-4 cust-stripeconfiguration-container'>
+            <Col md={5}>{/* Stripe Configuration */}</Col>
+          </Row>
+
+          <Row className='cust-radio-select-container'>
+            <Col md={5} style={{ textAlign: 'center' }}>
+              {/* Radio buttons for payment methods */}
+            </Col>
+          </Row>
+
+          {stripeConfig.paymentConfigShow === 'stripe' && (
+            <>
+              <Row>
+                <Col className='d-flex justify-content-center'>
+                  <StripeConnectButton
+                    isConnected={isConnected}
+                    onConnect={handleConnect}
+                    onDisconnect={handleDisconnect}
+                    connectedAccountName={accountInfo?.email}
+                    connectedAccountId={accountInfo?.id}
+                    hasErrors={hasErrors}
+                    errorData={errorData}
+                  />
+                </Col>
+              </Row>
+            </>
+          )}
+
+          {stripeConfig.paymentConfigShow === 'paypal' && (
+            <>{/* PayPal inputs */}</>
+          )}
+
+          {stripeConfig.paymentConfigShow === 'bank' && (
+            <>{/* Bank details inputs */}</>
+          )}
+
+          {/* Submit button */}
+          <Snackbar
+            open={snackbar.open}
+            autoHideDuration={6000}
+            onClose={handleCloseSnackbar}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           >
-            <Row className="mb-4 cust-payment-container">
-              <Col md={5} style={{ marginTop: "40px" }}>
-                <h2 className="text-center cust-payment-h">
-                  Payment Configuration
-                </h2>
-              </Col>
-            </Row>
-
-            <Row className="mb-4 cust-stripeconfiguration-container">
-              <Col></Col>
-              <Col md={5}>
-                {/* <h5
-                        className="text-center cust-stripeconfiguration-header"
-                    >Stripe Configuration</h5> */}
-              </Col>
-
-              <Col></Col>
-            </Row>
-            <Row className="cust-radio-select-container">
-              {/* <Col>
-                    </Col> */}
-              <Col md={5} style={{ textAlign: "center" }}>
-                <>
-                  <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">
-                      Select Configuration Type
-                    </FormLabel>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="row-radio-buttons-group"
-                      value={this.state.paymentConfigShow}
-                      onChange={(e) => {
-                        this.setState({ paymentConfigShow: e.target.value });
-                      }}
-                    >
-                      <FormControlLabel
-                        value="stripe"
-                        control={<Radio />}
-                        label="Stripe"
-                      />
-                      <FormControlLabel
-                        value="paypal"
-                        control={<Radio />}
-                        label="Paypal"
-                      />
-                      <FormControlLabel
-                        value="bank"
-                        control={<Radio />}
-                        label="Bank"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </>
-              </Col>
-            </Row>
-
-            {this.state.paymentConfigShow === "stripe" && (
-              <>
-                <Row>
-                  <Col></Col>
-                  <Col md={5}>
-                    <label className="label-style-configuration">
-                      Stripe Publish Key
-                    </label>
-                    <input
-                      name="stripe_publishable_key"
-                      type="text"
-                      placeholder="Enter your Stripe Publish Key.."
-                      value={this.state.stripe_publishable_key}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                  <Col></Col>
-                </Row>
-                <br />
-                <Row className="mb-4">
-                  <Col></Col>
-                  <Col md={5}>
-                    <label className="label-style-configuration">
-                      Stripe Secret Key
-                    </label>
-                    <input
-                      name="stripe_secret"
-                      type="text"
-                      placeholder="Enter your Stripe Secret Key.."
-                      value={this.state.stripe_secret}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                  <Col></Col>
-                </Row>
-              </>
-            )}
-
-            {this.state.paymentConfigShow === "paypal" && (
-              <>
-                <Row className="mb-4">
-                  <Col></Col>
-                  <Col md={5}>
-                    <label className="label-style-configuration">
-                      Paypal Client ID
-                    </label>
-                    <input
-                      name="paypal_client_id"
-                      type="text"
-                      placeholder="Enter your Paypal Client ID.."
-                      value={this.state.paypal_client_id}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                  <Col></Col>
-                </Row>
-
-                <Row className="mb-4">
-                  <Col></Col>
-                  <Col md={5}>
-                    <label className="label-style-configuration">
-                      Paypal Secret Key
-                    </label>
-                    <input
-                      name="paypal_client_secret"
-                      type="text"
-                      placeholder="Enter your Stripe Secret Key.."
-                      value={this.state.paypal_client_secret}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                  <Col></Col>
-                </Row>
-              </>
-            )}
-            {this.state.paymentConfigShow === "bank" && (
-              <>
-                <Row className="mb-4">
-                  <Col></Col>
-                  <Col md={5}>
-                    <label className="label-style-configuration">
-                      Account Holder Type
-                    </label>
-                    <select
-                      name="account_type"
-                      value={this.state.account_type}
-                      onChange={this.handleSelectChange}
-                    >
-                      <option key="Individual" value="individual">
-                        Individual
-                      </option>
-                    </select>
-                  </Col>
-                  <Col></Col>
-                </Row>
-                <Row className="mb-4">
-                  <Col></Col>
-                  <Col md={5}>
-                    <label className="label-style-configuration">
-                      Routing Number
-                    </label>
-                    <input
-                      name="routing_number"
-                      type="text"
-                      placeholder="Enter Account's Routing Number"
-                      value={this.state.routing_number}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                  <Col></Col>
-                </Row>
-                <Row className="mb-4">
-                  <Col></Col>
-                  <Col md={5}>
-                    <label className="label-style-configuration">
-                      Account Number
-                    </label>
-                    <input
-                      name="account_number"
-                      type="number"
-                      placeholder="Enter Account Number"
-                      value={this.state.account_number}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                  <Col></Col>
-                </Row>
-                <Row className="mb-4">
-                  <Col></Col>
-                  <Col md={5}>
-                    <label className="label-style-configuration">
-                      Account Holder First Name
-                    </label>
-                    <input
-                      name="fname"
-                      type="text"
-                      placeholder="Account Holder First Name"
-                      value={this.state.fname}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                  <Col></Col>
-                </Row>
-                <Row className="mb-4">
-                  <Col></Col>
-                  <Col md={5}>
-                    <label className="label-style-configuration">
-                      Account Holder Last Name
-                    </label>
-                    <input
-                      name="lname"
-                      type="text"
-                      placeholder="Account Holder Last Name"
-                      value={this.state.lname}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                  <Col></Col>
-                </Row>
-                <Row className="mb-4">
-                  <Col></Col>
-                  <Col md={5}>
-                    <label className="label-style-configuration">
-                      Account Holder email
-                    </label>
-                    <input
-                      name="email"
-                      type="email"
-                      placeholder="Account Holder email"
-                      value={this.state.email}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                  <Col></Col>
-                </Row>
-                <Row className="mb-4">
-                  <Col></Col>
-                  <Col md={5}>
-                    <label className="label-style-configuration">
-                      Account Holder Phone Number
-                    </label>
-                    <input
-                      name="phone"
-                      type="tel"
-                      placeholder="Account Holder phone Number"
-                      value={this.state.phone}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                  <Col></Col>
-                </Row>
-                <Row className="mb-4">
-                  <Col></Col>
-                  <Col md={5}>
-                    <label className="label-style-configuration">
-                      Date Of Birth
-                    </label>
-                    <input
-                      name="dob"
-                      type="date"
-                      placeholder="Account Holder dob"
-                      value={this.state.dob}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                  <Col></Col>
-                </Row>
-                <Row className="mb-4">
-                  <Col></Col>
-                  <Col md={2}>
-                    <label className="label-style-configuration">Country</label>
-                    <input
-                      name="country"
-                      type="text"
-                      readOnly
-                      placeholder="Account Holder Country"
-                      value={this.state.country}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                  <Col md={3}>
-                    <label className="label-style-configuration">State</label>
-                    <input
-                      name="state"
-                      type="text"
-                      placeholder="Account Holder State"
-                      value={this.state.state}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                  <Col></Col>
-                </Row>
-                <Row className="mb-4">
-                  <Col></Col>
-                  <Col md={2}>
-                    <label className="label-style-configuration">City</label>
-                    <input
-                      name="city"
-                      type="text"
-                      placeholder="Account Holder City"
-                      value={this.state.city}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                  <Col md={3}>
-                    <label className="label-style-configuration">
-                      Postal Code
-                    </label>
-                    <input
-                      name="postal_code"
-                      type="text"
-                      placeholder="Postal Code"
-                      value={this.state.postal_code}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                  <Col></Col>
-                </Row>
-                <Row className="mb-4">
-                  <Col></Col>
-                  <Col md={5}>
-                    <label className="label-style-configuration">
-                      Account Holder Address
-                    </label>
-                    <input
-                      name="addres"
-                      type="text"
-                      placeholder="Account Holder Address"
-                      value={this.state.addres}
-                      onChange={this.handleInputChange}
-                    />
-                  </Col>
-                  <Col></Col>
-                </Row>
-              </>
-            )}
-
-            <Row className="text-center">
-              <Col></Col>
-              <Col md={5} style={{ marginBottom: "1rem" }}>
-                <Button variant="success" onClick={this.handleSubmit}>
-                  Save And Continue
-                </Button>
-                <br />
-                {/* <Button variant="success"
-                            style={{
-                                backgroundColor: "#036905", color: "#fff", borderRadius: "5px",
-                                paddingLeft: "15px", paddingRight: "15px", letterSpacing: "0.3px"
-                            }}
-                        >Save</Button> */}
-              </Col>
-              <Col></Col>
-            </Row>
-          </Form>
-        )}
-      </>
-    );
-  }
-}
+            <Alert
+              onClose={handleCloseSnackbar}
+              severity={snackbar.severity}
+              variant='filled'
+            >
+              {snackbar.message}
+            </Alert>
+          </Snackbar>
+        </form>
+      )}
+    </>
+  );
+};
 
 export default StripeConfiguration;

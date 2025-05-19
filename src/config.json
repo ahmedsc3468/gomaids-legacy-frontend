@@ -1,4 +1,6 @@
 {
   "SERVER_URL": "https://maid-service.tecrux.solutions/public",
-  "comment_SERVER_URL": "https://maid-service.tecrux.solutions/public"
+  "comment_SERVER_URL": "https://maid-service.tecrux.solutions/public",
+  "STRIPE_PUBLIC_KEY": "pk_test_51QD9TMP9j5rhtLJa2DijNibJ4VTqqQgYwN2eOQiFbdMxqcfu8x9mulQBrUVp5BRNjBrueZbr7zjxfQHKlO1sfZay00XKPPGDwb",
+  "PAYPAL_CLIENT_ID": "Aa8gOmOuvFP6koHvD-nKnN3QHdOhsuvA7rLwLoeySyA1gmL8cG6Lkr7dquUuhuGddsYrcEqrOp5K74Bq"
 }

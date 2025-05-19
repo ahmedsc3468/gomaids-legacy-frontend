@@ -208,7 +208,7 @@ class Footer extends Component {
               <div className="hr-2 bg-light-white  mb-10 opacity-1" />
             </div>
             <div className="col-lg-12">
-              <p className="mb-0">© GoMaids 2024 Allright Reserved</p>
+              <p className="mb-0">© GoMaids 2025 Allright Reserved</p>
             </div>
             <div className="col-lg-4 text-center">
               <Link

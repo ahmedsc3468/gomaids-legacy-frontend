@@ -68,7 +68,7 @@ export default function NotificationPanel() {
     }
     if (not_title == 'order Update' && orderid != undefined) {
       localStorage.setItem('currenttab', 'AllOrder');
-      window.location.href = `/order_details_${orderid}`;
+      window.location.href = `/order/details/${orderid}`;
     }
     if (not_title == 'Order Recieved') {
       localStorage.setItem('currenttab', 'AllOrder');

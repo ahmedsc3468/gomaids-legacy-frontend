@@ -1,15 +1,20 @@
-import { GoogleMap, Marker, LoadScript,useJsApiLoader } from "@react-google-maps/api";
+import {
+  GoogleMap,
+  Marker,
+  LoadScript,
+  useJsApiLoader,
+} from '@react-google-maps/api';
 
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 
-import compass from "../../../Images/compass.png";
+import compass from '../../../Images/compass.png';
 
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
-} from "use-places-autocomplete";
+} from 'use-places-autocomplete';
 
-import { geocodeByAddress } from "react-places-autocomplete";
+import { geocodeByAddress } from 'react-places-autocomplete';
 
 import {
   Combobox,
@@ -18,50 +23,61 @@ import {
   ComboboxList,
   ComboboxOption,
   ComboboxInput,
-} from "@reach/combobox";
-import path from "path";
+} from '@reach/combobox';
+import path from 'path';
 
-const libraries = ["places"];
+const libraries = ['places'];
 
-const Address = ({ page, handleAddress, currentAddress, updateCity, updateState, updateCountry,updatePostalCode,updateServiceAddress }) => {
+const Address = ({
+  page,
+  handleAddress,
+  currentAddress,
+  updateCity,
+  updateState,
+  updateCountry,
+  updatePostalCode,
+  updateServiceAddress,
+  placeholder,
+}) => {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: 'AIzaSyDxLxPEKkM9vuuAJpTQuWJBCcfLmZKlDmI',
+    googleMapsApiKey: 'AIzaSyCDNkZ-OdVb0rc-rJImSM9fZ1oONuoih4o',
     libraries: libraries,
   });
   return (
-  
-      // (typeof window.google === 'undefined' && typeof window.google?.maps === 'undefined') ? (
+    // (typeof window.google === 'undefined' && typeof window.google?.maps === 'undefined') ? (
     //      <LoadScript
-    //   googleMapsApiKey="AIzaSyDxLxPEKkM9vuuAJpTQuWJBCcfLmZKlDmI"
+    //   googleMapsApiKey="AIzaSyCDNkZ-OdVb0rc-rJImSM9fZ1oONuoih4o"
     //   libraries={libraries}
     // >
-    isLoaded && (<Search
+    isLoaded && (
+      <Search
         page={page}
         handleAddress={handleAddress}
         currentAddress={currentAddress}
-        updateCity={updateCity} 
-        updateState={updateState} 
+        updateCity={updateCity}
+        updateState={updateState}
         updateCountry={updateCountry}
         updatePostalCode={updatePostalCode}
         updateServiceAddress={updateServiceAddress}
-      />)
-    // </LoadScript>
-    // ):(<Search
-    //     page={page}
-    //     handleAddress={handleAddress}
-    //     currentAddress={currentAddress}
-    //     updateCity={updateCity} 
-    //     updateState={updateState} 
-    //     updateCountry={updateCountry}
-    //     updatePostalCode={updatePostalCode}
-    //     updateServiceAddress={updateServiceAddress}
-    //   />)
+        placeholder={placeholder}
+      />
+    )
   );
 };
 export default Address;
 
-function Search({ page, handleAddress, currentAddress,updateCity, updateState, updateCountry,updatePostalCode,updateServiceAddress }) {
+function Search({
+  page,
+  handleAddress,
+  currentAddress,
+  updateCity,
+  updateState,
+  updateCountry,
+  updatePostalCode,
+  updateServiceAddress,
+  placeholder,
+}) {
   const {
     ready,
     value,
@@ -70,21 +86,20 @@ function Search({ page, handleAddress, currentAddress,updateCity, updateState, u
     clearSuggestions,
   } = usePlacesAutocomplete({
     requestOptions: {
-      componentRestrictions: { country: ["ca"] },
+      componentRestrictions: { country: ['ca'] },
     },
   });
   const showSuggestions = React.useRef(false);
   useEffect(() => {
-    const address = localStorage.getItem("address");
+    const address = localStorage.getItem('address');
     if (address) {
       setValue(address);
       // if(updateServiceAddress){
       //   updateServiceAddress(address);
       // }
-     
     }
-   
-    if (currentAddress != "") {
+
+    if (currentAddress != '') {
       // if(updateServiceAddress){
       //   updateServiceAddress(address);
       // }
@@ -95,10 +110,9 @@ function Search({ page, handleAddress, currentAddress,updateCity, updateState, u
     if (!page) {
       setValue(address, false);
       if (updateServiceAddress) {
-        console.log(address);
         updateServiceAddress(address);
       }
-      localStorage.setItem("address", address);
+      localStorage.setItem('address', address);
     }
     clearSuggestions();
 
@@ -106,76 +120,75 @@ function Search({ page, handleAddress, currentAddress,updateCity, updateState, u
       const results = await geocodeByAddress(address);
 
       const city = results[0].address_components.filter(
-        (x) => x.types[0] === "locality"
+        (x) => x.types[0] === 'locality',
       );
-    
+
       const state = results[0].address_components.filter(
-        (x) => x.types[0] === "administrative_area_level_1"
+        (x) => x.types[0] === 'administrative_area_level_1',
       );
       const country = results[0].address_components.filter(
-        (x) => x.types[0] === "country"
+        (x) => x.types[0] === 'country',
       );
       const postal_code = results[0].address_components.filter(
-        (x) => x.types[0] === "postal_code"
+        (x) => x.types[0] === 'postal_code',
       );
       updateCity(city[0]?.long_name);
       updateState(state[0]?.long_name);
       updateCountry(country[0]?.long_name);
-      if(updatePostalCode ){
+      if (updatePostalCode) {
         updatePostalCode(postal_code[0]?.long_name);
       }
-      
-    
-      localStorage.setItem("city", city[0]?.long_name);
-      localStorage.setItem("state", state[0]?.long_name);
-      localStorage.setItem("country", country[0]?.long_name);
-      localStorage.setItem("postal_code", postal_code[0]?.long_name);
+
+      localStorage.setItem('city', city[0]?.long_name);
+      localStorage.setItem('state', state[0]?.long_name);
+      localStorage.setItem('country', country[0]?.long_name);
+      localStorage.setItem('postal_code', postal_code[0]?.long_name);
     } else {
-      if (page === "setUpWizard streetAddress") {
+      if (page === 'setUpWizard streetAddress') {
         const results = await geocodeByAddress(address);
         const city = results[0].address_components.filter(
-          (x) => x.types[0] === "locality"
+          (x) => x.types[0] === 'locality',
         );
         const state = results[0].address_components.filter(
-          (x) => x.types[0] === "administrative_area_level_1"
+          (x) => x.types[0] === 'administrative_area_level_1',
         );
         const country = results[0].address_components.filter(
-          (x) => x.types[0] === "country"
+          (x) => x.types[0] === 'country',
         );
         const postal_code = results[0].address_components.filter(
-          (x) => x.types[0] === "postal_code"
+          (x) => x.types[0] === 'postal_code',
         );
         if (city[0] && state[0] && country[0] && postal_code[0]) {
           // if (city[0] && state[0] && country[0])
-          localStorage.setItem("city", city[0].long_name);
-          localStorage.setItem("state", state[0].long_name);
-          localStorage.setItem("country", country[0].long_name);
-          localStorage.setItem("postal_code", postal_code[0].long_name);
-          localStorage.setItem("streetAddress", address);
+          localStorage.setItem('city', city[0].long_name);
+          localStorage.setItem('state', state[0].long_name);
+          localStorage.setItem('country', country[0].long_name);
+          localStorage.setItem('postal_code', postal_code[0].long_name);
+          localStorage.setItem('streetAddress', address);
           setValue(address, false);
           showSuggestions.current = false;
         }
-      } else if (page === "userdetail streetAddress") {
+      } else if (page === 'userdetail streetAddress') {
         const results = await geocodeByAddress(address);
         const city = results[0].address_components.filter(
-          (x) => x.types[0] === "locality"
+          (x) => x.types[0] === 'locality',
         );
         const state = results[0].address_components.filter(
-          (x) => x.types[0] === "administrative_area_level_1"
+          (x) => x.types[0] === 'administrative_area_level_1',
         );
         const country = results[0].address_components.filter(
-          (x) => x.types[0] === "country"
+          (x) => x.types[0] === 'country',
         );
         const postal_code = results[0].address_components.filter(
-          (x) => x.types[0] === "postal_code"
+          (x) => x.types[0] === 'postal_code',
         );
         if (city[0] && state[0] && country[0] && postal_code[0]) {
           // if (city[0] && state[0] && country[0])
-          localStorage.setItem("city", city[0].long_name);
-          localStorage.setItem("state", state[0].long_name);
-          localStorage.setItem("country", country[0].long_name);
-          localStorage.setItem("postal_code", postal_code[0].long_name);
-          localStorage.setItem("streetAddress", address);
+          localStorage.setItem('city', city[0].long_name);
+          localStorage.setItem('state', state[0].long_name);
+          localStorage.setItem('country', country[0].long_name);
+          localStorage.setItem('postal_code', postal_code[0].long_name);
+          localStorage.setItem('streetAddress', address);
           setValue(address, false);
           showSuggestions.current = false;
           handleAddress(
@@ -183,33 +196,33 @@ function Search({ page, handleAddress, currentAddress,updateCity, updateState, u
             city[0].long_name,
             state[0].long_name,
             country[0].long_name,
-            postal_code[0].long_name
+            postal_code[0].long_name,
           );
         }
-      } else if (page === "userProfile updateAddress") {
+      } else if (page === 'userProfile updateAddress') {
         const results = await geocodeByAddress(address);
         const city = results[0].address_components.filter(
-          (x) => x.types[0] === "locality"
+          (x) => x.types[0] === 'locality',
         );
         const state = results[0].address_components.filter(
-          (x) => x.types[0] === "administrative_area_level_1"
+          (x) => x.types[0] === 'administrative_area_level_1',
         );
         const country = results[0].address_components.filter(
-          (x) => x.types[0] === "country"
+          (x) => x.types[0] === 'country',
         );
         // const postal_code = results[0].address_components.filter(x => x.types[0] === "postal_code")
         // if (city[0] && state[0] && country[0]&& postal_code[0])
         if (city[0] && state[0] && country[0]) {
-          localStorage.setItem("city", city[0].long_name);
-          localStorage.setItem("state", state[0].long_name);
-          localStorage.setItem("country", country[0].long_name);
+          localStorage.setItem('city', city[0].long_name);
+          localStorage.setItem('state', state[0].long_name);
+          localStorage.setItem('country', country[0].long_name);
           // localStorage.setItem("postal_code", postal_code[0].long_name)
-          localStorage.setItem("updateAddress", address);
+          localStorage.setItem('updateAddress', address);
           setValue(address, false);
           showSuggestions.current = false;
         }
-      } else if (page === "setUpWizard defaultAddress") {
-        localStorage.setItem("defaultAddress", address);
+      } else if (page === 'setUpWizard defaultAddress') {
+        localStorage.setItem('defaultAddress', address);
         setValue(address, false);
         showSuggestions.current = false;
       }
@@ -222,56 +235,55 @@ function Search({ page, handleAddress, currentAddress,updateCity, updateState, u
         handleSelect(address);
       }}
     >
-      <div className="address-order-txt">
+      <div className='address-order-txt'>
         <ComboboxInput
-          value={value ?? ""}
+          value={value ?? ''}
           onChange={(e) => {
-            if (page === "setUpWizard streetAddress") {
-              localStorage.setItem("streetAddress", e.target.value);
+            if (page === 'setUpWizard streetAddress') {
+              localStorage.setItem('streetAddress', e.target.value);
               setValue(e.target.value);
               showSuggestions.current = true;
-            } else if (page === "userProfile updateAddress") {
-              localStorage.setItem("updateAddress", e.target.value);
+            } else if (page === 'userProfile updateAddress') {
+              localStorage.setItem('updateAddress', e.target.value);
               setValue(e.target.value);
               showSuggestions.current = true;
-            } else if (page === "setUpWizard defaultAddress") {
-              console.log("defaultAddress");
-              localStorage.setItem("defaultAddress", e.target.value);
+            } else if (page === 'setUpWizard defaultAddress') {
+              console.log('defaultAddress');
+              localStorage.setItem('defaultAddress', e.target.value);
               setValue(e.target.value);
               showSuggestions.current = true;
             } else {
-              localStorage.removeItem("city");
-              localStorage.removeItem("state");
-              localStorage.removeItem("country");
-              localStorage.removeItem("postal_code");
+              localStorage.removeItem('city');
+              localStorage.removeItem('state');
+              localStorage.removeItem('country');
+              localStorage.removeItem('postal_code');
               setValue(e.target.value);
               showSuggestions.current = true;
               if (!e.target.value) {
-                localStorage.removeItem("address");
+                localStorage.removeItem('address');
               }
-              localStorage.setItem("address", e.target.value);
+              localStorage.setItem('address', e.target.value);
             }
 
-
-                  if (updateServiceAddress) {
-        console.log(e.target.value);
-        updateServiceAddress(e.target.value);
-      }
+            if (updateServiceAddress) {
+              console.log(e.target.value);
+              updateServiceAddress(e.target.value);
+            }
           }}
           disabled={!ready}
-          placeholder="Enter your service address"
+          placeholder={placeholder}
         ></ComboboxInput>
       </div>
 
-      <ComboboxPopover className="popover-style">
+      <ComboboxPopover className='popover-style'>
         {showSuggestions.current && (
           <ComboboxList>
-            {status === "OK" &&
+            {status === 'OK' &&
               data.map(({ id, description }, i) => (
                 <ComboboxOption
                   key={i}
                   value={description}
-                  className="popover-option"
+                  className='popover-option'
                 />
               ))}
           </ComboboxList>

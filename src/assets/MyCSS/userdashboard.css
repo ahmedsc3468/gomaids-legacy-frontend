@@ -35,7 +35,7 @@
   .MuiAvatar-root {
     justify-content: left !important;
   }
- 
+
   .MuiListItem-gutters {
     padding-left: 0px !important;
     padding-right: 0px !important;
@@ -139,7 +139,7 @@
   }
 }
 .cust-wallet-container {
-  max-width: 900px;
+  /* max-width: 900px; */
   padding-top: 10px;
   margin-left: 150px;
   padding-bottom: 30px;

@@ -1,28 +1,26 @@
-import axios from "axios";
-import React, { Component } from "react";
+import axios from 'axios';
+import React, { Component } from 'react';
 // import { Link } from "react-router-dom";
-import AuthService from "../../../services/auth.service";
-import { Grid } from "semantic-ui-react";
-import config from "../../../config.json";
-import SaveCard from "../StripePayment/SaveCard";
-import UpdateCard from "../StripePayment/UpdateCard";
-import { Card, CardBody, Col, Row } from "reactstrap";
-import authHeader from "../../../services/auth-header";
-import "../../../assets/MyCSS/userdashboard.css";
-import CircularProgress from "@mui/material/CircularProgress";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import AuthService from '../../../services/auth.service';
+import { Grid } from 'semantic-ui-react';
+import config from '../../../config.json';
+import SaveCard from '../StripePayment/SaveCard';
+import UpdateCard from '../StripePayment/UpdateCard';
+import { Card, CardBody, Col, Row } from 'reactstrap';
+import authHeader from '../../../services/auth-header';
+import '../../../assets/MyCSS/userdashboard.css';
+import CircularProgress from '@mui/material/CircularProgress';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEdit,
   faArrowLeft,
   faTrash,
-} from "@fortawesome/free-solid-svg-icons";
-import swal from "sweetalert";
+} from '@fortawesome/free-solid-svg-icons';
+import swal from 'sweetalert';
 
-const stripePromise = loadStripe(
-  "pk_test_51NiH9YEKvKY3WrKz1TnxITwiI9FQDsGht8IRFjxlwNYRu3N0CMfMBclQ09XxM1rjX1NfgV453L7UFCpervgCEctv00aLdDMpiv"
-);
+const stripePromise = loadStripe(config?.STRIPE_PUBLIC_KEY);
 class PaymentMethod extends Component {
   constructor(props) {
     super(props);
@@ -55,7 +53,7 @@ class PaymentMethod extends Component {
       // Send the token to your server or perform any necessary actions
 
       // Example: Display the token in the console
-      console.log("Token:", token);
+      console.log('Token:', token);
 
       // Perform any additional logic here, such as saving the token to your database
 
@@ -73,9 +71,9 @@ class PaymentMethod extends Component {
 
   deletePaymentConfiguration = (id) => {
     swal({
-      title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover these payment details.",
-      icon: "warning",
+      title: 'Are you sure?',
+      text: 'Once deleted, you will not be able to recover these payment details.',
+      icon: 'warning',
       buttons: true,
       dangerMode: true,
     }).then(async (willDelete) => {
@@ -86,7 +84,7 @@ class PaymentMethod extends Component {
             {
               headers: authHeader(),
               cancelToken: this.source.token,
-            }
+            },
           );
 
           this.setState({
@@ -96,9 +94,9 @@ class PaymentMethod extends Component {
           });
 
           swal(
-            "Card Details Deleted Successfully!",
-            "Your payment configuration details have been removed.",
-            "success"
+            'Card Details Deleted Successfully!',
+            'Your payment configuration details have been removed.',
+            'success',
           );
         } catch (e) {
           console.log(e);
@@ -110,15 +108,15 @@ class PaymentMethod extends Component {
   loadPaymentConfig = async () => {
     try {
       let paymentDetails = await axios.get(
-        config.SERVER_URL + "/api/getallconfigurations",
+        config.SERVER_URL + '/api/getallconfigurations',
         {
           headers: authHeader(),
           cancelToken: this.source.token,
-        }
+        },
       );
 
       if (paymentDetails.data.data.length === 0) {
-        console.log("no payment methods");
+        console.log('no payment methods');
         this.setState({ user_payment: paymentDetails.data.data });
         return;
       }
@@ -140,7 +138,7 @@ class PaymentMethod extends Component {
 
   componentWillUnmount() {
     if (this.source)
-      this.source.cancel("Payment Method component was unmounted");
+      this.source.cancel('Payment Method component was unmounted');
   }
 
   render() {
@@ -149,35 +147,35 @@ class PaymentMethod extends Component {
 
     return (
       <>
-        {" "}
+        {' '}
         {this.state.user_payment == null ? (
-          <div className="text-center">
-            {" "}
-            <CircularProgress color="success" />
+          <div className='text-center'>
+            {' '}
+            <CircularProgress color='success' />
           </div>
         ) : (
-          <Grid.Column className="cust-wallet-container">
+          <Grid.Column className='cust-wallet-container'>
             {!this.state.showEditPaymentConfigForm && (
               <Row>
                 {this.state.user_payments.length > 0 && (
-                  <Col sm="12">
+                  <Col sm='12'>
                     <Card>
                       <CardBody>
-                        <Row className="custom_row">
-                          <Col className="align-self-center custom_col_pm custom_cd_title">
-                            <h6 className="custom_font">Type</h6>
+                        <Row className='custom_row'>
+                          <Col className='align-self-center custom_col_pm custom_cd_title'>
+                            <h6 className='custom_font'>Type</h6>
                           </Col>
-                          <Col className="align-self-center custom_cardnum custom_col_pm custom_cd_title">
-                            <h6 className="custom_font">Card Number</h6>
+                          <Col className='align-self-center custom_cardnum custom_col_pm custom_cd_title'>
+                            <h6 className='custom_font'>Card Number</h6>
                           </Col>
-                          <Col className="align-self-center custom_col_pm custom_cd_title">
-                            <h6 className="custom_font">Expiry Month</h6>
+                          <Col className='align-self-center custom_col_pm custom_cd_title'>
+                            <h6 className='custom_font'>Expiry Month</h6>
                           </Col>
-                          <Col className="align-self-center custom_exp_mn custom_col_pm custom_cd_title">
-                            <h6 className="custom_font">Expiry Year</h6>
+                          <Col className='align-self-center custom_exp_mn custom_col_pm custom_cd_title'>
+                            <h6 className='custom_font'>Expiry Year</h6>
                           </Col>
-                          <Col className="align-self-center custom_col_pm custom_cd_title">
-                            <h6 className="cust-pad-status-h6 custom_font">
+                          <Col className='align-self-center custom_col_pm custom_cd_title'>
+                            <h6 className='cust-pad-status-h6 custom_font'>
                               Status
                             </h6>
                           </Col>
@@ -190,21 +188,21 @@ class PaymentMethod extends Component {
                   </Col>
                 )}
                 {this.state.user_payments.length < 1 ? (
-                  <div className="custom_empty_div">
-                    <Col sm="12">
+                  <div className='custom_empty_div'>
+                    <Col sm='12'>
                       <Card
-                        className="mobilecard"
-                        style={{ marginBottom: "15px" }}
+                        className='mobilecard'
+                        style={{ marginBottom: '15px' }}
                       >
                         <CardBody>
                           <Row>
-                            <Col className="align-self-center text-center">
-                              <h5 className="pb-3">
+                            <Col className='align-self-center text-center'>
+                              <h5 className='pb-3'>
                                 You Don't Have Any Saved Card
                               </h5>
                               {isAddingCard ? (
                                 <button
-                                  className="btn btn-blue mt-15 mb-15 btn-lg btn-shine"
+                                  className='btn btn-blue mt-15 mb-15 btn-lg btn-shine'
                                   onClick={this.handleAddCard}
                                 >
                                   Add Card
@@ -216,7 +214,7 @@ class PaymentMethod extends Component {
                                       onResponse={this.loadPaymentConfig}
                                       cost={6}
                                       checkOutBtnEnable={false}
-                                      service_provider_id={"savecard"}
+                                      service_provider_id={'savecard'}
                                       email={user.email}
                                     />
                                   </Elements>
@@ -233,37 +231,37 @@ class PaymentMethod extends Component {
                 ) : (
                   this.state.user_payments.map((paym, key) => {
                     return (
-                      <Col sm="12" key={key}>
-                        <Card style={{ marginBottom: "15px" }}>
+                      <Col sm='12' key={key}>
+                        <Card style={{ marginBottom: '15px' }}>
                           <CardBody>
-                            <Row className="custom_sn">
-                              <Col className="align-self-center custom_cd_title cust_visa">
+                            <Row className='custom_sn'>
+                              <Col className='align-self-center custom_cd_title cust_visa'>
                                 {paym.card_brand}
                               </Col>
-                              <Col className="align-self-center cust-pad-card custom_cd_title cust_42_42">
+                              <Col className='align-self-center cust-pad-card custom_cd_title cust_42_42'>
                                 {paym.card_no}
                               </Col>
-                              <Col className="align-self-center cust-pad-exp-mn custom_cd_title cust_4_">
+                              <Col className='align-self-center cust-pad-exp-mn custom_cd_title cust_4_'>
                                 {paym.expiry_month}
                               </Col>
-                              <Col className="align-self-center custom_cd_title">
+                              <Col className='align-self-center custom_cd_title'>
                                 {paym.expiry_year}
                               </Col>
-                              <Col className="align-self-center custom_cd_title">
-                                {paym.default_status === "3" ? "Cancelled" : ""}
-                                {paym.default_status === "1" ? "In-Use" : ""}
-                                {paym.default_status === "2" ? "Completed" : ""}
+                              <Col className='align-self-center custom_cd_title'>
+                                {paym.default_status === '3' ? 'Cancelled' : ''}
+                                {paym.default_status === '1' ? 'In-Use' : ''}
+                                {paym.default_status === '2' ? 'Completed' : ''}
                               </Col>
-                              <Col className="align-self-center custom_cd_title">
+                              <Col className='align-self-center custom_cd_title'>
                                 <FontAwesomeIcon
-                                  style={{ cursor: "pointer" }}
+                                  style={{ cursor: 'pointer' }}
                                   icon={faEdit}
                                   onClick={() => this.toggleEditForm(paym.id)}
                                 />
                                 <FontAwesomeIcon
                                   style={{
-                                    cursor: "pointer",
-                                    marginLeft: "12px",
+                                    cursor: 'pointer',
+                                    marginLeft: '12px',
                                   }}
                                   icon={faTrash}
                                   onClick={() => {
@@ -283,22 +281,22 @@ class PaymentMethod extends Component {
 
             {this.state.showEditPaymentConfigForm && (
               <Row>
-                <div className="custom_empty_div">
-                  <Col sm="12">
+                <div className='custom_empty_div'>
+                  <Col sm='12'>
                     <Card
-                      className="mobilecard"
-                      style={{ marginBottom: "15px" }}
+                      className='mobilecard'
+                      style={{ marginBottom: '15px' }}
                     >
                       <CardBody>
                         <Row>
-                          <Col className="align-self-center text-center">
+                          <Col className='align-self-center text-center'>
                             <FontAwesomeIcon
-                              style={{ cursor: "pointer" }}
-                              className="float-left"
+                              style={{ cursor: 'pointer' }}
+                              className='float-left'
                               icon={faArrowLeft}
                               onClick={this.toggleEditForm}
                             />
-                            <h5 className="pb-3">Update Card Details</h5>
+                            <h5 className='pb-3'>Update Card Details</h5>
                             <div>
                               <Elements stripe={stripePromise}>
                                 <UpdateCard

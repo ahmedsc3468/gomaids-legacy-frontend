@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Contacthelper from "../../../helper/Contacthelper";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Alert, Form } from "react-bootstrap";
@@ -13,6 +14,65 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Joi from "joi-browser";
+import whybgicon from "../../../assets/img/other/clean.png";
+import check from "../../../assets/img/icons/check.png";
+import aboutimg from "../../../assets/img/about/lady.png";
+
+const whyuslist = [
+  {
+    icon: check,
+    title: "Flexible Scheduling",
+    text: "Work when you want, where you want.",
+  },
+  {
+    icon: check,
+    title: "Guaranteed Bookings",
+    text: "Access a steady flow of cleaning jobs without chasing clients.",
+  },
+  { icon: check,
+    title: "Fair, Transparent Pay", 
+    text: "Get paid on time, every time, with no hidden feesk."
+   },
+
+  { icon: check,
+    title: "Grow Your Reputation",
+    text: "Earn customer reviews and climb our priority list for top jobs."
+   },
+
+    { icon: check,
+    title: "Work Safely",
+    text: "Every customer is verified, and our support team is always on your side."
+   },
+];
+const whyuslist1 = [
+  {
+    icon: check,
+    title: "Instant Access to New Clients ",
+    text: "Expand your service reach without increasing ad spend.",
+  },
+  {
+    icon: check,
+    title: "Streamlined Scheduling ",
+    text: "Accept jobs and dispatch staff with ease.",
+  },
+  { icon: check,
+    title: "Consistent Revenue", 
+    text: "Fill empty slots and slow periods with new opportunities."
+   },
+
+  { icon: check,
+    title: "Brand Visibility",
+    text: "Get listed as a trusted service provider in your local area."
+   },
+
+    { icon: check,
+    title: "Back-End Support",
+    text: "From payment processing to customer communication, we simplify operations."
+   },
+];
+
+
+
 class Contactdetail extends Contacthelper {
   objectSchema = Joi.object({
     label: Joi.string().required().label("Service").required(),
@@ -182,37 +242,102 @@ class Contactdetail extends Contacthelper {
         <div className="container">
           <div className="row">
             <div className="col-lg-12">
+               <p className="sub-head blue f-700 mb-1">
+                    <span>............</span>Partner With GOMaids<span>............</span>
+                </p>
+               <h1 className="mb-20">Why GOMaids?</h1>
               <p className="fs-20 mb-4 ">
-                Are you a skilled and hardworking maid or cleaner looking to
-                expand your opportunities? Look no further – GoMaids is
-                revolutionizing the way you find work! Our platform aggregates
-                maids and cleaners, connecting them with clients seeking
-                reliable and efficient cleaning services.
+                At GOMaids, we believe great cleaning deserves great opportunity. Whether you're an independent maid
+                 looking for flexible work or a cleaning agency ready to expand your client base — we invite you to 
+                 partner with us and grow together.
               </p>
               <p className="fs-20 mb-4 ">
-                By joining GoMaids as a freelancer, you gain access to a vast
-                pool of potential clients, boosting your chances of securing
-                more work. Our user-friendly website simplifies the process for
-                both clients and freelancers, allowing you to receive orders
-                conveniently and efficiently. Showcase your expertise, set your
-                schedule, and increase your income by taking on jobs that match
-                your skills.
-              </p>
-              <p className="fs-20 mb-4 ">
-                GoMaids prioritizes transparency, ensuring fair compensation for
-                your hard work. Plus, our platform provides a valuable
-                opportunity to build a reputation and receive reviews,
-                establishing trust with potential clients. Don't miss out on the
-                chance to elevate your career as a freelance maid or cleaner.
-                Join GoMaids today, where more work means more opportunities for
-                success. Embrace the future of cleaning services and take
-                control of your career with GoMaids!
-              </p>
-              <p className="fs-20 mb-4 ">
-                So, fill the form now, and one of our representatives will be in
-                touch with you soon to discuss this opportunity further.
+                Just like Uber connects drivers to riders, GOMaids connects cleaning professionals to paying customers
+                through our advanced, easy-to-use platform.
+                 No marketing, no sales, no admin headaches — just real jobs, delivered straight to your phone.
               </p>
             </div>
+          </div>
+           <div className="row no-gutters z-5 align-items-center mb-60 mt-60">
+            <div className="col-xl-5 col-lg-6">
+              <div className="about-image shadow-1 ml-10 mb-md-30 relative">
+              <img src={aboutimg} className="w-100" alt="" />
+            </div>
+            </div>
+            <div className="col-xl-7 col-lg-6 wow fadeInRight">
+              <div className="why-us-content">
+                <p className="sub-head blue f-700 mb-1">
+                  You have the skills. We have the platform.<span>............</span>
+                </p>
+                <h1 className="mb-10">For Individual Maids</h1>
+                 <p className="mb-20">
+                 Partnering with GOMaids means:
+                </p> 
+                <ul className="check-list3 half-list mb-10">
+                  {whyuslist.map((item, i) => (
+                    <li key={i}>
+                      <img src={item.icon} alt="" />
+                      <h5 className="fs-16 lh-14">{item.title}</h5>
+                      <p>{item.text}</p>
+                    </li>
+                  ))}
+                </ul>
+                <p className="mb-20">
+                 All you need is a smartphone, cleaning experience, and a passion for excellence — we’ll handle the rest.
+                </p> 
+                <Link
+                  to="/find-a-services"
+                  className="btn btn-blue shine-btn ml-20 mr-20"
+                >
+                  Order Now
+                </Link>
+                <Link to="/contact" className="btn btn-blue-border mt-xs-15">
+                  Contact Us
+                </Link>
+                <img src={whybgicon} className="why-bg-icon" alt="" />
+              </div>
+            </div>
+          </div>
+            <div className="row no-gutters z-5 align-items-center mb-60 mt-60">
+              <div className="col-xl-7 col-lg-6 wow fadeInRight">
+              <div className="why-us-content">
+                <p className="sub-head blue f-700 mb-1">
+                 Already managing a team of professional cleaners? Let’s scale your success.<span>............</span>
+                </p>
+                <h1 className="mb-10">For Cleaning Agencies</h1>
+                 <p className="mb-20">
+                 Partnering with GOMaids gives your agency:
+                </p> 
+                <ul className="check-list3 half-list mb-10">
+                  {whyuslist1.map((item, i) => (
+                    <li key={i}>
+                      <img src={item.icon} alt="" />
+                      <h5 className="fs-16 lh-14">{item.title}</h5>
+                      <p>{item.text}</p>
+                    </li>
+                  ))}
+                </ul>
+                <p className="mb-20">
+                 Whether you're a startup agency or a growing cleaning company, GOMaids helps you do more with less.
+                </p> 
+                <Link
+                  to="/find-a-services"
+                  className="btn btn-blue shine-btn ml-20 mr-20"
+                >
+                  Order Now
+                </Link>
+                <Link to="/contact" className="btn btn-blue-border mt-xs-15">
+                  Contact Us
+                </Link>
+                <img src={whybgicon} className="why-bg-icon" alt="" />
+              </div>
+            </div>
+            <div className="col-xl-5 col-lg-6">
+              <div className="about-image shadow-1 ml-10 mb-md-30 relative">
+              <img src={aboutimg} className="w-100" alt="" />
+            </div>
+            </div>
+            
           </div>
           <div className="row">
             <div className="col-lg-12">

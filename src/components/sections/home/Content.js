@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import About from './About';
+import Whygomaids from './Whygomaids';
 import Banner from './Banner';
 import Service from './Service';
 import Cta from '../../layouts/Cta';
@@ -7,6 +7,7 @@ import Howitwork from '../../layouts/Howitwork';
 import Gomaidzwork from '../../layouts/GomaidzWorkPartner';
 import Smallcallback from '../../layouts/Smallcallback';
 import Whyus from './Whyus';
+import Homemore from './Homemore';
 import Testimonials from './Testimonials';
 import Ctaft from './Cta';
 import Servicesfilter from './Servicesfilter';
@@ -274,9 +275,10 @@ class Content extends Component {
           apiIsLoaded={this.apiIsLoaded}
         />
 
-        <About />
+        <Whygomaids />
         <Cta />
         <Whyus />
+        <Homemore />
         <section className='hw-it-wrks bg-dot-full pt-95 pb-75 pb-sm-35'>
           {this.state.currentUser?.role?.name == 'service_provider' ? (
             <Gomaidzwork />

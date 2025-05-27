@@ -8,22 +8,22 @@ const howitswork = [
   {
     id: 1,
     icon: hw1,
-    title: "",
-    text: "Looking for More Work? Create Your Profile and Watch the Orders Pour In!",
+    title: "Apply & Get Verified ",
+    text: "Complete your profile, upload documents, and pass a quick screening.",
     extclass: "",
   },
   {
     id: 2,
     icon: hw2,
-    title: "",
-    text: "Work on Your Own Terms! Set Your Own Schedule and Pay Rate",
+    title: "Go Live on the App",
+    text: "Start receiving bookings from verified customers in your area.",
     extclass: "",
   },
   {
     id: 3,
     icon: hw3,
-    title: "",
-    text: "Make it Worth Your While! Earn More Money For Your Time",
+    title: "Accept Jobs & Get Paid ",
+    text: "Clean. Deliver a great experience. Earn money.",
     extclass: "no-line",
   },
 ];

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-
 import ctabg from "../../assets/img/bg/cta-1.jpg";
 
 class Cta extends Component {
@@ -19,24 +18,27 @@ class Cta extends Component {
             <div className="col-lg-7 text-center text-lg-left">
               <div className=" pr-md-00 cta-line-after">
                 <h1 className="white mb-15">
-                  Get your maid It's simple and affordable
+                  Download the GOMaids App
                 </h1>
                 <p className="white mb-0 fs-15">
-                  We provide backgroud checked and well mannered maids in your
-                  city to help you in your daily home task{" "}
+                  Available on the App Store and Google Play.Your clean home is just a few taps away.{" "} 
+                </p>
+                <p className="white mb-0 fs-15">
+                 GOMaids – Connecting You to Trusted Maids. Anytime. Anywhere.
                 </p>
               </div>
             </div>
             <div className="col-lg-5 text-center text-lg-right">
               <div className="mb-20 cta-inline-btn">
-                <Link to="/contact" className="btn btn-white-border">
-                  <i className="fas fa-headphones mr-10" />
-                  +1 (236) 808-6010
+                <Link to="/contact" className="btn btn-white-border btn-lg">
+                  <i className="fa fa-play mr-10" />
+                  App Store
                 </Link>
               </div>
               <div className="cta-inline-btn">
-                <Link to="/contact" className="btn btn-black shine-btn">
-                  Get a Quote Now
+                <Link to="/contact" className="btn shine-btn btn-lg btn-blue ">
+                <i className="fa fa-apple mr-10" />
+                  Play Store
                 </Link>
               </div>
             </div>

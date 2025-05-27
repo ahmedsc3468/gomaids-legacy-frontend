@@ -15,7 +15,7 @@ class PartnerWithUs extends Component {
         </MetaTags>
         <Header />
         <Breadcrumb
-          breadcrumb={{ pagename: "Looking for More Work? Partner With Us!" }}
+          breadcrumb={{ pagename: "Looking for More Work? Partner With GoMaids!" }}
         />
         <Content />
         <Footer />

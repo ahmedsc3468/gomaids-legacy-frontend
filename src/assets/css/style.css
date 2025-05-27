@@ -1389,6 +1389,9 @@ input[type='number']::-webkit-outer-spin-button {
 .banner-3-check.check-list2 li {
   padding-left: 40px;
 }
+.banner-3-check.check-list3 li {
+  padding-left: 40px;
+}
 /*banner type 4*/
 .banner-type-4 {
   min-height: 573px;
@@ -1930,7 +1933,14 @@ input[type='number']::-webkit-outer-spin-button {
   margin-top: 25px;
   margin-bottom: 29px;
 }
+.why-choose-3 .check-list3 {
+  margin-top: 25px;
+  margin-bottom: 29px;
+}
 .why-choose-3 .check-list2 h5 {
+  font-size: 17px;
+}
+.why-choose-3 .check-list3 h5 {
   font-size: 17px;
 }
 /* .................................... 8. Why us .......................................*/
@@ -1952,7 +1962,18 @@ input[type='number']::-webkit-outer-spin-button {
   position: relative;
   padding-left: 48px;
 }
+.check-list3 li {
+  position: relative;
+  padding-left: 48px;
+}
 .check-list2 li img {
+  position: absolute;
+  left: 0;
+  top: 6px;
+  left: 12px;
+  width: 20px;
+}
+.check-list3 li img {
   position: absolute;
   left: 0;
   top: 6px;
@@ -1964,6 +1985,9 @@ input[type='number']::-webkit-outer-spin-button {
   display: inline-block;
   vertical-align: top;
 }
+.check-list3.half-list li {
+ margin: 20px 0px;
+}
 .why-us-content {
   /* padding: 95px 60px 100px 60px; */
   padding: 0 60px 0 60px;
@@ -1972,6 +1996,9 @@ input[type='number']::-webkit-outer-spin-button {
   margin-top: 0;
 }
 .check-list2 h5 {
+  margin-bottom: 0px;
+}
+.check-list3 h5 {
   margin-bottom: 0px;
 }
 .why-bg-icon {
@@ -1983,7 +2010,14 @@ input[type='number']::-webkit-outer-spin-button {
 .why-us-content .check-list2 h5 {
   font-size: 17px;
 }
+.why-us-content .check-list3 h5 {
+  font-size: 17px;
+}
 .why-us-content .check-list2 p {
+  line-height: 1.5;
+  margin-top: 4px;
+}
+.why-us-content .check-list3 p {
   line-height: 1.5;
   margin-top: 4px;
 }
@@ -2020,7 +2054,15 @@ input[type='number']::-webkit-outer-spin-button {
   font-size: 18px;
   font-weight: 500;
 }
+.why-choose-2 .check-list3 h5 {
+  font-size: 18px;
+  font-weight: 500;
+}
 .why-choose-2 .check-list2 {
+  margin-top: 27px;
+  margin-bottom: 16px;
+}
+.why-choose-2 .check-list3 {
   margin-top: 27px;
   margin-bottom: 16px;
 }

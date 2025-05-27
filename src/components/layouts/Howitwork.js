@@ -8,22 +8,22 @@ const howitswork = [
   {
     id: 1,
     icon: hw1,
-    title: "Need A Maid?",
-    text: "Browse Through and Book From Available Options in Your Area",
+    title: "Search",
+    text: "Open the app and find nearby maids ready to help — all vetted, rated, and ready to go.",
     extclass: "",
   },
   {
     id: 2,
     icon: hw2,
-    title: "We Do the Job!",
-    text: "Our Highly Trained and Experienced Maids Will Take Care of the Assignment ",
+    title: "Book",
+    text: "Choose your service, set your schedule, and confirm your request. It’s that simple.",
     extclass: "",
   },
   {
     id: 3,
     icon: hw3,
-    title: "Sit Back & Relax!",
-    text: "Simply Sit Back and Enjoy Your Clean and Sparkling Living Space",
+    title: "Relax",
+    text: "Your maid arrives on time, does the job right, and leaves your space sparkling. You rate the experience.",
     extclass: "no-line",
   },
 ];

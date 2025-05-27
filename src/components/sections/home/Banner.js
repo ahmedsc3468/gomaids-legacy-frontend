@@ -179,13 +179,17 @@ class Banner extends Component {
           <div className='row z-5'>
             <div className='col-lg-10 offset-lg-1 text-center'>
               <div className='banner-content-4 white'>
-                <h1 className='f-900 mb-25'>
-                  Experience a Cleaner Home With Just a Tap!
+                <h1 className='f-900 mb-15'>
+                  Welcome to GOMaids
                 </h1>
+                <h4 className='fs-21 f-400 mb-20 '>
+                     Your Home. Cleaned on Your Terms.
+                    </h4>
+                    
                 {(this.state.currentUser === null ||
                   (this.state.currentUser &&
                     this.state.currentUser.role.name === 'service_taker')) && (
-                  <div className='banner-form-4'>
+                  <div className='banner-form-4 mt-4'>
                     <h4 className='fs-21 f-400 mb-4 '>
                       I am looking for a Maid/Cleaner in
                     </h4>

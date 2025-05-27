@@ -59,22 +59,25 @@ export default function Counter() {
                 ABOUT US<span>............</span>
               </p>
               <h1 className='mb-15'>
-                Effortless, Stress-Free Cleaning at the Click of a Button!
+               GOMaids – Connecting Cleaners with Customers. Seamlessly.
               </h1>
-              <h4>Welcome to GOMaids</h4>
-              <h5>Your Home. Cleaned on Your Terms.</h5>
+              {/* <h4>Welcome to GOMaids</h4>
+              <h5>Your Home. Cleaned on Your Terms.</h5> */}
               <p>
-                Cleaned on Your Terms. GOMaids is the smart, simple way to book
-                trusted home cleaners — whenever you need them.
+                At <b>GOMaids</b>, we’re not just another cleaning company — we’re a tech-driven platform that 
                 <b>
                   {' '}
-                  GOMaids connects you to reliable, background-verified maids at
-                  the tap of a button.
+                 connects people who need cleaning services with those who provide them.
                 </b>
                 <br/>
-                Whether you’re juggling a busy schedule, preparing for guests,
-                or just need help staying on top of life, GOMaids is here to
-                make your life easier — one clean home at a time.
+               We operate as a modern-day matchmaker, giving customers access to reliable, vetted maids, and giving cleaners the flexibility, freedom, and income opportunities they deserve.
+              </p>
+              <p>
+               Just like <b> Uber revolutionized rides </b> and <b> Airbnb transformed travel, </b>GOMaids is 
+                <b>
+                  {' '}
+                 reinventing how cleaning services are found, booked, and experienced </b>
+                 all through a few taps on your phone.
               </p>
               <ul className='check-list half-list mb-15 mt-20'>
                 {/* {aboutlist.map((item, i) => (

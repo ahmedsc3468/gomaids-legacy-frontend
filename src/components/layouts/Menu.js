@@ -11,29 +11,29 @@ const navigationmenu = [
     id: 1,
     linkText: "Home",
     link: "/",
-    child: false,
-    // submenu: [
-    //     {
-    //         id: 11,
-    //         link: '/',
-    //         linkText: 'Home Page 1'
-    //     },
-    //     {
-    //         id: 12,
-    //         link: '/home-v2',
-    //         linkText: 'Home Page 2'
-    //     },
-    //     {
-    //         id: 13,
-    //         link: '/home-v3',
-    //         linkText: 'Home Page 3'
-    //     },
-    //     {
-    //         id: 14,
-    //         link: '/home-v4',
-    //         linkText: 'Home Page 4'
-    //     },
-    // ]
+    child: true,
+    submenu: [
+        {
+            id: 11,
+            link: '/',
+            linkText: 'Home Page 1'
+        },
+        {
+            id: 12,
+            link: '/home-v2',
+            linkText: 'Home Page 2'
+        },
+        {
+            id: 13,
+            link: '/home-v3',
+            linkText: 'Home Page 3'
+        },
+        {
+            id: 14,
+            link: '/home-v4',
+            linkText: 'Home Page 4'
+        },
+    ]
   },
   {
     id: 2,

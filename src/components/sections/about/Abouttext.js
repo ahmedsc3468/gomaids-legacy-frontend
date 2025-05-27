@@ -5,8 +5,8 @@ import "magnific-popup";
 
 // About
 import aboutshape from "../../../assets/img/about/about-img.jpg";
-import aboutimg from "../../../assets/img/about/about-img.png";
-import aboutimg2 from "../../../assets/img/bg/bd-shape-1.jpg";
+import aboutimg from "../../../assets/img/about/about-image-1.png";
+import aboutimg2 from "../../../assets/img/bg/our-mission-image.jpg";
 import brush from "../../../assets/img/other/brush.png";
 import bubble from "../../../assets/img/other/bubble.png";
 
@@ -38,20 +38,23 @@ export default function Counter() {
                 ABOUT US<span>............</span>
               </p>
               <h1 className="mb-15">
-                Effortless, Stress-Free Cleaning at the Click of a Button!
+                GOMaids – Connecting Cleaners with Customers. Seamlessly.
               </h1>
               <p>
-                Welcome to GoMaids, where pristine cleanliness meets seamless
-                convenience. Our high quality, and easy to use app is designed
-                to simplify your life, ensuring a spotless home with just a few
-                taps. At GoMaids, we pride ourselves on delivering trusted and
-                professional cleaning services tailored to your unique needs.
-                Our dedicated team of skilled maids is committed to transforming
-                your living space into a sanctuary of cleanliness. With a
-                user-friendly app interface and a focus on reliability, we
-                strive to make your cleaning experience effortless and
-                stress-free. Experience the joy of coming home to a space –
-                where cleanliness is our commitment to you.
+                At <b>GOMaids</b>, we’re not just another cleaning company — we’re a tech-driven platform that 
+                <b>
+                  {' '}
+                 connects people who need cleaning services with those who provide them.
+                </b>
+                <br/>
+               We operate as a modern-day matchmaker, giving customers access to reliable, vetted maids, and giving cleaners the flexibility, freedom, and income opportunities they deserve.
+              </p>
+              <p>
+               Just like <b> Uber revolutionized rides </b> and <b> Airbnb transformed travel, </b>GOMaids is 
+                <b>
+                  {' '}
+                 reinventing how cleaning services are found, booked, and experienced </b>
+                 all through a few taps on your phone.
               </p>
               <ul className="check-list half-list mb-15 mt-20">
                 <li>
@@ -117,25 +120,18 @@ export default function Counter() {
         </div>
 
         <div className="row align-items-center  mt-90 mt-md-00">
-          <div className="col-xl-5 col-lg-6">
+          <div className="col-xl-6 col-lg-6">
             <div className="about-div mt-md-45 mt-sm-10">
               <h1 className="mb-10">Our Mission and Vision</h1>
               <p>
-                Gomaids is dedicated to providing exceptional cleaning services,
-                ensuring a spotless and organized environment for our clients.
-                We strive to simplify their lives by delivering reliable and
-                efficient maid services tailored to their unique needs.
+               To simplify home cleaning by using smart technology to <b> connect trusted maids with customers </b> who value their time, their space, and peace of mind.
               </p>
               <p>
-                At Gomaids, we envision becoming the leading maids service
-                provider, setting the standard for excellence in cleanliness and
-                customer satisfaction. Our goal is to enhance the well-being of
-                our clients by consistently exceeding expectations and fostering
-                a clean and comfortable living space for every client we serve.
+               To become the most trusted on-demand cleaning platform in North America — where quality meets convenience, and technology meets trust.
               </p>
             </div>
           </div>
-          <div className="col-xl-7 col-lg-6">
+          <div className="col-xl-6 col-lg-6">
             <img src={aboutimg2} className="w-100 mt-md-25" alt="" />
             <img src={brush} className="mission-bg" alt="" />
             <img src={bubble} className="mission-bg-2" alt="" />

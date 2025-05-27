@@ -84,7 +84,7 @@ class Footer extends Component {
                 </ul>
               </div>
             </div>
-            <div className="col-lg-3 col-md-3 mb-md-60 mb-sm-40 footer-link-wrap">
+            <div className="col-lg-2 col-md-2 mb-md-60 mb-sm-40 footer-link-wrap">
               <h3 className="fs-20 f-700 ">Quick Links</h3>
               <span className="footer-lines" />
               <ul className="footer-links white">
@@ -111,6 +111,31 @@ class Footer extends Component {
                   </Link>
                 </li>
               </ul>
+            </div>
+             <div className="col-lg-3 col-md-3 mb-md-60 mb-sm-40 footer-link-wrap">
+              <h3 className="fs-20 f-700 ">GOMaids App</h3>
+              <span className="footer-lines" />
+              <div className="footer-links white">
+                <h5 class="mb-25">
+                  Available for Download on
+                </h5>
+                 <div class="cta-inline-btn">
+                  <Link
+                  to="#"
+                  className="btn shine-btn btn-lg btn-blue mb-15"
+                >
+                  App Store
+                </Link>
+                 </div>
+                  <div class="cta-inline-btn">
+                  <Link
+                  to="#"
+                  className="btn btn-blue-border btn-lg mb-15"
+                >
+                  Play Store
+                </Link>
+                 </div>
+              </div>
             </div>
             {/* <div className="col-lg-3 col-md-6 mb-sm-40">
               <h3 className="fs-20 f-700 ">Our Services</h3>

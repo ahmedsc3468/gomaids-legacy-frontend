@@ -1,91 +1,58 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import $ from "jquery";
-import "magnific-popup";
-
-import videoposter from "../../../assets/img/bg/video-bg.jpg";
 import whybgicon from "../../../assets/img/other/clean.png";
 import check from "../../../assets/img/icons/check.png";
 
 import brush from "../../../assets/img/other/brush.png";
 import bubble from "../../../assets/img/other/bubble.png";
-import shape from "../../../assets/img/about/bg-shape.png";
+import HomeWhychoose from "../../../assets/img/about/home-why-choose.jpg";
 const whyuslist = [
   {
     icon: check,
-    title: "Highly Rated & Esteemed",
-    text: "Very experience workers",
+    title: "Trusted Professionals",
+    text: "Every maid on our platform goes through a strict verification process. We ensure professionalism, experience, and positive customer reviews before they ever reach your door.",
   },
   {
     icon: check,
-    title: "Insured and Bonded",
-    text: "Completly verified by the company",
+    title: "Flexible & On-Demand",
+    text: "Need a clean today? Or next Saturday? Whether it’s a one-time deep clean or a recurring service, GOMaids adapts to your needs and schedule.",
   },
-  { icon: check, title: "Trusted Professionals", text: "Pre-verified workers" },
-  { icon: check, title: "Quality Service", text: "highly qualified workers" },
+  { icon: check,
+    title: "Transparent Pricing", 
+    text: "No hidden fees, no surprises. See your price upfront before you book. Pay securely through the app."
+   },
+
+  { icon: check,
+    title: "We’re the Middleman You Can Trust",
+    text: "We don’t employ maids — we empower them. GOMaids simply makes it easier for you to find reliable cleaners while giving maids the opportunity to earn fairly and work flexibly. Think of us as the trusted matchmaker between people who need help and professionals who are ready to deliver."
+   },
 ];
 
 class Whyus extends Component {
   componentDidMount() {
-    function popup() {
-      $(".popup-video").magnificPopup({
-        type: "iframe",
-      });
-    }
-    popup();
+   
   }
   render() {
     return (
       <section className="why-us pt-50 pb-50 bg-white">
         <div className="container ">
-          <div className="row no-gutters z-5">
-            {/* <div className="col-lg-6 wow fadeInLeft">
-              <div
-                className="why-video shadow-blue bg-cover h-100"
-                style={{ backgroundImage: "url(" + videoposter + ")" }}
-              >
-                <div className="blob play-btn  transform-center">
-                  <Link
-                    to="https://www.youtube.com/watch?v=qtQgbdmIO30"
-                    className="popup-video"
-                  >
-                    {" "}
-                    <i className="fas fa-play" />
-                  </Link>
-                </div>
-              </div>
-            </div> */}
-            <div className="col-xl-7 col-lg-6">
+          <div className="row no-gutters z-5 align-items-center">
+            <div className="col-xl-5 col-lg-6">
               <div className="about-left-3 relative">
-                <img src={shape} alt="" />
-                <div className="blob play-btn transform-center">
-                  <Link
-                    to="https://www.youtube.com/watch?v=qtQgbdmIO30"
-                    className="popup-video"
-                  >
-                    <i className="fas fa-play" />
-                  </Link>
-                </div>
-                <img src={brush} className="abt-brush" alt="" />
-                <img src={bubble} className="abt-bubble" alt="" />
+                <img src={HomeWhychoose} alt="" />
               </div>
             </div>
 
-            <div className="col-xl-5 col-lg-6 wow fadeInRight">
+            <div className="col-xl-7 col-lg-6 wow fadeInRight">
               <div className="why-us-content">
                 <p className="sub-head blue f-700 mb-1">
-                  WHY CHOOSE US<span>............</span>
+                  Why Choose GOMaids?<span>............</span>
                 </p>
-                <h1 className="mb-10">Your Happiness Is Our Priority</h1>
+                <h1 className="mb-10">Cleaning Made Simple. And Smart.</h1>
                 <p className="mb-20">
-                  We care about the quality of our professional services by
-                  maintaining the behaviours, health, fitness, presentation and
-                  service quality of our team members. To ensure the safety and
-                  protection of our valued customers, company itself provides
-                  the verification of worker and then let him provide his
-                  service.
+                 With GOMaids, you’re not just getting a cleaner — you’re getting peace of mind. You’re getting your time back. And most of all, you’re getting a hassle-free experience that fits seamlessly into your busy life.
                 </p>
-                <ul className="check-list2 half-list mb-10">
+                <ul className="check-list3 half-list mb-10">
                   {whyuslist.map((item, i) => (
                     <li key={i}>
                       <img src={item.icon} alt="" />
@@ -94,15 +61,6 @@ class Whyus extends Component {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  to="/find-a-services"
-                  className="btn btn-blue shine-btn mr-20"
-                >
-                  Order Now
-                </Link>
-                <Link to="/contact" className="btn btn-blue-border mt-xs-15">
-                  Contact Us
-                </Link>
                 <img src={whybgicon} className="why-bg-icon" alt="" />
               </div>
             </div>
